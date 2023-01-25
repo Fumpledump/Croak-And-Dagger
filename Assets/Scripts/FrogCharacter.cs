@@ -100,9 +100,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        this.respawnPoint = new Vector3(17.26f, 1.54f, -22.49f);
-        //this.currentHealth = data.currentHealth;
-        this.currentHealth = 80;
+        this.respawnPoint = data.respawnPoint;
+        this.currentHealth = data.currentHealth;
+        //this.currentHealth = 80;
         currentEnergy = 100;
         this.transform.position = respawnPoint;
         GameManager.instance.hudUpdate = true;
