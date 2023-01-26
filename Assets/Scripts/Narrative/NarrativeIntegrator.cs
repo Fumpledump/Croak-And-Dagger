@@ -13,10 +13,19 @@ public class NarrativeIntegrator
     [YarnCommand("ChangeCamera")]
     private static void ChangeCamera(int cameraIndex)
     {
+        CheckHandler();
+
         // Check if Camera Index Exists
         if (cameraIndex > narrativeHandler.dialogueCameras.Count)
         {
             Debug.LogError("No Dialogue Camera of that Index was found!");
+            return;
+        }
+
+        // Check if Camera List has Items
+        if (narrativeHandler.dialogueCameras.Count <= 0)
+        {
+            Debug.LogError("No Cameras in Dialogue Cameras List!");
             return;
         }
 
@@ -63,5 +72,14 @@ public class NarrativeIntegrator
     private static string GetName()
     {
         return narrativeHandler.croakName;
+    }
+
+    public static void CheckHandler()
+    {
+        if (narrativeHandler == null)
+        {
+            Debug.Log("Narrative Handler is Null. Grabbing Narrative Handler");
+            narrativeHandler = NarrativeHandler.Instance;
+        }
     }
 }
