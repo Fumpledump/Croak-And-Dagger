@@ -52,9 +52,16 @@ public class DataPersistenceManager : MonoBehaviour
         LoadGame();
     }
 
+    private void Start()
+    {
+        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        LoadGame();
+    }
+
     public void OnSceneUnloaded(Scene scene)
     {
-       SaveGame();
+        //this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        //SaveGame();
     }
 
     public void NewGame()
