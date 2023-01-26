@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviour
     public void NewGame(string sceneName)
     {
         DataPersistenceManager.instance.NewGame();
-        //DataPersistenceManager.instance.SaveGame();
+        DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadScene(sceneName);
     }
 
