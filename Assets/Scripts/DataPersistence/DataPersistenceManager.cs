@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -22,20 +23,38 @@ public class DataPersistenceManager : MonoBehaviour
     {
         if(instance != null)
         {
-            Debug.Log("Found more than one Data Persistence Manager in the scene");
+            Debug.Log("Found more than one Data Persistence Manager in the scene. Destroying newest one.");
+            Destroy(this.gameObject);
+            return;
         }
-        else
-        {
-            instance = this;
-        }
+        instance = this;
+        DontDestroyOnLoad(this.gameObject);
+
+        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
-        //Debug.Log(Application.persistentDataPath);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    public void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("On scene loaded yes");
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
+    }
+
+    public void OnSceneUnloaded(Scene scene)
+    {
+       SaveGame();
     }
 
     public void NewGame()
@@ -64,10 +83,12 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void SaveGame()
     {
+        //Debug.Log("Saving");
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
             dataPersistenceObj.SaveData(ref gameData);
         }
+
         //Debug.Log("Health = " + gameData.currentHealth);
         //Debug.Log("Respawn Point = " + gameData.respawnPoint);
 
