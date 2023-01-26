@@ -14,9 +14,9 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-    public void NewGame()
+    public void NewGame(string sceneName)
     {
-
+        SceneManager.LoadScene(sceneName);
     }
 
     
