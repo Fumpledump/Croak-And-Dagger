@@ -103,6 +103,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         Debug.Log(transform.position);
         this.respawnPoint = data.respawnPoint;
         this.currentHealth = data.currentHealth;
+        this.fireflies = data.fireflies;
         //this.currentHealth = 80;
         currentEnergy = 100;
         this.GetComponent<CharacterController>().enabled = false;
@@ -118,6 +119,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             //data.respawnPoint = new Vector3(17, 2, -22);
             data.respawnPoint = this.respawnPoint;
             data.currentHealth = this.currentHealth;
+            data.fireflies = this.fireflies;
         }
     }
 
