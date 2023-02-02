@@ -18,10 +18,10 @@ namespace StarterAssets
     {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 2.0f;
+        public float MoveSpeed = 7.0f;
 
         [Tooltip("Sprint speed of the character in m/s")]
-        public float SprintSpeed = 5.335f;
+        public float SprintSpeed = 10.0f;
 
         [Tooltip("Dash speed of the character in m/s")]
         public float DashSpeed = 12f;
@@ -59,7 +59,7 @@ namespace StarterAssets
         public float GroundedOffset = -0.14f;
 
         [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-        public float GroundedRadius = 0.28f;
+        public float GroundedRadius = 0.24f;
 
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
@@ -87,6 +87,7 @@ namespace StarterAssets
 
         // player
         private float _speed;
+        private float _slideSpeed; //Flat speed of slope sliding movement
         private float _animationBlend;
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
@@ -100,6 +101,23 @@ namespace StarterAssets
         private bool jumpHeld;
         private int holdJumpCount = 0;
         const int HOLDJUMP_COUNT_MAX = 3;
+
+        // sliding variables
+        private Vector3 hitPointNormal;
+        //Determines if character is on a slope and if the slope is beyond the controller slope limit
+        private bool IsSliding 
+        {
+            get
+            {
+                if (!_controller.isGrounded) return false;
+                return Vector3.Angle(hitPointNormal, Vector3.up) > _controller.slopeLimit;
+            }
+        }
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            hitPointNormal = hit.normal;
+        }
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -171,6 +189,7 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+            _slideSpeed = 3.5f;
         }
 
         private void Update()
@@ -190,7 +209,20 @@ namespace StarterAssets
                 JumpAndGravity();
                 GroundedCheck();
                 Move();
+
+                //Check for character sliding, update movement if so
+                if (IsSliding)
+                {
+                    Vector3 realSlopeDirection = Vector3.Cross(Vector3.Cross(hitPointNormal, Vector3.down), hitPointNormal);
+                    Vector3 targetDirection = new Vector3(realSlopeDirection.x, realSlopeDirection.y, realSlopeDirection.z);
+                    // move the player
+                    _controller.Move(targetDirection.normalized * (_slideSpeed * 1.2f * Time.deltaTime));
+                }
+
+
             }
+            Debug.Log(_slideSpeed);
+
         }
 
         private void LateUpdate()
@@ -312,8 +344,8 @@ namespace StarterAssets
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
-            // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
+                // move the player
+                _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
             // update animator if using character
