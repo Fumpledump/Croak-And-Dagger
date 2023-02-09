@@ -158,8 +158,8 @@ namespace StarterAssets
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if (!_controller.isGrounded) return;
-            hitPointNormal = hit.normal;
+            if(hit.gameObject.layer != LayerMask.NameToLayer("IgnoreSlide"))
+                hitPointNormal = hit.normal;
         }
 
 
@@ -216,11 +216,16 @@ namespace StarterAssets
                 //Check for character sliding, update movement if so
                 if (IsSliding)
                 {
+                    //Convert normal of collision point to slope of collision point
                     Vector3 realSlopeDirection = Vector3.Cross(Vector3.Cross(hitPointNormal, Vector3.down), hitPointNormal);
                     Vector3 targetDirection = new Vector3(realSlopeDirection.x, realSlopeDirection.y, realSlopeDirection.z);
                     // move the player
+                    
+                    
                     _controller.Move(targetDirection.normalized * (_slideSpeed * 1.2f * Time.deltaTime));
                 }
+
+                hitPointNormal = Vector3.zero;
             }
         }
 
@@ -246,10 +251,12 @@ namespace StarterAssets
         private void GroundedCheck()
         {
             // set sphere position, with offset
+
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                 transform.position.z);
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
+
             //Debug.Log("Grounded state: " + Grounded);
             // update animator if using character
             if (_hasAnimator)

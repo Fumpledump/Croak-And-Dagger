@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7272696469984481327}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!20 &54155340
 Camera:
@@ -6478,7 +6478,7 @@ PrefabInstance:
     - target: {fileID: 272993188807782130, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3837663348675104489, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
@@ -6552,8 +6552,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
+      propertyPath: followCam
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
       propertyPath: SprintSpeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
+      propertyPath: GroundedRadius
+      value: 0.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
+      propertyPath: GroundLayers.m_Bits
+      value: 1537
+      objectReference: {fileID: 0}
+    - target: {fileID: 4416926081852918491, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.27
       objectReference: {fileID: 0}
     - target: {fileID: 5885216827943657505, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
@@ -6592,8 +6612,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9123028342815504485, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9123028342815504485, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
+      propertyPath: pullSpeed
+      value: 130
+      objectReference: {fileID: 0}
+    - target: {fileID: 9123028342815504485, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
       propertyPath: sheathTime
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9123028342815504485, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
+      propertyPath: weaponTrail
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9123028342815504485, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
@@ -6659,6 +6694,34 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1762682275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8045151064671505045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53725a3fec8d1e648bd934112998c9af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueCameras:
+  - {fileID: 0}
+  - {fileID: 54155336}
+  - {fileID: 0}
+  - {fileID: 0}
+  inTrigger: 0
+  inDialog: 0
+  currentTrigger: {fileID: 0}
+  relationshipValue: 0
+  croakName: 
+  dialogSystem: {fileID: 0}
+  dialogPrompt: {fileID: 0}
+  hud: {fileID: 0}
+  input: {fileID: 1762682282}
+  NameInput: {fileID: 0}
+  NameWarning: {fileID: 0}
 --- !u!114 &1762682276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6708,34 +6771,7 @@ MonoBehaviour:
   lockedOn: 0
   interact: 0
   reportTongueChange: 0
+  cheat: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
---- !u!114 &1762682275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8045151064671505045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53725a3fec8d1e648bd934112998c9af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueCameras:
-  - {fileID: 0}
-  - {fileID: 54155336}
-  - {fileID: 0}
-  - {fileID: 0}
-  inTrigger: 0
-  inDialog: 0
-  currentTrigger: {fileID: 0}
-  relationshipValue: 0
-  croakName: 
-  dialogSystem: {fileID: 0}
-  dialogPrompt: {fileID: 0}
-  hud: {fileID: 0}
-  input: {fileID: 1762682282}
-  NameInput: {fileID: 0}
-  NameWarning: {fileID: 0}
