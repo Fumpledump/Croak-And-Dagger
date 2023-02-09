@@ -49,6 +49,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     // probably switch to the frog son
     public FrogSon Son;
+    private float croakTimer = 10;
 
     // Tongue
     [SerializeField] float tongueLength = 1.0f; //how far away from the player can the tongue reach to grab things
@@ -127,7 +128,19 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     {
         timeSinceLastAttack += Time.deltaTime;
         // if the time since the last attack is greater than the input buffer, end the combo
-        if (timeSinceLastAttack > comboTimeBuffer) EndAttackCombo();
+        if (timeSinceLastAttack > comboTimeBuffer)
+        {
+            EndAttackCombo();
+            if(croakTimer > 0)
+            {
+                croakTimer -= Time.deltaTime;
+            }
+            else
+            {
+                SheathWeapon();
+            }
+
+        }
 
         RegenerateEnergy();
         //PComboDone();
@@ -178,6 +191,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
         //update material
 
+
         if (weapon[2].activeSelf && weapon[0].activeSelf)
         {
             //swordMat.SetFloat("_CutoffHeight", swordMat.GetFloat("_CutoffHeight") - 0.01f);
@@ -195,6 +209,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 swordMat.SetFloat("_CutoffHeight", weapon[0].GetComponent<Transform>().position.y + 1);
             }
         }
+
     }
     #region COMBAT_SYSTEM_V2
     private void MaceAttack()
@@ -212,6 +227,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         else curMaceAttack++;
         anim.SetInteger("MaceAttack", curMaceAttack);
         weaponTrail.active = true;
+        croakTimer = 10;
     }
 
     private void EndAttackCombo()
@@ -220,8 +236,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         anim.SetInteger("MaceAttack", curMaceAttack);
 
         //timeSinceLastAttack = 0;
-        SheathWeapon();
+        //SheathWeapon();
         weaponTrail.active = false;
+        //croakTimerActive = true;
     }
 
     private void SheathWeapon()
