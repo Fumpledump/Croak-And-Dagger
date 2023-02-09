@@ -102,23 +102,6 @@ namespace StarterAssets
         private int holdJumpCount = 0;
         const int HOLDJUMP_COUNT_MAX = 3;
 
-        // sliding variables
-        private Vector3 hitPointNormal;
-        //Determines if character is on a slope and if the slope is beyond the controller slope limit
-        private bool IsSliding 
-        {
-            get
-            {
-                if (!_controller.isGrounded) return false;
-                return Vector3.Angle(hitPointNormal, Vector3.up) > _controller.slopeLimit;
-            }
-        }
-
-        private void OnControllerColliderHit(ControllerColliderHit hit)
-        {
-            hitPointNormal = hit.normal;
-        }
-
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
@@ -161,6 +144,24 @@ namespace StarterAssets
             }
         }
 
+        // sliding variables
+        private Vector3 hitPointNormal;
+        //Determines if character is on a slope and if the slope is beyond the controller slope limit
+        private bool IsSliding
+        {
+            get
+            {
+                if (!_controller.isGrounded) return false;
+                return Vector3.Angle(hitPointNormal, Vector3.up) > _controller.slopeLimit + 10;
+            }
+        }
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            if (!_controller.isGrounded) return;
+            hitPointNormal = hit.normal;
+        }
+
 
         private void Awake()
         {
@@ -189,7 +190,9 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
-            _slideSpeed = 3.5f;
+
+            // Set slide speed
+            _slideSpeed = 4.5f;
         }
 
         private void Update()
@@ -218,11 +221,7 @@ namespace StarterAssets
                     // move the player
                     _controller.Move(targetDirection.normalized * (_slideSpeed * 1.2f * Time.deltaTime));
                 }
-
-
             }
-            Debug.Log(_slideSpeed);
-
         }
 
         private void LateUpdate()
