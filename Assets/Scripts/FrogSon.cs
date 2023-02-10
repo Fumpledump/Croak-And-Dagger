@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
+using System.Linq;
 
 public class FrogSon : MonoBehaviour
 {
@@ -10,34 +13,23 @@ public class FrogSon : MonoBehaviour
     // (-100 , 100)
     public int relationshipValue;
 
-    // Gravity
-    private float _verticalVelocity;
-    private float _terminalVelocity = 53.0f;
-
-    [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-    public float Gravity = -15.0f;
+    // Player tracking
+    public GameObject player;
+    protected Transform target;
+    protected UnityEngine.AI.NavMeshAgent agent;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameManager.instance.myFrog.gameObject;
+        agent = GetComponent<NavMeshAgent>();
+        target = player.transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_verticalVelocity < 0.0f)
-        {
-            _verticalVelocity = -2f;
-        }
-
-        if (_verticalVelocity < _terminalVelocity)
-        {
-            _verticalVelocity += Gravity * Time.deltaTime;
-        }
-
-        //_controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-             //new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        //agent.SetDestination(target.position);
     }
 
     void SwitchWeapons()

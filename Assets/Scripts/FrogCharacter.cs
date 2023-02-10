@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using StarterAssets;
 using System.Linq;
 using System;
@@ -92,11 +93,14 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         // Start with weapon sheathed
         weapon[0].SetActive(false); // weapon
         weapon[2].SetActive(true); // croak
+        //weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z);
         timeSinceLastAttack = attackTimeBuffer;
 
         weaponCollider = weapon[0].GetComponent<CapsuleCollider>();
 
         hitEnemies = new List<GameObject>();
+
+        // Set Croak's positon
     }
 
     public void LoadData(GameData data)
@@ -110,6 +114,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         this.GetComponent<CharacterController>().enabled = false;
         this.transform.position = respawnPoint;
         this.GetComponent<CharacterController>().enabled = true;
+        weapon[2].GetComponent<NavMeshAgent>().enabled = false;
+        weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
+        weapon[2].GetComponent<NavMeshAgent>().enabled = true;
         GameManager.instance.hudUpdate = true;
     }
 
@@ -126,7 +133,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void Update()
     {
-        
+        //Debug.Log("Croak " + weapon[2].transform.position);
+        //Debug.Log("Dagger " + transform.position);
         timeSinceLastAttack += Time.deltaTime;
         // if the time since the last attack is greater than the input buffer, end the combo
         if (timeSinceLastAttack > comboTimeBuffer)
@@ -257,6 +265,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (weapon[2].activeSelf) return; // if weapon already sheathed
         weapon[0].SetActive(false); // weapon
         weapon[2].SetActive(true); // croak
+
+        // Set Croak's Position
+        weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z);
     }
     private void UnSheathWeapon()
     {
