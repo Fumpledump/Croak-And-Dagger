@@ -133,8 +133,6 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void Update()
     {
-        //Debug.Log("Croak " + weapon[2].transform.position);
-        //Debug.Log("Dagger " + transform.position);
         timeSinceLastAttack += Time.deltaTime;
         // if the time since the last attack is greater than the input buffer, end the combo
         if (timeSinceLastAttack > comboTimeBuffer)
@@ -267,13 +265,16 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         weapon[2].SetActive(true); // croak
 
         // Set Croak's Position
-        weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z);
+        weapon[2].GetComponent<NavMeshAgent>().enabled = false;
+        weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
+        weapon[2].GetComponent<NavMeshAgent>().enabled = true;
     }
     private void UnSheathWeapon()
     {
         if (weapon[0].activeSelf) return; // if weapon already unsheathed
         weapon[0].SetActive(true); // weapon
         weapon[2].SetActive(false); // croak
+        croakTimer = 10;
     }
 
     public void CheckHit(GameObject enemy)
