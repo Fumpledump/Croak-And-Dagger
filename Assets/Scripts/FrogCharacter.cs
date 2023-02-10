@@ -126,6 +126,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void Update()
     {
+        
         timeSinceLastAttack += Time.deltaTime;
         // if the time since the last attack is greater than the input buffer, end the combo
         if (timeSinceLastAttack > comboTimeBuffer)
@@ -180,7 +181,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             tonguePressed = true;
             inputs.reportTongueChange = false;
             TongueGrab();
-        }
+        } 
         else if(inputs.reportTongueChange && tonguePressed)
         {
             tonguePressed = false;
@@ -220,11 +221,21 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             //this.gameObject.transform.LookAt(targetSwitcher.GetComponent<TargetSwitch>().currentTarget.transform);
         }
         
+        // need to disable movement during attacking
+
         hitEnemies.Clear();
         UnSheathWeapon();
         timeSinceLastAttack = 0;
-        if (curMaceAttack + 1 > 3) curMaceAttack = 1;
-        else curMaceAttack++;
+        
+        if (curMaceAttack + 1 > 3)
+        {
+            curMaceAttack = 1;
+        }
+        else
+        {
+            curMaceAttack++;
+        }
+
         anim.SetInteger("MaceAttack", curMaceAttack);
         weaponTrail.active = true;
         croakTimer = 10;

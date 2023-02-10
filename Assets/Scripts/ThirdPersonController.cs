@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -121,6 +122,7 @@ namespace StarterAssets
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
+
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
@@ -211,7 +213,9 @@ namespace StarterAssets
             {
                 JumpAndGravity();
                 GroundedCheck();
+                // cannot move if attacking
                 Move();
+                
 
                 //Check for character sliding, update movement if so
                 if (IsSliding)
@@ -297,7 +301,7 @@ namespace StarterAssets
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
             if (_input.dash)
-                targetSpeed = GameManager.instance.myFrog.Dash()  ? DashSpeed : targetSpeed;
+                targetSpeed = GameManager.instance.myFrog.Dash() ? DashSpeed : targetSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -336,23 +340,61 @@ namespace StarterAssets
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_input.move != Vector2.zero)
+            // FOR COMBAT: only create regular rotation and movement when not attacking
+            if (_animator.GetInteger("MaceAttack") == 0)
             {
-                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _mainCamera.transform.eulerAngles.y;
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
-                    RotationSmoothTime);
+                if (_input.move != Vector2.zero)
+                {
+                    _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
+                                      _mainCamera.transform.eulerAngles.y;
+                    float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
+                        RotationSmoothTime);
 
-                // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-            }
+                    // rotate to face input direction relative to camera position
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                }
 
 
-            Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+                Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
                 // move the player
                 _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            }
+
+
+            /// COMBAT MOVEMENT V3
+
+            // Calculated movement for First Attack of Mace Combo
+            if (_animator.GetInteger("MaceAttack") > 0)
+            {
+                // Rotation to always attack forward
+
+                _targetRotation = Mathf.Atan2(0, 1) * Mathf.Rad2Deg +
+                                      _mainCamera.transform.eulerAngles.y;
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
+                        RotationSmoothTime);
+
+                // rotate to face forward relative to camera position
+                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+
+
+
+                Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+
+                // move the player for the first 20% of the animations run time
+                if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.4f) {
+                    _controller.Move(targetDirection.normalized * (MoveSpeed * Time.deltaTime) +
+                        new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+                }
+
+            }
+
+
+
+
+
 
             // update animator if using character
             if (_hasAnimator)
@@ -363,7 +405,7 @@ namespace StarterAssets
 
             if (_input.dash)
                 StartCoroutine(DashCoroutine(0.4f));
-            
+
         }
 
         //called from FrogCharacter.cs
