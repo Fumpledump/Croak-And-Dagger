@@ -13,9 +13,6 @@ public class PauseMenu : MonoBehaviour
 {
     private MenuMap menuMap;
     private InputAction escape;
-    private InputAction toggleUp;
-    private InputAction toggleDown;
-    private InputAction select;
     private float currentChoice;
 
     [SerializeField] private GameObject resume;
@@ -42,24 +39,9 @@ public class PauseMenu : MonoBehaviour
     private void OnEnable()
     {
         escape = menuMap.Menu.Escape;
-        toggleUp = menuMap.Menu.ToggleUp;
-        toggleDown = menuMap.Menu.ToggleDown;
-        select = menuMap.Menu.Select;
 
         escape.Enable();
-        toggleUp.Enable();
-        toggleDown.Enable();
-        select.Enable();
-
-        currentChoice = 0;
-        resume.GetComponent<Image>().color = Color.white;
-        exit.GetComponent<Image>().color = Color.grey;
-
-
         escape.performed += Pause;
-        toggleUp.performed += TogUp;
-        toggleDown.performed += TogDown;
-        select.performed += Select;
 
     }
 
@@ -79,6 +61,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0;
         AudioListener.pause = true;
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         pauseUI.SetActive(true);
     }
 
@@ -86,37 +69,16 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         AudioListener.pause = false;
-        Cursor.lockState = CursorLockMode.Locked;
         pauseUI.SetActive(false);
         isPaused = false;
     }
 
-    void TogUp(InputAction.CallbackContext context)
+    public void GoToTitle()
     {
-        currentChoice = 0;
-        resume.GetComponent<Image>().color = Color.white;
-        exit.GetComponent<Image>().color = Color.grey;
-        UnityEngine.Debug.Log(currentChoice);
+        SceneManager.LoadScene("MainMenu");
+        DeactivateMenu();
     }
 
-    void TogDown(InputAction.CallbackContext context)
-    {
-        currentChoice = 1;
-        resume.GetComponent<Image>().color = Color.grey;
-        exit.GetComponent<Image>().color = Color.white;
-        UnityEngine.Debug.Log(currentChoice);
-    }
-
-    void Select(InputAction.CallbackContext context)
-    {
-        if (currentChoice == 0)
-        {
-            DeactivateMenu();
-        }
-        else if (currentChoice == 1)
-        {
-            SceneManager.LoadScene("MainMenu");
-        }
-    }
+    
 }
 
