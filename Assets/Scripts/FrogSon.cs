@@ -18,6 +18,9 @@ public class FrogSon : MonoBehaviour
     protected Transform target;
     protected UnityEngine.AI.NavMeshAgent agent;
 
+    [Range(1f, 20f)]
+    public float croakRadius;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +32,16 @@ public class FrogSon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        agent.SetDestination(target.position);
+        float distance = Vector3.Distance(target.position, transform.position);
+
+        if(distance <= croakRadius)
+        {
+            agent.SetDestination(target.position);
+        }
+        else
+        {
+            player.GetComponent<FrogCharacter>().UnSheathWeapon();
+        }
     }
 
     void SwitchWeapons()

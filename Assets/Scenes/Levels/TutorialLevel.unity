@@ -29363,6 +29363,7 @@ MonoBehaviour:
   attackDamage: 0
   relationshipValue: 0
   player: {fileID: 0}
+  croakRadius: 10
 --- !u!1 &1661894926
 GameObject:
   m_ObjectHideFlags: 0

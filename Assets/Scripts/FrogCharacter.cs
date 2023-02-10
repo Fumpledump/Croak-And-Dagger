@@ -269,7 +269,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
         weapon[2].GetComponent<NavMeshAgent>().enabled = true;
     }
-    private void UnSheathWeapon()
+    public void UnSheathWeapon()
     {
         if (weapon[0].activeSelf) return; // if weapon already unsheathed
         weapon[0].SetActive(true); // weapon
