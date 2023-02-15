@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour
         Collider[] collisions = Physics.OverlapCapsule(collider.transform.position, collider.transform.position, collider.radius);
         foreach (Collider c in collisions)
         {
-            if (c.tag == "Enemy")
+            if (c.tag.Equals("Enemy"))
             {
                 parent.GetComponent<FrogCharacter>().CheckHit(c.gameObject);
             }

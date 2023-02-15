@@ -105,7 +105,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     {
         HUDUpdate();
         EnemyAI();
-        if(anim.GetBool("Hit"))
+        if (anim.GetBool("Hit"))
             ResetHit();
 
         if (player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AttackJump") && !inAir)
@@ -150,7 +150,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     public virtual void GetHit(int attackDamage)
     {
-        if(anim.GetBool("Hit") && Time.time - lastGotHit == 0f)
+        if (anim.GetBool("Hit") && Time.time - lastGotHit == 0f)
         {
             health -= attackDamage;
             anim.SetInteger("Health", health);
@@ -161,7 +161,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     void ResetHit()
     {
-        if(Time.time - lastGotHit > getHitCooldown)
+        if (Time.time - lastGotHit > getHitCooldown)
             anim.SetBool("Hit", false);
     }
 
@@ -196,7 +196,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         // Depending on the distance of the player and the enemy view distance
         // The enemy will enter a different state
         float distance = Vector3.Distance(target.position, transform.position);
-        if (!canSeePlayer && !isDead) 
+        if (!canSeePlayer && !isDead)
         {
             // Checks if the player was lost while chasing them
             if (!lostPlayer)
@@ -295,7 +295,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         float randomX = Random.Range(-10, 10);
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-        
+
         // Checks if the waypoint is still on the ground
         // if so then the waypoint is set
         if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
@@ -340,7 +340,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         {
             hits.AddRange(Physics.OverlapSphere(weapon.transform.position, 0.3f).ToList());
         }
-        if(hits.Count > 0)
+        if (hits.Count > 0)
         {
             foreach (Collider hit in hits)
             {
@@ -358,8 +358,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     {
         agent.SetDestination(transform.position);
 
-        if(!isDead)
-        transform.LookAt(target);
+        if (!isDead)
+            transform.LookAt(target);
 
         // Makes it so the player doesn't keep moving while attacking the player
         agent.speed = 0;
@@ -437,12 +437,13 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         Vector3 destination;
         float pullTime = (t_player.position - transform.position).sqrMagnitude / pullSpeed;
         float timer = 0;
-        while(timer < pullTime){
+        while (timer < pullTime)
+        {
             //destination and pullTime need to be updated each frame to account for player movement during the pull
             destination = t_player.position + ((transform.position - t_player.position).normalized);
             //pullTime = (t_player.position - transform.position).sqrMagnitude / pullSpeed;
 
-            transform.position = Vector3.Lerp(origin, destination, timer/pullTime);
+            transform.position = Vector3.Lerp(origin, destination, timer / pullTime);
             Debug.Log(pullTime);
             timer += Time.deltaTime;
             yield return null;

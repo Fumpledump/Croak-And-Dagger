@@ -173,6 +173,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
             if(timeSinceLastAttack > attackTimeBuffer) MaceAttack();
 
+            isAttacking = true;
             inputs.pAttack = false;
         }
         if (inputs.hAttack)
@@ -251,6 +252,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     {
         curMaceAttack = 0;
         anim.SetInteger("MaceAttack", curMaceAttack);
+        isAttacking = false;
 
         //timeSinceLastAttack = 0;
         //SheathWeapon();
@@ -279,7 +281,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     public void CheckHit(GameObject enemy)
     {
-        if (!hitEnemies.Contains(enemy))
+        if (!hitEnemies.Contains(enemy) && isAttacking)
         {
             enemy.GetComponent<Animator>().SetBool("Hit", true);
             enemy.GetComponent<Enemy>().lastGotHit = Time.time;
