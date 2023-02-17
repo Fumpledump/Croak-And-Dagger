@@ -79,7 +79,7 @@ public class EnemyRanged : Enemy
 
             //Clamps vertical rotation
             Vector3 myRotation = transform.rotation.eulerAngles;
-            if(myRotation.x < 310 && myRotation.x > 270){ myRotation.x = 310;}
+            if(myRotation.x < 325 && myRotation.x > 270){ myRotation.x = 325;}
 
             //Applies rotational changes
             transform.rotation = Quaternion.Euler(myRotation);

@@ -156,6 +156,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             anim.SetInteger("Health", health);
             onHitVFX.Play();
             anim.SetTrigger("GetHit");
+
+            canSeePlayer = true;
         }
     }
 
