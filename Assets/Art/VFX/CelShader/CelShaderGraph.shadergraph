@@ -26,6 +26,9 @@
         },
         {
             "m_Id": "46dc7475d6c44271952a731807ee9726"
+        },
+        {
+            "m_Id": "71efd8518ae84e9cbe2238cfe40b8b41"
         }
     ],
     "m_Keywords": [],
@@ -3456,6 +3459,35 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty",
+    "m_ObjectId": "71efd8518ae84e9cbe2238cfe40b8b41",
+    "m_Guid": {
+        "m_GuidSerialized": "04fb861e-2f24-4dd3-af0c-8925c4385c9e"
+    },
+    "m_Name": "DiffuseMap",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "DiffuseMap",
+    "m_DefaultReferenceName": "_DiffuseMap",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_Guid": ""
+    },
+    "isMainTexture": false,
+    "useTilingAndOffset": false,
+    "m_Modifiable": true,
+    "m_DefaultType": 0
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "747bd8c0e77a49e2be6f6d2b4c2b7380",
     "m_Group": {
@@ -5771,6 +5803,9 @@
         },
         {
             "m_Id": "46dc7475d6c44271952a731807ee9726"
+        },
+        {
+            "m_Id": "71efd8518ae84e9cbe2238cfe40b8b41"
         }
     ]
 }
