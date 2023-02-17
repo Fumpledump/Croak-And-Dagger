@@ -589,6 +589,7 @@ namespace StarterAssets
             }
             else
             {
+
                 // reset the jump timeout timer
                 _jumpTimeoutDelta = JumpTimeout;
 
