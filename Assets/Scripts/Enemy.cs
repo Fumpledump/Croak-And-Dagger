@@ -156,6 +156,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             anim.SetInteger("Health", health);
             onHitVFX.Play();
             anim.SetTrigger("GetHit");
+
+            canSeePlayer = true;
         }
     }
 
@@ -359,7 +361,14 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         agent.SetDestination(transform.position);
 
         if (!isDead)
+        {
             transform.LookAt(target);
+
+            Vector3 myRotation = transform.rotation.eulerAngles;
+            myRotation.x = 0;
+
+            transform.rotation = Quaternion.Euler(myRotation);
+        }
 
         // Makes it so the player doesn't keep moving while attacking the player
         agent.speed = 0;

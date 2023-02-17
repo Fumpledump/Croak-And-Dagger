@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EnemyRanged : Enemy
 {
@@ -71,7 +73,17 @@ public class EnemyRanged : Enemy
 
 
         if (enemyState != EnemyState.Idle)
+        {
+            Vector3 prevRot = transform.rotation.eulerAngles;
             transform.LookAt(player.transform.position);
+
+            //Clamps vertical rotation
+            Vector3 myRotation = transform.rotation.eulerAngles;
+            if(myRotation.x < 325 && myRotation.x > 270){ myRotation.x = 325;}
+
+            //Applies rotational changes
+            transform.rotation = Quaternion.Euler(myRotation);
+        }
 
         if (health <= 0 && !isDead)
         {

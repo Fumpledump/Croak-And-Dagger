@@ -258,6 +258,14 @@ namespace StarterAssets
 
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                 transform.position.z);
+
+            // check if this frame switched switched groundedness
+            if (Grounded != Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
+                QueryTriggerInteraction.Ignore))
+            {
+                gameObject.GetComponent<FrogCharacter>().EndAttackCombo();
+            }
+            
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
@@ -266,6 +274,8 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetBool(_animIDGrounded, Grounded);
+
+                // reset attack when landing
                 //_animator.SetBool("isInAir", !Grounded);
             }
         }
@@ -341,7 +351,7 @@ namespace StarterAssets
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
             // FOR COMBAT: only create regular rotation and movement when not attacking
-            if (_animator.GetInteger("MaceAttack") == 0)
+            if (_animator.GetInteger("MaceAttack") == 0 )
             {
                 if (_input.move != Vector2.zero)
                 {
@@ -383,8 +393,14 @@ namespace StarterAssets
 
                 Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
+                // jump attack motion if airborn
+                if (!_animator.GetBool("Grounded")) {
+                    _controller.Move(targetDirection.normalized * (MoveSpeed * Time.deltaTime) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+                }
                 // move the player for the first 20% of the animations run time
-                if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.4f) {
+                else if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.4f)
+                {
                     _controller.Move(targetDirection.normalized * (MoveSpeed * Time.deltaTime) +
                         new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
                 }
@@ -423,6 +439,10 @@ namespace StarterAssets
                 StopCoroutine(_swingCoroutine);
                 StartCoroutine(SwingBoostCoroutine());
             }
+        }
+        public void AirAttack()
+        {
+            _verticalVelocity = 0;
         }
 
         /// <summary>
@@ -569,6 +589,7 @@ namespace StarterAssets
             }
             else
             {
+
                 // reset the jump timeout timer
                 _jumpTimeoutDelta = JumpTimeout;
 
