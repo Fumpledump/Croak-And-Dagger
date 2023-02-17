@@ -242,13 +242,18 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         {
             curMaceAttack++;
         }
+        // trigger air attack parameters
+        if (!anim.GetBool("Grounded"))
+        {
+            gameObject.GetComponent<ThirdPersonController>().AirAttack();
+        }
 
         anim.SetInteger("MaceAttack", curMaceAttack);
         weaponTrail.active = true;
         croakTimer = 10;
     }
 
-    private void EndAttackCombo()
+    public void EndAttackCombo()
     {
         curMaceAttack = 0;
         anim.SetInteger("MaceAttack", curMaceAttack);
