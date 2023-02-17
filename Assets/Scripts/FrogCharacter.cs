@@ -39,6 +39,10 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     public GameObject weaponTrail;
     float maxComboDelay = 0.55f;
 
+    // Croak Transform
+    public GameObject croakTransform;
+    public AnimationCurve speedCurve;
+
     // Revamped Combat
     private int curMaceAttack = 0;
     private float timeSinceLastAttack = 0;
@@ -93,6 +97,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         // Start with weapon sheathed
         weapon[0].SetActive(false); // weapon
         weapon[2].SetActive(true); // croak
+        croakTransform.SetActive(false); // croak transform visual effects
+      
         //weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z);
         timeSinceLastAttack = attackTimeBuffer;
 
@@ -277,6 +283,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         weapon[0].SetActive(true); // weapon
         weapon[2].SetActive(false); // croak
         croakTimer = 10;
+        CroakTransform();
     }
 
     public void CheckHit(GameObject enemy)
@@ -494,5 +501,46 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         firefly.SetActive(false);
         GameManager.instance.hudUpdate = true;
         collectFireflyParticles.Play();
+    }
+
+    public void CroakTransform()
+    {
+        StopAllCoroutines();
+        Coroutine_CroakTransform();
+    }
+    IEnumerator Coroutine_CroakTransform()
+    {
+
+        Debug.LogWarning("Haha");
+        Vector3 target;
+        Vector3 startPos;
+        if (weapon[2].activeSelf)
+        {
+            target = weapon[1].transform.position;
+            startPos = weapon[2].transform.position;
+            float lerp = 0;
+            while (lerp < 1)
+            {
+                transform.position = Vector3.Lerp(startPos, target, speedCurve.Evaluate(lerp));
+                float magnitude = (transform.position - target).magnitude;
+                if (magnitude < 0.4f)
+                {
+                    break;
+                }
+                lerp += Time.deltaTime * 4;//speed
+                yield return null;
+            }
+            weapon[0].SetActive(true); // weapon
+            weapon[2].SetActive(false); // croak
+        }
+        else
+        {
+            target = weapon[2].transform.position;
+            startPos = weapon[1].transform.position;
+        }
+       
+
+
+
     }
 }
