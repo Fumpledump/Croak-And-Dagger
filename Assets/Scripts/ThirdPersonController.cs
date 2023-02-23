@@ -548,7 +548,7 @@ namespace StarterAssets
         {
             // check if player is holding down jump key
             jumpHeld = (_playerInput.currentActionMap.actions[2].ReadValue<float>() > 0.1f) ? true : false;
-            croak.GetComponent<FrogSon>().isJumping = true;
+            croak.GetComponent<FrogSon>().isJumping = false;
             if (Grounded)
             {
                 // reset hold jump timer
@@ -584,7 +584,7 @@ namespace StarterAssets
                     {
                         _animator.SetBool(_animIDJump, true);
                     }
-                    croak.GetComponent<FrogSon>().isJumping = false;
+                    croak.GetComponent<FrogSon>().isJumping = true;
 
                 }
 
