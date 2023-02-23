@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Linq;
+using System.IO;
+using System.Drawing;
 
 public enum EnemyState
 {
@@ -211,6 +213,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                 // The enemy will stop moving and stand at the last seen spot for a bit
                 // Then the walkpoint is set to false and the lost player is set to true
                 // So that the enemy will continue to patrol again
+
                 if (distanceToWalkPoint.magnitude < 3f)
                 {
                     StopEnemy();
@@ -231,11 +234,11 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                 Patrolling();
             }
         }
+
         if (canSeePlayer && !isDead && !player.GetComponent<FrogCharacter>().isDead) ChasePlayer();
         // Checks if the distance of the enemy is at the stopping distance
         // If so then that means the enemy can start attacking the player
         if (distance <= agent.stoppingDistance + 1 && !isDead && !player.GetComponent<FrogCharacter>().isDead) AttackPlayer();
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -312,7 +315,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         agent.speed = 3;
         gameObject.GetComponent<NavMeshAgent>().isStopped = false;
         lastPlayerDestination = target.position;
-        agent.SetDestination(target.position);
+        agent.SetDestination(lastPlayerDestination);
         lostPlayer = false;
     }
 
@@ -461,7 +464,4 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     }
 
     public bool GetSwingable() { return false; }
-
-
-
 }
