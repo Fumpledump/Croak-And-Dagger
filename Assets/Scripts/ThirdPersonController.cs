@@ -103,6 +103,8 @@ namespace StarterAssets
         private int holdJumpCount = 0;
         const int HOLDJUMP_COUNT_MAX = 3;
 
+        public GameObject croak;
+
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
@@ -268,6 +270,9 @@ namespace StarterAssets
             
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
+
+            croak.GetComponent<FrogSon>().grounded = Grounded;
+            //Debug.Log("grounded frog: " + Grounded);
 
             //Debug.Log("Grounded state: " + Grounded);
             // update animator if using character
@@ -543,7 +548,7 @@ namespace StarterAssets
         {
             // check if player is holding down jump key
             jumpHeld = (_playerInput.currentActionMap.actions[2].ReadValue<float>() > 0.1f) ? true : false;
-
+            croak.GetComponent<FrogSon>().isJumping = true;
             if (Grounded)
             {
                 // reset hold jump timer
@@ -579,6 +584,8 @@ namespace StarterAssets
                     {
                         _animator.SetBool(_animIDJump, true);
                     }
+                    croak.GetComponent<FrogSon>().isJumping = false;
+
                 }
 
                 // jump timeout
