@@ -50,13 +50,14 @@ public class EnemyRanged : Enemy
         switch(enemyState)
         {
             case EnemyState.MoveTowards:
-                agent.isStopped = false;
-                agent.SetDestination(target.position);
+                if (agent.pathStatus == NavMeshPathStatus.PathComplete)
+                {
+                    agent.SetDestination(target.position);
+                }
                 break;
 
             case EnemyState.MoveAway:
                 agent.SetDestination(transform.position + (transform.position - target.position));
-                agent.isStopped = false;
                 break;
 
             case EnemyState.Attack:
@@ -72,7 +73,7 @@ public class EnemyRanged : Enemy
                 }
                 break;
             case EnemyState.Idle:
-                agent.isStopped = true;
+                Patrolling();
                 break;
         }
 

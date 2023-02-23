@@ -214,7 +214,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                 // Then the walkpoint is set to false and the lost player is set to true
                 // So that the enemy will continue to patrol again
 
-                if (distanceToWalkPoint.magnitude < 3f)
+                if (distanceToWalkPoint.magnitude < 3f || waitTime <= 0)
                 {
                     StopEnemy();
                     if (waitTime <= 0)
@@ -223,11 +223,9 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                         lostPlayer = true;
                         waitTime = startWaitTime;
                     }
-                    else
-                    {
-                        waitTime -= Time.deltaTime;
-                    }
                 }
+
+                waitTime -= Time.deltaTime;
             }
             else
             {
@@ -246,7 +244,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         anim.SetBool("Hit", false);
     }
 
-    private void Patrolling()
+    protected void Patrolling()
     {
         // Goes to the walkpoint set
         // Makes it look as though the enemy is aimlessly walking around
@@ -259,7 +257,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
         // Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 3f)
+        if (distanceToWalkPoint.magnitude < 3f || waitTime <= 0)
         {
             StopEnemy();
             if (waitTime <= 0)
@@ -267,11 +265,9 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                 walkPointSet = false;
                 waitTime = startWaitTime;
             }
-            else
-            {
-                waitTime -= Time.deltaTime;
-            }
         }
+
+        waitTime -= Time.deltaTime;
 
     }
 
@@ -311,12 +307,15 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     private void ChasePlayer()
     {
-        // Sets the enemy to move towards the player
-        agent.speed = 3;
-        gameObject.GetComponent<NavMeshAgent>().isStopped = false;
-        lastPlayerDestination = target.position;
-        agent.SetDestination(lastPlayerDestination);
-        lostPlayer = false;
+        if (agent.pathStatus == NavMeshPathStatus.PathComplete)
+        {
+            // Sets the enemy to move towards the player
+            agent.speed = 3;
+            gameObject.GetComponent<NavMeshAgent>().isStopped = false;
+            lastPlayerDestination = target.position;
+            agent.SetDestination(lastPlayerDestination);
+            lostPlayer = false;
+        }
     }
 
     protected void CheckHit()
