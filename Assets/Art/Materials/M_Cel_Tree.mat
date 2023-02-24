@@ -54,6 +54,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DiffuseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -93,7 +97,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaClip: 0
-    - _Ambient_Strength: 0.3
+    - _Ambient_Strength: 0.11
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -104,19 +108,19 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _Falloff_Amount: 0.05
-    - _Fresnel_Size: 0.05
+    - _Falloff_Amount: 0.35
+    - _Fresnel_Size: 0.58
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Lighting_Cutoff: 0
+    - _Lighting_Cutoff: 0.08
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 2000
+    - _Smoothness: 20000.34
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -126,9 +130,9 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Diffuse_Color: {r: 0.2830189, g: 0.17765811, b: 0.15058741, a: 0}
+    - _Diffuse_Color: {r: 0.20754719, g: 0.08517266, b: 0.055802777, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Fresnel_Color: {r: 0.49056602, g: 0.34226626, b: 0.17771445, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Specular_Color: {r: 0.509434, g: 0.35510534, b: 0.30469918, a: 0}
+    - _Specular_Color: {r: 0.5188679, g: 0.3556472, b: 0.16398183, a: 0}
   m_BuildTextureStacks: []
