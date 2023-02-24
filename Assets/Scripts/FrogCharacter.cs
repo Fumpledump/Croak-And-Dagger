@@ -39,6 +39,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     public GameObject weaponTrail;
     float maxComboDelay = 0.55f;
 
+    // Croak Transform
+    public GameObject croakPop;
+    private ParticleSystem croakPopVFX;
+    public GameObject weaponPop;
+    private ParticleSystem weaponPopVFX;
+
     // Revamped Combat
     private int curMaceAttack = 0;
     private float timeSinceLastAttack = 0;
@@ -93,6 +99,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         // Start with weapon sheathed
         weapon[0].SetActive(false); // weapon
         weapon[2].SetActive(true); // croak
+      
         //weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z);
         timeSinceLastAttack = attackTimeBuffer;
 
@@ -101,6 +108,14 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         hitEnemies = new List<GameObject>();
 
         // Set Croak's positon
+
+        // get croak pop particle effect
+        croakPopVFX = croakPop.GetComponent<ParticleSystem>();
+        croakPop.transform.position = weapon[2].transform.position;
+        croakPop.SetActive(true);
+        weaponPopVFX = weaponPop.GetComponent<ParticleSystem>();
+        weaponPop.transform.position = weapon[1].transform.position;
+        weaponPop.SetActive(true);
     }
 
     public void LoadData(GameData data)
@@ -275,13 +290,23 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         weapon[2].GetComponent<NavMeshAgent>().enabled = false;
         weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
         weapon[2].GetComponent<NavMeshAgent>().enabled = true;
+
+        weaponPop.transform.position = weapon[0].transform.position;
+        croakPop.transform.position = weapon[2].transform.position;
+        weaponPopVFX.Play();
+        croakPopVFX.Play();
     }
     public void UnSheathWeapon()
     {
         if (weapon[0].activeSelf) return; // if weapon already unsheathed
+        croakTimer = 10;
         weapon[0].SetActive(true); // weapon
         weapon[2].SetActive(false); // croak
-        croakTimer = 10;
+
+        weaponPop.transform.position = weapon[0].transform.position;
+        croakPop.transform.position = weapon[2].transform.position;
+        weaponPopVFX.Play();
+        croakPopVFX.Play();
     }
 
     public void CheckHit(GameObject enemy)
@@ -500,4 +525,5 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         GameManager.instance.hudUpdate = true;
         collectFireflyParticles.Play();
     }
+
 }
