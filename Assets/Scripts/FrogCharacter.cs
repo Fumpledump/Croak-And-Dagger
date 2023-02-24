@@ -48,7 +48,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     // Revamped Combat
     private int curMaceAttack = 0;
     private float timeSinceLastAttack = 0;
-    private float attackTimeBuffer = 0.45f;
+    private float attackTimeBuffer = 0.35f;
     private float comboTimeBuffer = 1;
     private CapsuleCollider weaponCollider;
     private List<GameObject> hitEnemies;
@@ -186,7 +186,11 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (inputs.pAttack)
         {
             Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
-            if(timeSinceLastAttack > attackTimeBuffer) MaceAttack();
+            // mace combo
+            if(timeSinceLastAttack > attackTimeBuffer && anim.GetInteger("MaceAttack") < 3) MaceAttack();
+            // final hit takes double recovery before starting chain again
+            else if (timeSinceLastAttack > attackTimeBuffer * 2 && anim.GetInteger("MaceAttack") == 3) MaceAttack();
+
 
             isAttacking = true;
             inputs.pAttack = false;

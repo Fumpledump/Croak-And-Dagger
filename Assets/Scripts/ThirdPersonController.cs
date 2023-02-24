@@ -412,16 +412,15 @@ namespace StarterAssets
 
                 // jump attack motion if airborn
                 if (!_animator.GetBool("Grounded")) {
-                    _controller.Move(targetDirection.normalized * (MoveSpeed * Time.deltaTime) +
+                    _controller.Move(targetDirection.normalized * (MoveSpeed * 1.7f * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
                 }
                 // move the player for the first 20% of the animations run time
-                else if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.4f)
+                else if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.2f)
                 {
-                    _controller.Move(targetDirection.normalized * (MoveSpeed * Time.deltaTime) +
+                    _controller.Move(targetDirection.normalized * (MoveSpeed * 1.5f * Time.deltaTime) +
                         new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
                 }
-
             }
 
 
@@ -459,7 +458,7 @@ namespace StarterAssets
         }
         public void AirAttack()
         {
-            _verticalVelocity = 0;
+            _verticalVelocity = 2;
         }
 
         /// <summary>
