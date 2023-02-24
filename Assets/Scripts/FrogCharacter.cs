@@ -40,8 +40,10 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     float maxComboDelay = 0.55f;
 
     // Croak Transform
-    public GameObject croakTransform;
-    public AnimationCurve speedCurve;
+    public GameObject croakPop;
+    private ParticleSystem croakPopVFX;
+    public GameObject weaponPop;
+    private ParticleSystem weaponPopVFX;
 
     // Revamped Combat
     private int curMaceAttack = 0;
@@ -97,7 +99,6 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         // Start with weapon sheathed
         weapon[0].SetActive(false); // weapon
         weapon[2].SetActive(true); // croak
-        croakTransform.SetActive(false); // croak transform visual effects
       
         //weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z);
         timeSinceLastAttack = attackTimeBuffer;
@@ -107,6 +108,14 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         hitEnemies = new List<GameObject>();
 
         // Set Croak's positon
+
+        // get croak pop particle effect
+        croakPopVFX = croakPop.GetComponent<ParticleSystem>();
+        croakPop.transform.position = weapon[2].transform.position;
+        croakPop.SetActive(true);
+        weaponPopVFX = weaponPop.GetComponent<ParticleSystem>();
+        weaponPop.transform.position = weapon[1].transform.position;
+        weaponPop.SetActive(true);
     }
 
     public void LoadData(GameData data)
@@ -273,23 +282,31 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void SheathWeapon()
     {
-        croakTransform.transform.position = weapon[2].transform.position;
         if (weapon[2].activeSelf) return; // if weapon already sheathed
-        //weapon[0].SetActive(false); // weapon
-        //weapon[2].SetActive(true); // croak
+        weapon[0].SetActive(false); // weapon
+        weapon[2].SetActive(true); // croak
 
         // Set Croak's Position
         weapon[2].GetComponent<NavMeshAgent>().enabled = false;
         weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
         weapon[2].GetComponent<NavMeshAgent>().enabled = true;
-        CroakTransform();
+
+        weaponPop.transform.position = weapon[0].transform.position;
+        croakPop.transform.position = weapon[2].transform.position;
+        weaponPopVFX.Play();
+        croakPopVFX.Play();
     }
     public void UnSheathWeapon()
     {
         if (weapon[0].activeSelf) return; // if weapon already unsheathed
-        croakTransform.transform.position = weapon[2].transform.position;
         croakTimer = 10;
-        CroakTransform();
+        weapon[0].SetActive(true); // weapon
+        weapon[2].SetActive(false); // croak
+
+        weaponPop.transform.position = weapon[0].transform.position;
+        croakPop.transform.position = weapon[2].transform.position;
+        weaponPopVFX.Play();
+        croakPopVFX.Play();
     }
 
     public void CheckHit(GameObject enemy)
@@ -509,61 +526,4 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         collectFireflyParticles.Play();
     }
 
-    public void CroakTransform()
-    {
-        StopAllCoroutines();
-        StartCoroutine(Coroutine_CroakTransform());
-    }
-    IEnumerator Coroutine_CroakTransform()
-    {
-
-        Vector3 target;
-        Vector3 startPos;
-        float lerp = 0;
-        if (weapon[2].activeSelf)
-        {
-            // unshead weapn
-            weapon[0].SetActive(true); // weapon
-            weapon[2].SetActive(false); // croak
-            croakTransform.SetActive(true);
-            target = weapon[1].transform.position;
-            startPos = weapon[2].transform.position;
-            while (lerp < 3)
-            {
-                //weapon[2].transform.position = Vector3.Lerp(startPos, target, speedCurve.Evaluate(lerp));
-                croakTransform.transform.position = Vector3.Lerp(startPos, target, speedCurve.Evaluate(lerp));
-                float magnitude = (croakTransform.transform.position - target).magnitude;
-                if (magnitude < 0.4f)
-                {
-                    break;
-                }
-                lerp += Time.deltaTime * 4;//speed
-                yield return null;
-            }
-            croakTransform.SetActive(false);
-        }
-        else
-        {
-            weapon[0].SetActive(false); // weapon
-            weapon[2].SetActive(true); // croak
-            croakTransform.SetActive(true);
-            target = weapon[2].transform.position;
-            startPos = weapon[1].transform.position;
-            while (lerp < 3)
-            {
-                //weapon[2].transform.position = Vector3.Lerp(startPos, target, speedCurve.Evaluate(lerp));
-                croakTransform.transform.position = Vector3.Lerp(startPos, target, speedCurve.Evaluate(lerp));
-                float magnitude = (croakTransform.transform.position - target).magnitude;
-                if (magnitude < 0.4f)
-                {
-                    break;
-                }
-                lerp += Time.deltaTime * 4;//speed
-                yield return null;
-            }
-            croakTransform.SetActive(false);
-        }
-    
-
-    }
 }
