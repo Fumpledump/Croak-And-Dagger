@@ -59,7 +59,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
     private void Start()
     {
         player = this.transform.gameObject; // Grab Player GameObject
-        NarrativeIntegrator.CheckHandler();
+        NarrativeIntegrator.CheckIntegrator();
     }
 
     // Update is called once per frame

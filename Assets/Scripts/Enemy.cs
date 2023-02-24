@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     public Slider healthSlider;
     public GameObject weaponStart;
     public GameObject weaponEnd;
+    public GameObject group;
 
     // Player Tracking
     public float lookRadius = 10f;
@@ -70,7 +71,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     private Rigidbody rigidbody;
 
-    private EnemyManager enemyManager;
+    public EnemyManager enemyManager;
 
     // Save System
 
@@ -86,6 +87,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     private void Awake()
     {
         enemyManager = EnemyManager.instance;
+        group = transform.parent.gameObject;
     }
 
     // Start is called before the first frame update
@@ -182,10 +184,9 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
         if (health <= 0 && !isDead)
         {
-            deathTime = Time.time;
             isDead = true;
-            //enemyManager.EnemyGroupDefeated(gameObject.GetComponentInParent<GameObject>()); // Check Enemy Trigger in Manager
-
+            enemyManager.EnemyGroupDefeated(group); // Check Enemy Trigger in Manager
+            deathTime = Time.time;
             //this.gameObject.SetActive(false);
         }
 

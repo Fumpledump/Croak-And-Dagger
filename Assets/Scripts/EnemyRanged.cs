@@ -91,8 +91,9 @@ public class EnemyRanged : Enemy
 
         if (health <= 0 && !isDead)
         {
-            deathTime = Time.time;
             isDead = true;
+            enemyManager.EnemyGroupDefeated(group); // Check Enemy Trigger in Manager
+            deathTime = Time.time;
             anim.SetTrigger("Die");
         }
 

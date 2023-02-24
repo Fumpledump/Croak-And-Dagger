@@ -14,9 +14,13 @@ public class EnemyManager : MonoBehaviour
     void Awake()
     {
         if (instance == null)
+        {
             instance = this;
+        }
         else
+        {
             Destroy(instance);
+        }
     }
 
 
@@ -24,11 +28,9 @@ public class EnemyManager : MonoBehaviour
     {
         bool status = true;
 
-        foreach (GameObject child in group.transform)
+        foreach (Enemy enemy in enemies)
         {
-            Enemy enemy = child.GetComponent<Enemy>();
-
-            if (!enemy.isDead)
+            if (!enemy.isDead && enemy.group == group)
             {
                 status = false;
             }
@@ -36,7 +38,7 @@ public class EnemyManager : MonoBehaviour
 
         if (status == true)
         {
-            Debug.Log("All Enemies in the Group are Defeated!");
+            group.GetComponent<EnemyGroup>().GroupDefeated();
         }
     }
 }

@@ -7,13 +7,14 @@ using Yarn.Unity;
 public class NarrativeIntegrator
 {
     private static NarrativeHandler narrativeHandler = NarrativeHandler.Instance; // Get Ref to Narrative Handler
+    private static EnemyManager enemyManager = EnemyManager.instance; // Get Ref to Narrative Handler
 
     // Sets the Camera for Dialogue Sequences in the game.
     // Can be used to showcase different npcs and or set pieces to go along with the narrative.
     [YarnCommand("ChangeCamera")]
     private static void ChangeCamera(int cameraIndex)
     {
-        CheckHandler();
+        CheckIntegrator();
 
         // Check if Camera Index Exists
         if (cameraIndex > narrativeHandler.dialogueCameras.Count)
@@ -37,6 +38,11 @@ public class NarrativeIntegrator
 
         // Enable Dialogue Camera
         narrativeHandler.dialogueCameras[cameraIndex].SetActive(true);
+    }
+    [YarnCommand("SetEnemyGroup")]
+    private static void SetEnemyGroup(int groupIndex, bool setting)
+    {
+        enemyManager.enemyGroups[groupIndex].SetActive(setting);
     }
 
     // Sets the Relationship Value to the given value
@@ -74,12 +80,17 @@ public class NarrativeIntegrator
         return narrativeHandler.croakName;
     }
 
-    public static void CheckHandler()
+    public static void CheckIntegrator()
     {
         if (narrativeHandler == null)
         {
             Debug.Log("Narrative Handler is Null. Grabbing Narrative Handler");
             narrativeHandler = NarrativeHandler.Instance;
+        }
+        if (enemyManager == null)
+        {
+            Debug.Log("Enemy Manager is Null. Grabbing Enemey");
+            enemyManager = EnemyManager.instance;
         }
     }
 }

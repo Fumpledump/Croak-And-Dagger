@@ -8,7 +8,10 @@ Dagger: It's an egg....
     <<ChangeCamera 1>>
     Dagger: Don't worry buddy I got you.
 <<ChangeCamera 1>>
-Dagger: As rough as today has been.
+Dagger: Today must have been rough for the both of us...
+<<SetEnemyGroup 1 true>>
+<<ChangeCamera 6>>
+Dagger: Uh oh looks like we got company...
 <<ChangeCamera 0>>
 Dagger: I'm not gonna let anybody hurt you!!!
 ===
