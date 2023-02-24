@@ -70,13 +70,14 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
         AudioListener.pause = false;
         pauseUI.SetActive(false);
+        Cursor.visible = false;
         isPaused = false;
     }
 
     public void GoToTitle()
     {
-        SceneManager.LoadScene("MainMenu");
         DeactivateMenu();
+        SceneManager.LoadScene("MainMenu");
     }
 
     
