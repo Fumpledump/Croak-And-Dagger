@@ -40,9 +40,10 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     float maxComboDelay = 0.55f;
 
     // Croak Transform
-    public GameObject croakPop;
+    public GameObject croakPopPrefab;
+    private GameObject croakPop;
     private ParticleSystem croakPopVFX;
-    public GameObject weaponPop;
+    private GameObject weaponPop;
     private ParticleSystem weaponPopVFX;
 
     // Revamped Combat
@@ -109,6 +110,10 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
         // Set Croak's positon
 
+
+        // Initialize croak Effect
+        croakPop = Instantiate(croakPopPrefab, Vector3.zero, Quaternion.identity);
+        weaponPop = Instantiate(croakPopPrefab, Vector3.zero, Quaternion.identity);
         // get croak pop particle effect
         croakPopVFX = croakPop.GetComponent<ParticleSystem>();
         croakPop.transform.position = weapon[2].transform.position;
