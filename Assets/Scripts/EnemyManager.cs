@@ -7,6 +7,9 @@ public class EnemyManager : MonoBehaviour
     public static EnemyManager instance;
     // For pooling
     public List<Enemy> enemies;
+
+    public List<GameObject> enemyGroups = new List<GameObject>();
+
     // Basic Singleton
     void Awake()
     {
@@ -17,9 +20,23 @@ public class EnemyManager : MonoBehaviour
     }
 
 
-    // Update is called once per frame
-    void Update()
+    public void EnemyGroupDefeated(GameObject group)
     {
-        
+        bool status = true;
+
+        foreach (GameObject child in group.transform)
+        {
+            Enemy enemy = child.GetComponent<Enemy>();
+
+            if (!enemy.isDead)
+            {
+                status = false;
+            }
+        }
+
+        if (status == true)
+        {
+            Debug.Log("All Enemies in the Group are Defeated!");
+        }
     }
 }

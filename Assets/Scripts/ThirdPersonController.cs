@@ -203,18 +203,13 @@ namespace StarterAssets
         {
             _hasAnimator = TryGetComponent(out _animator);
 
-            // If Player is in Dialog Sequence disable movement controls until finished
-            if (inDialog)
-            {
-                return;
-            }
-
             // Checks if the player is dead or swinging
             // if not then the player is able to control Dagger
             if (!GameManager.instance.myFrog.isDead && !inSwing)
             {
                 JumpAndGravity();
                 GroundedCheck();
+
                 // cannot move if attacking
                 Move();
                 
@@ -318,6 +313,12 @@ namespace StarterAssets
             if (_input.dash)
                 targetSpeed = GameManager.instance.myFrog.Dash() ? DashSpeed : targetSpeed;
 
+            // If Player is in Dialog Sequence disable movement controls until finished
+            if (inDialog)
+            {
+                targetSpeed = 0;
+            }
+
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
@@ -329,6 +330,12 @@ namespace StarterAssets
 
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+
+            // If Player is in Dialog Sequence disable movement controls until finished
+            if (inDialog)
+            {
+                inputMagnitude = 0;
+            }
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
@@ -356,17 +363,22 @@ namespace StarterAssets
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
             // FOR COMBAT: only create regular rotation and movement when not attacking
-            if (_animator.GetInteger("MaceAttack") == 0 )
+            if (_animator.GetInteger("MaceAttack") == 0)
             {
                 if (_input.move != Vector2.zero)
                 {
                     _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                       _mainCamera.transform.eulerAngles.y;
+
                     float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                         RotationSmoothTime);
 
-                    // rotate to face input direction relative to camera position
-                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+                    if (!inDialog)
+                    {
+                        // rotate to face input direction relative to camera position
+                        transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                    }
                 }
 
 
@@ -548,6 +560,12 @@ namespace StarterAssets
         {
             // check if player is holding down jump key
             jumpHeld = (_playerInput.currentActionMap.actions[2].ReadValue<float>() > 0.1f) ? true : false;
+
+            if (inDialog)
+            {
+                jumpHeld = false;
+            }
+
             croak.GetComponent<FrogSon>().isJumping = false;
             if (Grounded)
             {

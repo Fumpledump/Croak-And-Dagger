@@ -53,9 +53,9 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     // Test
     protected float reviveCooldown = 2f;
     protected float despawnCooldown = 10f;
-    public float deathTime = 0;
-    protected bool isDead = false;
     protected bool inAir = false;
+    public float deathTime = 0;
+    public bool isDead = false;
     public ParticleSystem onHitVFX;
 
     // Enemy Field of View
@@ -70,6 +70,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     private Rigidbody rigidbody;
 
+    private EnemyManager enemyManager;
+
     // Save System
 
     [SerializeField] private string id;
@@ -79,6 +81,11 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     private void GenerateGuid()
     {
         id = System.Guid.NewGuid().ToString();
+    }
+
+    private void Awake()
+    {
+        enemyManager = EnemyManager.instance;
     }
 
     // Start is called before the first frame update
@@ -177,6 +184,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         {
             deathTime = Time.time;
             isDead = true;
+            //enemyManager.EnemyGroupDefeated(gameObject.GetComponentInParent<GameObject>()); // Check Enemy Trigger in Manager
+
             //this.gameObject.SetActive(false);
         }
 

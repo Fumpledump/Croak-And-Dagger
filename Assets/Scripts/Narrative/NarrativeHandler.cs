@@ -36,6 +36,8 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
     private GameObject player; // Player GameObject
     private static NarrativeHandler instance; // Singleton for the Narrative Handler
 
+    private Coroutine dialogeRoutine;
+
     public static NarrativeHandler Instance
     {
         get { return instance; }
@@ -63,22 +65,46 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
     // Update is called once per frame
     private void Update()
     {
-        dialogPrompt.gameObject.SetActive(inTrigger && !inDialog); // If the player can start a dialog sequence and is not already in one show the prompt
-
         // Starts a Dialog Sequence if the player is in a trigger for one
-        if (inTrigger && !inDialog )
+        if (inTrigger && !inDialog)
         {
+            if (!currentTrigger.automatic)
+            {
+                dialogPrompt.gameObject.SetActive(inTrigger && !inDialog); // If the player can start a dialog sequence and is not already in one show the prompt
+            }
+
             if (input.interact || currentTrigger.automatic)
             {
                 ActivateControls(false);
 
-                dialogSystem.StartDialogue(currentTrigger.node);
+
+                dialogeRoutine = StartCoroutine(DialogueStart());
             }
             else
             {
                 input.interact = false;
             }
         }
+        else
+        {
+            dialogPrompt.gameObject.SetActive(false); // If the player can start a dialog sequence and is not already in one show the prompt
+        }
+    }
+
+    IEnumerator DialogueStart(float delay = 0.25f)
+    {
+        if (player.GetComponent<ThirdPersonController>().Grounded)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+        else
+        {
+            yield return new WaitForSeconds(delay * 4);
+        }
+
+        
+        dialogSystem.StartDialogue(currentTrigger.node);
+        StopCoroutine(dialogeRoutine);
     }
 
     // Enables and Disables the Controls
