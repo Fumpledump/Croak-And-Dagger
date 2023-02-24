@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Rendering;
 
 public class EnemyRanged : Enemy
@@ -49,12 +50,14 @@ public class EnemyRanged : Enemy
         switch(enemyState)
         {
             case EnemyState.MoveTowards:
-                agent.SetDestination(target.position);
+                if (agent.pathStatus == NavMeshPathStatus.PathComplete)
+                {
+                    agent.SetDestination(target.position);
+                }
                 break;
 
             case EnemyState.MoveAway:
                 agent.SetDestination(transform.position + (transform.position - target.position));
-                
                 break;
 
             case EnemyState.Attack:
@@ -69,12 +72,13 @@ public class EnemyRanged : Enemy
                     attackCooldown -= Time.deltaTime;
                 }
                 break;
+            case EnemyState.Idle:
+                Patrolling();
+                break;
         }
-
 
         if (enemyState != EnemyState.Idle)
         {
-            Vector3 prevRot = transform.rotation.eulerAngles;
             transform.LookAt(player.transform.position);
 
             //Clamps vertical rotation

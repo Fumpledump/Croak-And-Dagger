@@ -19,18 +19,15 @@ public class FrogSon : MonoBehaviour
     protected UnityEngine.AI.NavMeshAgent agent;
 
     // Jump stuff
-    private bool grounded = true;
-    private float groundedOffset = -0.14f;
-    private float groundedRadius = 0.24f;
-    public LayerMask groundLayers;
+    public bool grounded = true;
 
-    private float playerGroundedValue;
-    private float jumpTimeout = 0.50f;
-    private float jumpTimeoutDelta;
-
-    private float gravity = -15.0f;
+    private float gravity = -50.0f;
     private float verticalVelocity;
     private float terminalVelocity = 53.0f;
+
+    public bool isJumping;
+
+    private CharacterController controller;
 
     [Range(1f, 20f)]
     public float croakRadius;
@@ -41,9 +38,7 @@ public class FrogSon : MonoBehaviour
         player = GameManager.instance.myFrog.gameObject;
         agent = GetComponent<NavMeshAgent>();
         target = player.transform;
-        playerGroundedValue = target.position.y;
-        jumpTimeoutDelta = jumpTimeout;
-        //Debug.Log("ground value" + playerGroundedValue);
+        controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -60,63 +55,40 @@ public class FrogSon : MonoBehaviour
             player.GetComponent<FrogCharacter>().UnSheathWeapon();
         }
 
-        //JumpAndGravity();
+        JumpAndGravity();
 
-    }
-
-    private void GroundedCheck()
-    {
-        // set sphere position, with offset
-
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset,
-                transform.position.z);
-
-        grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers,
-            QueryTriggerInteraction.Ignore);
 
     }
 
     private void JumpAndGravity()
     {
-        //Debug.Log(target.position.y);
 
         if (grounded)
         {
-            // stop our velocity dropping infinitely when grounded
-            if(verticalVelocity < 1f)
-            {
-                verticalVelocity = 2f;
-            }
-
+            
             //Jump
-            if (target.position.y > playerGroundedValue && jumpTimeoutDelta <= 0.0f)
+            if (isJumping)
             {
-                Debug.Log("jump croak");
-                verticalVelocity = 4.5f;
+                verticalVelocity = 10f;
+                controller.Move(new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
             }
-
-            // jump timeout
-            if (jumpTimeoutDelta >= 0.0f)
-            {
-                jumpTimeoutDelta -= Time.deltaTime;
-            }
-            //Debug.Log("grounded?");
+            
         }
         else
         {
-            jumpTimeoutDelta = jumpTimeout;
+
+            if (verticalVelocity < terminalVelocity)
+            {
+                verticalVelocity += gravity * Time.deltaTime;
+            }
+            controller.Move(new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
         }
 
-        if (verticalVelocity < terminalVelocity)
-        {
-            verticalVelocity += gravity * Time.deltaTime;
-        }
-
-        transform.position = new Vector3(transform.position.x, verticalVelocity, transform.position.z);
     }
 
     void SwitchWeapons()
     {
 
     }
+
 }

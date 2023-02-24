@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Linq;
+using System.IO;
+using System.Drawing;
 
 public enum EnemyState
 {
@@ -211,7 +213,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                 // The enemy will stop moving and stand at the last seen spot for a bit
                 // Then the walkpoint is set to false and the lost player is set to true
                 // So that the enemy will continue to patrol again
-                if (distanceToWalkPoint.magnitude < 3f)
+
+                if (distanceToWalkPoint.magnitude < 3f || waitTime <= 0)
                 {
                     StopEnemy();
                     if (waitTime <= 0)
@@ -220,22 +223,20 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                         lostPlayer = true;
                         waitTime = startWaitTime;
                     }
-                    else
-                    {
-                        waitTime -= Time.deltaTime;
-                    }
                 }
+
+                waitTime -= Time.deltaTime;
             }
             else
             {
                 Patrolling();
             }
         }
+
         if (canSeePlayer && !isDead && !player.GetComponent<FrogCharacter>().isDead) ChasePlayer();
         // Checks if the distance of the enemy is at the stopping distance
         // If so then that means the enemy can start attacking the player
         if (distance <= agent.stoppingDistance + 1 && !isDead && !player.GetComponent<FrogCharacter>().isDead) AttackPlayer();
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -243,7 +244,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         anim.SetBool("Hit", false);
     }
 
-    private void Patrolling()
+    protected void Patrolling()
     {
         // Goes to the walkpoint set
         // Makes it look as though the enemy is aimlessly walking around
@@ -256,7 +257,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
         // Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 3f)
+        if (distanceToWalkPoint.magnitude < 3f || waitTime <= 0)
         {
             StopEnemy();
             if (waitTime <= 0)
@@ -264,11 +265,9 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                 walkPointSet = false;
                 waitTime = startWaitTime;
             }
-            else
-            {
-                waitTime -= Time.deltaTime;
-            }
         }
+
+        waitTime -= Time.deltaTime;
 
     }
 
@@ -308,12 +307,15 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     private void ChasePlayer()
     {
-        // Sets the enemy to move towards the player
-        agent.speed = 3;
-        gameObject.GetComponent<NavMeshAgent>().isStopped = false;
-        lastPlayerDestination = target.position;
-        agent.SetDestination(target.position);
-        lostPlayer = false;
+        if (agent.pathStatus == NavMeshPathStatus.PathComplete)
+        {
+            // Sets the enemy to move towards the player
+            agent.speed = 3;
+            gameObject.GetComponent<NavMeshAgent>().isStopped = false;
+            lastPlayerDestination = target.position;
+            agent.SetDestination(lastPlayerDestination);
+            lostPlayer = false;
+        }
     }
 
     protected void CheckHit()
@@ -461,7 +463,4 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     }
 
     public bool GetSwingable() { return false; }
-
-
-
 }
