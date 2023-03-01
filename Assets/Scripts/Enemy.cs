@@ -35,6 +35,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     public float lookRadius = 10f;
     protected Transform target;
     protected NavMeshAgent agent;
+    private float chasingTimeOut;
 
     public LayerMask whatIsGround, whatIsPlayer;
     public Vector3 walkPoint;
@@ -156,7 +157,9 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         // Makes it so if the player attacks while the enemy can't see
         // they will turn back ground and fight back
         if (!canSeePlayer)
+        {
             canSeePlayer = true;
+        }
     }
 
     public virtual void GetHit(int attackDamage)
@@ -243,7 +246,22 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             }
         }
 
-        if (canSeePlayer && !isDead && !player.GetComponent<FrogCharacter>().isDead) ChasePlayer();
+        if (canSeePlayer && !isDead && !player.GetComponent<FrogCharacter>().isDead //Attempts to Chase Player
+            && agent.pathStatus == NavMeshPathStatus.PathComplete && chasingTimeOut <= 0) //Stops Chase if Player cannot be reached
+        {
+            ChasePlayer();
+        }
+        else if(agent.pathStatus != NavMeshPathStatus.PathComplete) //If Player cannot be reached, Force Enemy to Stop Chasing for 5 seconds, Start Patrol
+        {
+            chasingTimeOut = 3f;
+            walkPointSet = false;
+            lostPlayer = true;
+            waitTime = startWaitTime;
+            Patrolling();
+        }
+
+        if (chasingTimeOut >= 0){ chasingTimeOut -= Time.deltaTime;} 
+
         // Checks if the distance of the enemy is at the stopping distance
         // If so then that means the enemy can start attacking the player
         if (distance <= agent.stoppingDistance + 1 && !isDead && !player.GetComponent<FrogCharacter>().isDead) AttackPlayer();
@@ -258,7 +276,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     {
         // Goes to the walkpoint set
         // Makes it look as though the enemy is aimlessly walking around
-        if (!walkPointSet)
+        if (!walkPointSet || agent.pathStatus != NavMeshPathStatus.PathComplete)
         {
             SearchWalkPoint();
             agent.SetDestination(walkPoint);
@@ -317,15 +335,12 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     private void ChasePlayer()
     {
-        if (agent.pathStatus == NavMeshPathStatus.PathComplete)
-        {
-            // Sets the enemy to move towards the player
-            agent.speed = 3;
-            gameObject.GetComponent<NavMeshAgent>().isStopped = false;
-            lastPlayerDestination = target.position;
-            agent.SetDestination(lastPlayerDestination);
-            lostPlayer = false;
-        }
+        // Sets the enemy to move towards the player
+        agent.speed = 3;
+        gameObject.GetComponent<NavMeshAgent>().isStopped = false;
+        lastPlayerDestination = target.position;
+        agent.SetDestination(lastPlayerDestination);
+        lostPlayer = false;
     }
 
     protected void CheckHit()
