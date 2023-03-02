@@ -598,16 +598,18 @@ MonoBehaviour:
   healthSlider: {fileID: 4072986918231938288}
   weaponStart: {fileID: 3844710775297677410}
   weaponEnd: {fileID: 2276349208279046851}
+  group: {fileID: 0}
   lookRadius: 10
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 513
+    m_Bits: 1537
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256
   walkPoint: {x: 0, y: 0, z: 0}
   timeBetweenAttacks: 0
   deathTime: 0
+  isDead: 0
   onHitVFX: {fileID: 4199216889339966489}
   radius: 5
   angle: 180
@@ -615,7 +617,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   canSeePlayer: 0
-  id: 0ea32308-9bda-455b-8648-563f495a4532
+  enemyManager: {fileID: 0}
+  id: ffaf175c-7b67-4d10-8360-7aedae0f6d0e
 --- !u!54 &8992952566067443901
 Rigidbody:
   m_ObjectHideFlags: 0
