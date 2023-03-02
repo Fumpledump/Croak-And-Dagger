@@ -32,6 +32,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
     [Header("Narrative Input")]
     public GameObject NameInput; // Inputted Name by the Player
     public GameObject NameWarning; // Warning for Invalid Name
+    public GameObject textBox;
 
     private GameObject player; // Player GameObject
     private static NarrativeHandler instance; // Singleton for the Narrative Handler
@@ -172,6 +173,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         Debug.Log(this.croakName);
     }
 
+
     // Sets the Player Child's Name
     public void SetName()
     {
@@ -183,10 +185,17 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         }
         else
         {
+            if (inputField.text.Length <= 0)
+            {
+                inputField.text = "Croak";
+            }
+
+            Time.timeScale = 1;
             NameWarning.SetActive(false);
 
             this.croakName = inputField.text;
             NameInput.SetActive(false);
+            textBox.SetActive(true);
         }
     }
 }

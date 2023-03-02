@@ -115,6 +115,11 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     // Update is called once per frame
     void Update()
     {
+        if (player.GetComponent<NarrativeHandler>().inDialog)
+        {
+            return;
+        }
+
         HUDUpdate();
         EnemyAI();
         if (anim.GetBool("Hit"))
