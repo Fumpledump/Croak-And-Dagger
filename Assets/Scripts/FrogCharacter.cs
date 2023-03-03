@@ -58,7 +58,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     // probably switch to the frog son
     public FrogSon Son;
-    private float croakTimer = 10;
+    private float croakTimer = 4;
 
     // Tongue
     [SerializeField] float tongueLength = 1.0f; //how far away from the player can the tongue reach to grab things
@@ -274,7 +274,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
         anim.SetInteger("MaceAttack", curMaceAttack);
         weaponTrail.active = true;
-        croakTimer = 10;
+        croakTimer = 4;
     }
 
     public void EndAttackCombo()

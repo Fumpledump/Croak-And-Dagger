@@ -84,8 +84,7 @@ public class FrogSon : MonoBehaviour
     private void Move()
     {
         // Taken from Dagger's script
-        // Supposed to rotate Croak the same way it does dagger but
-        // Model needed for Croak to see if it is working
+        // Rotates Croak to face the same way as Dagger
 
         Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
