@@ -13,7 +13,7 @@ public class TargetLock : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera targetCam;
     [SerializeField] private Camera mainCam;
 
-    [SerializeField] private GameObject target;
+    [SerializeField] public GameObject target;
     [SerializeField] private GameObject targetSwitcher;
     [SerializeField] private Image lockImage;
     [SerializeField] private StarterAssetsInputs input;
