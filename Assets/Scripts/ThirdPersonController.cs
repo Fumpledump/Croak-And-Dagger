@@ -136,6 +136,22 @@ namespace StarterAssets
         public bool inSwing;
         Coroutine _swingCoroutine;
 
+        public StarterAssetsInputs Input
+        {
+            get
+            {
+                return _input;
+            }
+        }
+
+        public float Speed
+        {
+            get
+            {
+                return _speed;
+            }
+        }
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -395,20 +411,54 @@ namespace StarterAssets
             // Calculated movement for First Attack of Mace Combo
             if (_animator.GetInteger("MaceAttack") > 0)
             {
-                // Rotation to always attack forward
+                // Rotation to always attack forward during unlocked camera
 
-                _targetRotation = Mathf.Atan2(0, 1) * Mathf.Rad2Deg +
-                                      _mainCamera.transform.eulerAngles.y;
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
-                        RotationSmoothTime);
+                if (!_input.lockedOn)
+                {
+                    _targetRotation = Mathf.Atan2(0, 1) * Mathf.Rad2Deg +
+                                          _mainCamera.transform.eulerAngles.y;
+                    float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
+                            RotationSmoothTime);
 
-                // rotate to face forward relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                    // rotate to face forward relative to camera position
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                }
+                else // locked on camera
+                {
+                    
+                    Vector3 enemyPosition = GetComponent<TargetLock>().target.transform.position;
+                    /*
+                    Quaternion tempRotation = Quaternion.LookRotation(enemyPosition, transform.position);
+
+                    float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, tempRotation.eulerAngles.y, ref _rotationVelocity,
+                            RotationSmoothTime);
+
+                    // rotate to face forward relative to camera position
+                    transform.rotation = Quaternion.Euler(0.0f, tempRotation.eulerAngles.y, 0.0f);
+                    */
+
+                    transform.LookAt(enemyPosition);
+                    Vector3 eulerAngles = transform.rotation.eulerAngles;
+                    eulerAngles.x = 0;
+                    eulerAngles.z = 0;
+
+                    transform.rotation = Quaternion.Euler(eulerAngles);
+                    
+                }
 
 
 
+                // get movement direction
+                Vector3 targetDirection;
 
-                Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+                if (_input.lockedOn)
+                {
+                    targetDirection = transform.forward;
+                }
+                else
+                {
+                    targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+                }
 
                 // jump attack motion if airborn
                 if (!_animator.GetBool("Grounded")) {
@@ -566,7 +616,7 @@ namespace StarterAssets
             }
 
             croak.GetComponent<FrogSon>().isJumping = false;
-            if (Grounded)
+            if (Grounded && _animator.GetInteger("MaceAttack") == 0)
             {
                 // reset hold jump timer
                 holdJumpTimer = 0;

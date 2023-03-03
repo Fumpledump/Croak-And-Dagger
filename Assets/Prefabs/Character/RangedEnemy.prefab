@@ -1583,16 +1583,18 @@ MonoBehaviour:
   healthSlider: {fileID: 4072986918231938288}
   weaponStart: {fileID: 0}
   weaponEnd: {fileID: 0}
+  group: {fileID: 0}
   lookRadius: 15
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 513
+    m_Bits: 1537
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256
   walkPoint: {x: 0, y: 0, z: 0}
   timeBetweenAttacks: 0
   deathTime: 0
+  isDead: 0
   onHitVFX: {fileID: 4199216889339966489}
   radius: 0
   angle: 0
@@ -1600,7 +1602,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   canSeePlayer: 0
-  id: 
+  enemyManager: {fileID: 0}
+  id: 6d74bb37-804d-4401-ba0c-3c1fb534f302
   idealRange: 7
   rangeTolerance: 3
   projectile: {fileID: 3873377811334291190, guid: 0a58224e41a4bfa4da21f7ce12dcf1f2,

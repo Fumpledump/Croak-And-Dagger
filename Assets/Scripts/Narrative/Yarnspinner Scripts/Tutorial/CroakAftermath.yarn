@@ -1,0 +1,26 @@
+﻿title: CroakAftermath
+tags:
+---
+Dagger: Wow that was pretty cool.
+-> This kid is useful.
+    <<AddRelationshipValue -1>>
+-> That is quite an interesting ability.
+Dagger: Do you have a name little fella?
+Egg: ...
+Dagger: I am going to take that as a no.
+<<InputName>>
+Dagger: What do you think of that name?
+{GetName()}: Yeah! I am {GetName()}!!!
+Dagger: Woah! You can talk!
+-> Thanks for helping me take out those mosquitoes earlier.
+     <<AddRelationshipValue 1>>
+-> Why didn't you respond before?
+{GetName()}: Sorry I did not say anthing before... I did not know what to say and was kind of scared.
+Dagger: That's alright little buddy!
+-> Wanna come with me on adventure to help out my own kids?
+    <<AddRelationshipValue 1>>
+    {GetName()}: Yeah! That sounds like fun!
+-> Alright well lets go find some more baddies to beat up!
+    <<AddRelationshipValue -1>>
+    {GetName()}: Ok!
+===

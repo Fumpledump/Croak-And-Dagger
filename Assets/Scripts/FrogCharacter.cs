@@ -50,7 +50,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     private int curMaceAttack = 0;
     private float timeSinceLastAttack = 0;
     private float attackTimeBuffer = 0.35f;
-    private float comboTimeBuffer = 1;
+    private float comboTimeBuffer = 0.8f;
+    private float comboWalkOutTimer = 0.6f;
     private CapsuleCollider weaponCollider;
     private List<GameObject> hitEnemies;
     [SerializeField] private GameObject targetSwitcher;
@@ -134,9 +135,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         this.GetComponent<CharacterController>().enabled = false;
         this.transform.position = respawnPoint;
         this.GetComponent<CharacterController>().enabled = true;
-        weapon[2].GetComponent<NavMeshAgent>().enabled = false;
+        //weapon[2].GetComponent<NavMeshAgent>().enabled = false;
         weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
-        weapon[2].GetComponent<NavMeshAgent>().enabled = true;
+        //weapon[2].GetComponent<NavMeshAgent>().enabled = true;
         GameManager.instance.hudUpdate = true;
     }
 
@@ -154,6 +155,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     private void Update()
     {
         timeSinceLastAttack += Time.deltaTime;
+
         // if the time since the last attack is greater than the input buffer, end the combo
         if (timeSinceLastAttack > comboTimeBuffer)
         {
@@ -251,25 +253,23 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         {
             //this.gameObject.transform.LookAt(targetSwitcher.GetComponent<TargetSwitch>().currentTarget.transform);
         }
-        
-        // need to disable movement during attacking
 
         hitEnemies.Clear();
         UnSheathWeapon();
         timeSinceLastAttack = 0;
         
-        if (curMaceAttack + 1 > 3)
+        if (curMaceAttack + 1 > 3) // loop attack
         {
             curMaceAttack = 1;
         }
-        else
+        else if (anim.GetBool("Grounded") || anim.GetInteger("MaceAttack") == 0) // can start, but only continue combo if grounded
         {
             curMaceAttack++;
-        }
-        // trigger air attack parameters
-        if (!anim.GetBool("Grounded"))
-        {
-            gameObject.GetComponent<ThirdPersonController>().AirAttack();
+            // trigger air attack motion for third person controller if airborn for first attack
+            if (!anim.GetBool("Grounded"))
+            {
+                gameObject.GetComponent<ThirdPersonController>().AirAttack();
+            }
         }
 
         anim.SetInteger("MaceAttack", curMaceAttack);
@@ -296,9 +296,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         weapon[2].SetActive(true); // croak
 
         // Set Croak's Position
-        weapon[2].GetComponent<NavMeshAgent>().enabled = false;
+        //weapon[2].GetComponent<NavMeshAgent>().enabled = false;
         weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
-        weapon[2].GetComponent<NavMeshAgent>().enabled = true;
+        //weapon[2].GetComponent<NavMeshAgent>().enabled = true;
 
         weaponPop.transform.position = weapon[0].transform.position;
         croakPop.transform.position = weapon[2].transform.position;

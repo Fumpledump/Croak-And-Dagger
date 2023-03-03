@@ -32,20 +32,21 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     public GameObject weaponStart;
     public GameObject weaponEnd;
     public GameObject group;
+    public bool forceChaseMode = false;
 
     // Player Tracking
     public float lookRadius = 10f;
     protected Transform target;
     protected NavMeshAgent agent;
-    private float chasingTimeOut;
+    protected float chasingTimeOut;
 
     public LayerMask whatIsGround, whatIsPlayer;
     public Vector3 walkPoint;
-    bool walkPointSet;
+    protected bool walkPointSet;
     protected int maxHealth;
 
-    private float startWaitTime;
-    private float waitTime;
+    protected float startWaitTime;
+    protected float waitTime;
 
     private bool lostPlayer;
     private Vector3 lastPlayerDestination;
@@ -117,6 +118,11 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     // Update is called once per frame
     void Update()
     {
+        if (player.GetComponent<NarrativeHandler>().inDialog)
+        {
+            return;
+        }
+
         HUDUpdate();
         EnemyAI();
         if (anim.GetBool("Hit"))
@@ -248,18 +254,38 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             }
         }
 
-        if (canSeePlayer && !isDead && !player.GetComponent<FrogCharacter>().isDead //Attempts to Chase Player
-            && agent.pathStatus == NavMeshPathStatus.PathComplete && chasingTimeOut <= 0) //Stops Chase if Player cannot be reached
+        switch (forceChaseMode)
         {
-            ChasePlayer();
-        }
-        else if(agent.pathStatus != NavMeshPathStatus.PathComplete) //If Player cannot be reached, Force Enemy to Stop Chasing for 5 seconds, Start Patrol
-        {
-            chasingTimeOut = 3f;
-            walkPointSet = false;
-            lostPlayer = true;
-            waitTime = startWaitTime;
-            Patrolling();
+            case false:
+                if (canSeePlayer && !isDead && !player.GetComponent<FrogCharacter>().isDead //Attempts to Chase Player
+                && agent.pathStatus == NavMeshPathStatus.PathComplete && chasingTimeOut <= 0) //Stops Chase if Player cannot be reached
+                {
+                    ChasePlayer();
+                }
+                else if (agent.pathStatus != NavMeshPathStatus.PathComplete) //If Player cannot be reached, Force Enemy to Stop Chasing for 5 seconds, Start Patrol
+                {
+                    chasingTimeOut = 3f;
+                    walkPointSet = false;
+                    lostPlayer = true;
+                    waitTime = startWaitTime;
+                    Patrolling();
+                }
+                break;
+            case true:
+                NavMeshPath path = new NavMeshPath();
+                NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
+                if (agent.pathStatus != NavMeshPathStatus.PathComplete)
+                {
+                    agent.ResetPath();
+                    StopEnemy();
+                }
+                
+                if (path.status == NavMeshPathStatus.PathComplete && !isDead && !player.GetComponent<FrogCharacter>().isDead)
+                {
+                    StartEnemy(2);
+                    ChasePlayer();
+                }
+                break;
         }
 
         if (chasingTimeOut >= 0){ chasingTimeOut -= Time.deltaTime;} 
@@ -274,13 +300,13 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         anim.SetBool("Hit", false);
     }
 
-    protected void Patrolling()
+    private void Patrolling()
     {
         // Goes to the walkpoint set
         // Makes it look as though the enemy is aimlessly walking around
         if (!walkPointSet || agent.pathStatus != NavMeshPathStatus.PathComplete)
         {
-            SearchWalkPoint();
+            SearchWalkPoint(1);
             agent.SetDestination(walkPoint);
             StartEnemy(2);
         }
@@ -319,13 +345,13 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         anim.SetFloat("Speed", speed);
     }
 
-    private void SearchWalkPoint()
+    protected void SearchWalkPoint(float multiplier)
     {
         //Makes a random walk pont for the enemy to go to
         float randomZ = Random.Range(-10, 10);
         float randomX = Random.Range(-10, 10);
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        walkPoint = new Vector3(transform.position.x + randomX * multiplier, transform.position.y, transform.position.z + randomZ* multiplier);
 
         // Checks if the waypoint is still on the ground
         // if so then the waypoint is set

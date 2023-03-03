@@ -32,6 +32,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
     [Header("Narrative Input")]
     public GameObject NameInput; // Inputted Name by the Player
     public GameObject NameWarning; // Warning for Invalid Name
+    public GameObject textBox;
 
     private GameObject player; // Player GameObject
     private static NarrativeHandler instance; // Singleton for the Narrative Handler
@@ -93,6 +94,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
 
     IEnumerator DialogueStart(float delay = 0.25f)
     {
+        string storedTrigger = currentTrigger.node;
         if (player.GetComponent<ThirdPersonController>().Grounded)
         {
             yield return new WaitForSeconds(delay);
@@ -103,7 +105,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         }
 
         
-        dialogSystem.StartDialogue(currentTrigger.node);
+        dialogSystem.StartDialogue(storedTrigger);
         StopCoroutine(dialogeRoutine);
     }
 
@@ -140,14 +142,15 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         inDialog = false;
         input.interact = false;
 
-        if (currentTrigger.loadLevel != string.Empty)
-        {
-            SceneManager.LoadScene(currentTrigger.loadLevel);
-        }
-
         // Set Trigger to complete so it can not be reactivated
         if (currentTrigger != null)
         {
+            // check for level load
+            if (currentTrigger.loadLevel != string.Empty)
+            {
+                SceneManager.LoadScene(currentTrigger.loadLevel);
+            }
+
             if (!currentTrigger.repeatable)
             {
                 currentTrigger.triggerComplete = true;
@@ -172,6 +175,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         Debug.Log(this.croakName);
     }
 
+
     // Sets the Player Child's Name
     public void SetName()
     {
@@ -183,10 +187,17 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         }
         else
         {
+            if (inputField.text.Length <= 0)
+            {
+                inputField.text = "Croak";
+            }
+
+            Time.timeScale = 1;
             NameWarning.SetActive(false);
 
             this.croakName = inputField.text;
             NameInput.SetActive(false);
+            textBox.SetActive(true);
         }
     }
 }

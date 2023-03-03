@@ -30,7 +30,7 @@ public class EnemyRanged : Enemy
             enemyState = EnemyState.Idle;
         }  
 
-        else if(distance > idealRange + rangeTolerance)
+        else if(distance > idealRange + rangeTolerance && chasingTimeOut <= 0)
         {
             enemyState = EnemyState.MoveTowards;
         }   
@@ -54,6 +54,11 @@ public class EnemyRanged : Enemy
                 {
                     agent.SetDestination(target.position);
                 }
+                else
+                {
+                    chasingTimeOut = 3f;
+                    RangedPatrolling();
+                }
                 break;
 
             case EnemyState.MoveAway:
@@ -73,7 +78,7 @@ public class EnemyRanged : Enemy
                 }
                 break;
             case EnemyState.Idle:
-                Patrolling();
+                RangedPatrolling();
                 break;
         }
 
@@ -99,8 +104,12 @@ public class EnemyRanged : Enemy
 
         if (Time.time - deathTime > reviveCooldown && isDead)
         {
-          this.gameObject.SetActive(false);
+            gameObject.SetActive(false);
+        }
 
+        if(chasingTimeOut >= 0)
+        {
+            chasingTimeOut -= Time.deltaTime;
         }
 
         /**
@@ -125,6 +134,32 @@ public class EnemyRanged : Enemy
         anim.SetTrigger("Attack");
 
         spiderAttack.GetComponent<Rigidbody>().AddForce((target.transform.position - transform.position).normalized * 500.0f);
+    }
+
+    private void RangedPatrolling()
+    {
+        // Goes to the walkpoint set
+        // Makes it look as though the enemy is aimlessly walking around
+        if (!walkPointSet || agent.pathStatus != NavMeshPathStatus.PathComplete)
+        {
+            SearchWalkPoint(0.5f);
+            agent.SetDestination(walkPoint);
+            // anim.speed = 1;
+        }
+
+        Vector3 distanceToWalkPoint = transform.position - walkPoint;
+        // Walkpoint reached
+        if (distanceToWalkPoint.magnitude < 3f || waitTime <= 0)
+        {
+            // anim.speed = 0;
+            if (waitTime <= 0)
+            {
+                walkPointSet = false;
+                waitTime = startWaitTime*2;
+            }
+        }
+
+        waitTime -= Time.deltaTime;
     }
 
     public override void GetHit(int attackDamage)

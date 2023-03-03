@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+//using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.InputSystem;
+using StarterAssets;
+
 
 public class FrogSon : MonoBehaviour
 {
@@ -16,7 +19,7 @@ public class FrogSon : MonoBehaviour
     // Player tracking
     public GameObject player;
     protected Transform target;
-    protected UnityEngine.AI.NavMeshAgent agent;
+    //protected UnityEngine.AI.NavMeshAgent agent;
 
     // Jump stuff
     public bool grounded = true;
@@ -25,20 +28,37 @@ public class FrogSon : MonoBehaviour
     private float verticalVelocity;
     private float terminalVelocity = 53.0f;
 
+    private float targetRotation = 0.0f;
+
     public bool isJumping;
+    private StarterAssetsInputs _input;
+    private float rotationVelocity;
+    public float RotationSmoothTime = 0.12f;
 
     private CharacterController controller;
 
+    private GameObject mainCamera;
+
     [Range(1f, 20f)]
     public float croakRadius;
+
+    private void Awake()
+    {
+        // get a reference to our main camera
+        if (mainCamera == null)
+        {
+            mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameManager.instance.myFrog.gameObject;
-        agent = GetComponent<NavMeshAgent>();
+        //agent = GetComponent<NavMeshAgent>();
         target = player.transform;
         controller = GetComponent<CharacterController>();
+        _input = player.GetComponent<ThirdPersonController>().Input;
     }
 
     // Update is called once per frame
@@ -46,18 +66,48 @@ public class FrogSon : MonoBehaviour
     {
         float distance = Vector3.Distance(target.position, transform.position);
 
-        if (distance <= croakRadius)
+        // Checks if Croak is too far or too close
+        if (distance <= croakRadius && distance >= 2)
         {
-            agent.SetDestination(target.position);
+            Move();
         }
-        else
+        // Checks specifically if Croak is too far
+        else if(distance > croakRadius)
         {
             player.GetComponent<FrogCharacter>().UnSheathWeapon();
         }
-
+        
         JumpAndGravity();
 
+    }
 
+    private void Move()
+    {
+        // Taken from Dagger's script
+        // Supposed to rotate Croak the same way it does dagger but
+        // Model needed for Croak to see if it is working
+
+        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+
+        if (_input.move != Vector2.zero)
+        {
+
+            targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
+                  mainCamera.transform.eulerAngles.y;
+            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity,
+        RotationSmoothTime);
+
+            // rotate to face forward relative to camera position
+            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+        }
+
+        // Actual movement
+
+        Vector3 direction = target.position - transform.position;
+        Vector3 movement = direction.normalized * player.GetComponent<ThirdPersonController>().Speed * Time.deltaTime;
+
+        controller.Move(movement);
     }
 
     private void JumpAndGravity()
@@ -67,7 +117,8 @@ public class FrogSon : MonoBehaviour
         {
             
             //Jump
-            if (isJumping)
+            //if (isJumping)
+            if(_input.jump)
             {
                 verticalVelocity = 10f;
                 controller.Move(new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);

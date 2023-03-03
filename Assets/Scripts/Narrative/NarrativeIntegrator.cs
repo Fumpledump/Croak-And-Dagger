@@ -71,6 +71,8 @@ public class NarrativeIntegrator
     private static void InputName()
     {
         narrativeHandler.NameInput.SetActive(true);
+        narrativeHandler.textBox.SetActive(false);
+        Time.timeScale = 0;
     }
 
     // Gets current name for Player's Child so it can be displayed in Dialogue
