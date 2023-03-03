@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     public GameObject weaponStart;
     public GameObject weaponEnd;
     public GameObject group;
+    public bool forceChaseMode = false;
 
     // Player Tracking
     public float lookRadius = 10f;
@@ -251,18 +252,38 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             }
         }
 
-        if (canSeePlayer && !isDead && !player.GetComponent<FrogCharacter>().isDead //Attempts to Chase Player
-            && agent.pathStatus == NavMeshPathStatus.PathComplete && chasingTimeOut <= 0) //Stops Chase if Player cannot be reached
+        switch (forceChaseMode)
         {
-            ChasePlayer();
-        }
-        else if(agent.pathStatus != NavMeshPathStatus.PathComplete) //If Player cannot be reached, Force Enemy to Stop Chasing for 5 seconds, Start Patrol
-        {
-            chasingTimeOut = 3f;
-            walkPointSet = false;
-            lostPlayer = true;
-            waitTime = startWaitTime;
-            Patrolling();
+            case false:
+                if (canSeePlayer && !isDead && !player.GetComponent<FrogCharacter>().isDead //Attempts to Chase Player
+                && agent.pathStatus == NavMeshPathStatus.PathComplete && chasingTimeOut <= 0) //Stops Chase if Player cannot be reached
+                {
+                    ChasePlayer();
+                }
+                else if (agent.pathStatus != NavMeshPathStatus.PathComplete) //If Player cannot be reached, Force Enemy to Stop Chasing for 5 seconds, Start Patrol
+                {
+                    chasingTimeOut = 3f;
+                    walkPointSet = false;
+                    lostPlayer = true;
+                    waitTime = startWaitTime;
+                    Patrolling();
+                }
+                break;
+            case true:
+                NavMeshPath path = new NavMeshPath();
+                NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
+                if (agent.pathStatus != NavMeshPathStatus.PathComplete)
+                {
+                    agent.ResetPath();
+                    StopEnemy();
+                }
+                
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    StartEnemy(2);
+                    ChasePlayer();
+                }
+                break;
         }
 
         if (chasingTimeOut >= 0){ chasingTimeOut -= Time.deltaTime;} 
