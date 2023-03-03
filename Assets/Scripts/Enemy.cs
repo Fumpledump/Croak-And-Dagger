@@ -278,7 +278,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                     StopEnemy();
                 }
                 
-                if (path.status == NavMeshPathStatus.PathComplete)
+                if (path.status == NavMeshPathStatus.PathComplete && !isDead && !player.GetComponent<FrogCharacter>().isDead)
                 {
                     StartEnemy(2);
                     ChasePlayer();

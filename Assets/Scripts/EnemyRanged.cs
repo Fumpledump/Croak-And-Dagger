@@ -144,14 +144,14 @@ public class EnemyRanged : Enemy
         {
             SearchWalkPoint(0.5f);
             agent.SetDestination(walkPoint);
-            anim.speed = 1;
+            // anim.speed = 1;
         }
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
         // Walkpoint reached
         if (distanceToWalkPoint.magnitude < 3f || waitTime <= 0)
         {
-            anim.speed = 0;
+            // anim.speed = 0;
             if (waitTime <= 0)
             {
                 walkPointSet = false;
