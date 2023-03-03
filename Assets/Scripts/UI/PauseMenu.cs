@@ -16,6 +16,7 @@ public class PauseMenu : MonoBehaviour
     private float currentChoice;
 
     [SerializeField] private GameObject resume;
+    [SerializeField] private GameObject options;
     [SerializeField] private GameObject exit;
 
     [SerializeField] private GameObject pauseUI;
@@ -59,7 +60,7 @@ public class PauseMenu : MonoBehaviour
     void ActivateMenu()
     {
         Time.timeScale = 0;
-        AudioListener.pause = true;
+        //AudioListener.pause = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         pauseUI.SetActive(true);
@@ -80,6 +81,12 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    
+    public void GoToOptions()
+    {
+        DeactivateMenu();
+        SceneManager.LoadScene("Settings");
+    }
+
+
 }
 
