@@ -94,6 +94,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
 
     IEnumerator DialogueStart(float delay = 0.25f)
     {
+        string storedTrigger = currentTrigger.node;
         if (player.GetComponent<ThirdPersonController>().Grounded)
         {
             yield return new WaitForSeconds(delay);
@@ -104,7 +105,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         }
 
         
-        dialogSystem.StartDialogue(currentTrigger.node);
+        dialogSystem.StartDialogue(storedTrigger);
         StopCoroutine(dialogeRoutine);
     }
 
@@ -141,14 +142,15 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         inDialog = false;
         input.interact = false;
 
-        if (currentTrigger.loadLevel != string.Empty)
-        {
-            SceneManager.LoadScene(currentTrigger.loadLevel);
-        }
-
         // Set Trigger to complete so it can not be reactivated
         if (currentTrigger != null)
         {
+            // check for level load
+            if (currentTrigger.loadLevel != string.Empty)
+            {
+                SceneManager.LoadScene(currentTrigger.loadLevel);
+            }
+
             if (!currentTrigger.repeatable)
             {
                 currentTrigger.triggerComplete = true;
