@@ -34,7 +34,7 @@ public class NarrativeTrigger : MonoBehaviour
     }
     private void OnTriggerExit(Collider col)
     {
-        if (col.tag == "Player" && !triggerComplete)
+        if (col.tag == "Player" && triggerComplete)
         {
             narrativeHandler.inTrigger = false;
             narrativeHandler.currentTrigger = null;
