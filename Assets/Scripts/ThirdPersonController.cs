@@ -582,7 +582,7 @@ namespace StarterAssets
             }
 
             croak.GetComponent<FrogSon>().isJumping = false;
-            if (Grounded)
+            if (Grounded && _animator.GetInteger("MaceAttack") == 0)
             {
                 // reset hold jump timer
                 holdJumpTimer = 0;
