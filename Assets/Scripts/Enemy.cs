@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System.IO;
 using System.Drawing;
+using UnityEngine.VFX;
 
 public enum EnemyState
 {
@@ -23,6 +24,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     public int attackDamage;
     protected int damage = 10;
     public Animator anim;
+    public VisualEffect attackEffect;
     public GameObject player;
     public float lastGotHit = 0;
     public float getHitCooldown = 0.55f;
@@ -405,6 +407,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         {
             // Attack code
             anim.SetBool("Attack", true);
+            attackEffect.Play();
 
             // Checks if the enemy has hit the player
             InvokeRepeating(nameof(CheckHit), 1.5f, 0.1f);
