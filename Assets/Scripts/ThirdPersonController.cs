@@ -136,6 +136,22 @@ namespace StarterAssets
         public bool inSwing;
         Coroutine _swingCoroutine;
 
+        public StarterAssetsInputs Input
+        {
+            get
+            {
+                return _input;
+            }
+        }
+
+        public float Speed
+        {
+            get
+            {
+                return _speed;
+            }
+        }
+
         private bool IsCurrentDeviceMouse
         {
             get

@@ -134,9 +134,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         this.GetComponent<CharacterController>().enabled = false;
         this.transform.position = respawnPoint;
         this.GetComponent<CharacterController>().enabled = true;
-        weapon[2].GetComponent<NavMeshAgent>().enabled = false;
+        //weapon[2].GetComponent<NavMeshAgent>().enabled = false;
         weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
-        weapon[2].GetComponent<NavMeshAgent>().enabled = true;
+        //weapon[2].GetComponent<NavMeshAgent>().enabled = true;
         GameManager.instance.hudUpdate = true;
     }
 
@@ -296,9 +296,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         weapon[2].SetActive(true); // croak
 
         // Set Croak's Position
-        weapon[2].GetComponent<NavMeshAgent>().enabled = false;
+        //weapon[2].GetComponent<NavMeshAgent>().enabled = false;
         weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
-        weapon[2].GetComponent<NavMeshAgent>().enabled = true;
+        //weapon[2].GetComponent<NavMeshAgent>().enabled = true;
 
         weaponPop.transform.position = weapon[0].transform.position;
         croakPop.transform.position = weapon[2].transform.position;
