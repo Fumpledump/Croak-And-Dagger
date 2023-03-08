@@ -7,39 +7,44 @@ using UnityEngine.Rendering;
 
 public class EnemyRanged : Enemy
 {
-    private EnemyState enemyState;
+    private EnemyState enemyState = EnemyState.Idle;
     [SerializeField] private float idealRange;
     [SerializeField] private float rangeTolerance;
     [SerializeField] GameObject projectile;
     public float attackInterval = 2.0f;
     public float projectileSpeed = 700f;
     float attackCooldown = 0f;
+    bool patrolling = false;
 
     protected override void EnemyAI()
     {
-
         anim.SetInteger("MovementState", (int)enemyState);
 
 
-        //anim.SetFloat("Speed", agent.speed);
-
         float distance = Vector3.Distance(target.position, transform.position);
 
-        if (distance > lookRadius || isDead)
+        if(patrolling && distance > lookRadius)
+        {
+            enemyState = EnemyState.Patrol;
+        }
+
+        else if (distance > lookRadius || isDead)
         {
             enemyState = EnemyState.Idle;
-        }  
+        }
 
         else if(distance > idealRange + rangeTolerance && chasingTimeOut <= 0)
         {
             enemyState = EnemyState.MoveTowards;
+            patrolling = false;
         }   
         
         else if(distance < idealRange - rangeTolerance)
         {
             enemyState = EnemyState.MoveAway;
-        }   
-        
+            patrolling = false;
+        }
+
         else
         {
             enemyState = EnemyState.Attack;
@@ -57,7 +62,9 @@ public class EnemyRanged : Enemy
                 else
                 {
                     chasingTimeOut = 3f;
-                    RangedPatrolling();
+                    patrolling = true;
+                    walkPointSet = false;
+                    waitTime = startWaitTime * 2;
                 }
                 break;
 
@@ -78,11 +85,16 @@ public class EnemyRanged : Enemy
                 }
                 break;
             case EnemyState.Idle:
+                waitTime -= Time.deltaTime;
+                agent.ResetPath();
+                break;
+            case EnemyState.Patrol:
                 RangedPatrolling();
+                waitTime -= Time.deltaTime;
                 break;
         }
 
-        if (enemyState != EnemyState.Idle)
+        if (enemyState != EnemyState.Idle && enemyState != EnemyState.Patrol)
         {
             transform.LookAt(player.transform.position);
 
@@ -112,6 +124,14 @@ public class EnemyRanged : Enemy
             chasingTimeOut -= Time.deltaTime;
         }
 
+        //Checking if enemy should enter patrol mode - Is idle and has waited long enough since the last patrol
+        if(waitTime <= 0 && enemyState == EnemyState.Idle) 
+        {
+            patrolling = true;
+            walkPointSet = false;
+            waitTime = startWaitTime * 2;
+        }
+
         /**
         if (Time.time - deathTime > reviveCooldown && isDead)
         {
@@ -136,6 +156,7 @@ public class EnemyRanged : Enemy
         spiderAttack.GetComponent<Rigidbody>().AddForce((target.transform.position - transform.position).normalized * 500.0f);
     }
 
+    //Runs Patrol Process
     private void RangedPatrolling()
     {
         // Goes to the walkpoint set
@@ -144,22 +165,20 @@ public class EnemyRanged : Enemy
         {
             SearchWalkPoint(0.5f);
             agent.SetDestination(walkPoint);
-            // anim.speed = 1;
         }
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
         // Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 3f || waitTime <= 0)
+        if (distanceToWalkPoint.magnitude < 1f || waitTime <= 0)
         {
-            // anim.speed = 0;
+            patrolling = false;
+
             if (waitTime <= 0)
             {
                 walkPointSet = false;
                 waitTime = startWaitTime*2;
             }
         }
-
-        waitTime -= Time.deltaTime;
     }
 
     public override void GetHit(int attackDamage)

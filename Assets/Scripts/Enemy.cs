@@ -12,6 +12,7 @@ public enum EnemyState
 {
     MoveTowards,
     MoveAway,
+    Patrol,
     Attack,
     Idle
 }
@@ -350,6 +351,12 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         //Makes a random walk pont for the enemy to go to
         float randomZ = Random.Range(-10, 10);
         float randomX = Random.Range(-10, 10);
+
+        if(randomZ < 3 && randomZ >= 0) { randomZ = 3; }
+        else if (randomZ > -3 && randomZ <= 0) { randomZ = -3; }
+
+        if (randomX < 3 && randomX >= 0) { randomX = 3; }
+        else if (randomX > -3 && randomX <= 0) { randomX = -3; }
 
         walkPoint = new Vector3(transform.position.x + randomX * multiplier, transform.position.y, transform.position.z + randomZ* multiplier);
 
