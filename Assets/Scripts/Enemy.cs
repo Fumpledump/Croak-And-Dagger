@@ -137,9 +137,10 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         }
     }
 
+    // Since the enemy manager exists this all needs to be changed
     public void LoadData(GameData data)
     {
-        data.enemies.TryGetValue(id, out isDead);
+        //data.enemies.TryGetValue(id, out isDead);
         if (isDead)
         {
             this.gameObject.SetActive(false);
@@ -155,7 +156,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         data.enemies.Add(id, isDead);
     }
 
-    private void HUDUpdate()
+    protected void HUDUpdate()
     {
         healthSlider.value = maxHealth - health;
     }

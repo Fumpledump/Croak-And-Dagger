@@ -15,7 +15,10 @@ public class Boss : Enemy
     // Start is called before the first frame update
     void Start()
     {
+        // This should be 500
+        // If it is lower it is due to testing
         health = 500;
+        maxHealth = health;
         damage = 1;
         healthSlider.maxValue = 500;
         healthSlider.value = 0;
@@ -27,44 +30,72 @@ public class Boss : Enemy
     void Update()
     {
         FindPlayer();
+        HUDUpdate();
     }
 
     void FindPlayer()
     {
-        if (Vector3.Distance(transform.position, GameManager.instance.myFrog.transform.position) < findingRadius && !isAttacking)
+        if (health <= 0 && !isDead)
         {
-            agent.SetDestination(GameManager.instance.myFrog.transform.position);
-            anim.SetFloat("Speed", 1);
+            isDead = true;
+            deathTime = Time.time;
+            //this.gameObject.SetActive(false);
         }
 
-        if(Vector3.Distance(transform.position, GameManager.instance.myFrog.transform.position) < 1 && !isAttacking)
+        if (Time.time - deathTime > despawnCooldown && isDead)
         {
-            // Play Animation and attack
-            if (Random.Range(0, 10) > 3)
-            {
-                anim.SetBool("Triple", true);
-                isAttacking = true;
-            }
-             
-            else
-            {
-                anim.SetBool("Heavy", true);
-                isAttacking = true;
-            }
+            this.gameObject.SetActive(false);
+
         }
 
-        if(isAttacking)
+        if (!isDead)
         {
-            attackTime += Time.deltaTime;
-            CheckHit(weapons);
-            
-            if(attackTime > 2.5f)
+            if (Vector3.Distance(transform.position, GameManager.instance.myFrog.transform.position) < findingRadius && !isAttacking)
             {
-                isAttacking = false;
-                anim.SetBool("Triple", false);
-                anim.SetBool("Heavy", false);
-                attackTime = 0;
+                agent.SetDestination(GameManager.instance.myFrog.transform.position);
+                anim.SetFloat("Speed", 1);
             }
+
+            if (Vector3.Distance(transform.position, GameManager.instance.myFrog.transform.position) < 2 && !isAttacking)
+            {
+                // Play Animation and attack
+                if (Random.Range(0, 10) > 3)
+                {
+                    anim.SetBool("Triple", true);
+                    isAttacking = true;
+                }
+
+                else
+                {
+                    anim.SetBool("Heavy", true);
+                    isAttacking = true;
+                }
+            }
+
+            if (isAttacking)
+            {
+                attackTime += Time.deltaTime;
+                CheckHit(weapons);
+
+                if (attackTime > 2.5f)
+                {
+                    isAttacking = false;
+                    anim.SetBool("Triple", false);
+                    anim.SetBool("Heavy", false);
+                    attackTime = 0;
+                }
+            }
+        }
+    }
+
+    public void BossHit(int attackDamage)
+    {
+        if (Time.time - lastGotHit == 0f)
+        {
+            health -= attackDamage;
+            onHitVFX.Play();
+
+            canSeePlayer = true;
         }
     }
 }

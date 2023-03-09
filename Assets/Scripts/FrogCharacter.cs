@@ -154,6 +154,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void Update()
     {
+        //Debug.Log(currentHealth);
         timeSinceLastAttack += Time.deltaTime;
 
         // if the time since the last attack is greater than the input buffer, end the combo
@@ -322,9 +323,17 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     {
         if (!hitEnemies.Contains(enemy) && isAttacking)
         {
-            enemy.GetComponent<Animator>().SetBool("Hit", true);
             enemy.GetComponent<Enemy>().lastGotHit = Time.time;
-            enemy.GetComponent<Enemy>().GetHit(attackDamage);
+            if (enemy.tag == "Enemy")
+            {
+                enemy.GetComponent<Animator>().SetBool("Hit", true);
+                enemy.GetComponent<Enemy>().GetHit(attackDamage);
+            }
+            else if(enemy.tag == "Boss")
+            {
+                enemy.GetComponent<Boss>().BossHit(attackDamage);
+            }
+
             hitEnemies.Add(enemy);
         }
     }

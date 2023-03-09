@@ -9,6 +9,7 @@ TagManager:
   - Weapon
   - Checkpoint
   - Collectible
+  - Boss
   layers:
   - Default
   - TransparentFX
