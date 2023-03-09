@@ -186,7 +186,10 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             //noOfAttacks = 0;
         }
 
-
+        if (inDialog)
+        {
+            timeSinceLastAttack = 0f;
+        }
         // If Player is in Dialog Sequence disable combat controls until finished
         if (inDialog) return;
 
