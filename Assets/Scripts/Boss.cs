@@ -31,6 +31,9 @@ public class Boss : Enemy
     {
         FindPlayer();
         HUDUpdate();
+
+        if (anim.GetBool("Hit"))
+            ResetHit();
     }
 
     void FindPlayer()
@@ -71,27 +74,28 @@ public class Boss : Enemy
                     isAttacking = true;
                 }
             }
+        }
 
-            if (isAttacking)
+        if (isAttacking)
+        {
+            attackTime += Time.deltaTime;
+            CheckHit(weapons);
+
+            if (attackTime > 2.5f)
             {
-                attackTime += Time.deltaTime;
-                CheckHit(weapons);
-
-                if (attackTime > 2.5f)
-                {
-                    isAttacking = false;
-                    anim.SetBool("Triple", false);
-                    anim.SetBool("Heavy", false);
-                    attackTime = 0;
-                }
+                isAttacking = false;
+                anim.SetBool("Triple", false);
+                anim.SetBool("Heavy", false);
+                attackTime = 0;
             }
         }
     }
 
     public void BossHit(int attackDamage)
     {
-        if (Time.time - lastGotHit == 0f)
+        if (anim.GetBool("Hit") && Time.time - lastGotHit == 0f)
         {
+            anim.SetInteger("Health", health);
             health -= attackDamage;
             onHitVFX.Play();
 

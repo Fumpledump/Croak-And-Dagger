@@ -331,6 +331,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             }
             else if(enemy.tag == "Boss")
             {
+                enemy.GetComponent<Animator>().SetBool("Hit", true);
                 enemy.GetComponent<Boss>().BossHit(attackDamage);
             }
 

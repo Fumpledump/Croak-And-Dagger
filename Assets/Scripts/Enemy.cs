@@ -185,7 +185,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         }
     }
 
-    void ResetHit()
+    protected void ResetHit()
     {
         if (Time.time - lastGotHit > getHitCooldown)
             anim.SetBool("Hit", false);
