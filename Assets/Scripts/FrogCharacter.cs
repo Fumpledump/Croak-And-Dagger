@@ -64,6 +64,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     [SerializeField] float tongueLength = 1.0f; //how far away from the player can the tongue reach to grab things
     [SerializeField] float pullSpeed = 50.0f; //how quickly a grabbed object will be pulled to the player
     private bool tonguePressed = false;
+    private float maxSwingingDistance = 20f;
 
     // Narrative
     public bool inDialog;
@@ -518,7 +519,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             Debug.DrawLine(tonguePosStart, tonguePosStart + tongueDirection * tongueLength, Color.red, 1.0f);
 
             Physics.Raycast(tonguePosStart, tongueDirection, out raycast);
-            if (raycast.collider)
+            if (raycast.collider && raycast.collider.gameObject.GetComponent<IGrabbable>() != null && raycast.distance <= maxSwingingDistance)
             {
                 IGrabbable g = raycast.collider.gameObject.GetComponent<IGrabbable>();
                 if (g != null)

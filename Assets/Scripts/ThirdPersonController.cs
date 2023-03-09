@@ -502,6 +502,7 @@ namespace StarterAssets
         {
             if(_swinging)
             {
+                _swinging = false;
                 StopCoroutine(_swingCoroutine);
                 StartCoroutine(SwingBoostCoroutine());
             }
