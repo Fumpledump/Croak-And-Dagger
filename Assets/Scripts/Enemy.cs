@@ -441,7 +441,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         {
             // Attack code
             anim.SetBool("Attack", true);
-            attackEffect.Play();
+            //attackEffect.Play();
 
             // Checks if the enemy has hit the player
             InvokeRepeating(nameof(CheckHit), 1.5f, 0.1f);
