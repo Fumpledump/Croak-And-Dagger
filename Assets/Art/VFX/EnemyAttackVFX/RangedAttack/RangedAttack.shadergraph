@@ -3657,7 +3657,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Alpha",
     "m_StageCapability": 2,
-    "m_Value": 1.0,
+    "m_Value": 0.800000011920929,
     "m_DefaultValue": 1.0,
     "m_Labels": []
 }
@@ -7333,7 +7333,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Power",
     "m_StageCapability": 3,
-    "m_Value": 2.0,
+    "m_Value": 5.659999847412109,
     "m_DefaultValue": 1.0,
     "m_Labels": []
 }
