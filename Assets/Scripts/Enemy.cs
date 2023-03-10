@@ -264,7 +264,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
                 {
                     ChasePlayer();
                 }
-                else if (agent.pathStatus != NavMeshPathStatus.PathComplete) //If Player cannot be reached, Force Enemy to Stop Chasing for 5 seconds, Start Patrol
+                else if (agent.pathStatus != NavMeshPathStatus.PathComplete && !isDead) //If Player cannot be reached, Force Enemy to Stop Chasing for 5 seconds, Start Patrol
                 {
                     chasingTimeOut = 3f;
                     walkPointSet = false;
@@ -276,7 +276,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             case true:
                 NavMeshPath path = new NavMeshPath();
                 NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
-                if (agent.pathStatus != NavMeshPathStatus.PathComplete)
+                if (agent.pathStatus != NavMeshPathStatus.PathComplete && !isDead)
                 {
                     agent.ResetPath();
                     StopEnemy();
