@@ -22,7 +22,16 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     public int maxhealth;
     public int maxEnergy;
     public int fireflies = 0;
-
+    public bool Invunerable
+    {
+        get
+        {
+            if (invulnTimer >= 0) return true;
+            else return false;
+        }
+    }
+    private float invulnTimer = 0;
+    private float invulnDuration = 1.5f;
     // stretch goals
     public int skillPoints;
     public int level;
@@ -114,6 +123,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         // Set Croak's positon
 
 
+
         // Initialize croak Effect
         croakPop = Instantiate(croakPopPrefab, Vector3.zero, Quaternion.identity);
         weaponPop = Instantiate(croakPopPrefab, Vector3.zero, Quaternion.identity);
@@ -158,6 +168,11 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     {
         //Debug.Log(currentHealth);
         timeSinceLastAttack += Time.deltaTime;
+        if (invulnTimer > 0)
+        {
+            invulnTimer -= Time.deltaTime;
+        }
+        
 
         // if the time since the last attack is greater than the input buffer, end the combo
         if (timeSinceLastAttack > comboTimeBuffer)
@@ -554,6 +569,18 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         firefly.SetActive(false);
         GameManager.instance.hudUpdate = true;
         collectFireflyParticles.Play();
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (invulnTimer <= 0) // only take damage when vunerable
+        {
+            invulnTimer = invulnDuration;
+            currentHealth -= damage;
+        }
+
+        // knockback, will always trigger independent of damage taken
+        StartCoroutine(gameObject.GetComponent<ThirdPersonController>().KnockbackCoroutine());
     }
 
 }

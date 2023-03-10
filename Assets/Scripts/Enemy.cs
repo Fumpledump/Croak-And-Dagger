@@ -389,7 +389,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         {
             if (hit.tag == "Player")
             {
-                player.GetComponent<FrogCharacter>().currentHealth -= damage;
+                player.GetComponent<FrogCharacter>().TakeDamage(damage);
                 GameManager.instance.hudUpdate = true;
                 CancelInvoke(nameof(CheckHit));
                 //Debug.Log(player.GetComponent<FrogCharacter>().currentHealth);
@@ -411,7 +411,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             {
                 if (hit.tag == "Player")
                 {
-                    GameManager.instance.myFrog.GetComponent<FrogCharacter>().currentHealth -= damage;
+                    GameManager.instance.myFrog.GetComponent<FrogCharacter>().TakeDamage(damage);
                 }
             }
         }

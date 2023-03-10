@@ -753,5 +753,20 @@ namespace StarterAssets
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
+        public IEnumerator KnockbackCoroutine()
+        {
+            //TODO: change this to be determined by the player's WASD/Joystick input instead of Camera.forward
+            Vector3 boostDirection = Camera.main.transform.forward * -1f;
+            float boostSpeed = 10.0f;
+            float deltaBoost = -1.0f;
+            for (float timer = 0; timer < 0.2f; timer += Time.deltaTime)
+            {
+                _controller.Move((boostDirection * boostSpeed) * Time.deltaTime);
+                boostSpeed += deltaBoost * Time.deltaTime;
+                if (boostSpeed < 0) { boostSpeed = 0; }
+                yield return null;
+            }
+            inSwing = false;
+        }
     }
 }
