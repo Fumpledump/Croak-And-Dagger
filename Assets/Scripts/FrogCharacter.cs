@@ -65,6 +65,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     [SerializeField] float pullSpeed = 50.0f; //how quickly a grabbed object will be pulled to the player
     private bool tonguePressed = false;
     private float maxSwingingDistance = 20f;
+    private bool canSwing = true;
 
     // Narrative
     public bool inDialog;
@@ -228,6 +229,11 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             GetComponent<ThirdPersonController>().CancelSwing();
         }
 
+        // grounded check for swining
+        if (GetComponent<ThirdPersonController>().Grounded == true)
+        {
+            canSwing = true;
+        }
         //update material
 
 
@@ -525,8 +531,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 if (g != null)
                 {
                     tongueHasHit = true;
-                    if (g.GetSwingable())
+                    if (g.GetSwingable() && canSwing)
                     {
+                        canSwing = false;
                         GetComponent<ThirdPersonController>().Swing(raycast.point);
                     }
                     else {
