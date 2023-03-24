@@ -19,7 +19,6 @@ public class SettingsMenu : MonoBehaviour
 
     void Awake()
     {
-        PlayerPrefs.SetFloat("Music", 0.5f);
         menuMap = new MenuMap();
         Cursor.visible = true;
     }
@@ -27,6 +26,12 @@ public class SettingsMenu : MonoBehaviour
     void Start()
     {
         LoadVolume();
+    }
+
+    void Update()
+    {
+        AudioListener.volume = musicSlider.value;
+        //PlayerPrefs.SetFloat("Music", musicSlider.value);
     }
 
     private void OnEnable()
