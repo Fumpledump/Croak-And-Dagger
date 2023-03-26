@@ -213,6 +213,8 @@ namespace StarterAssets
 
             // Set slide speed
             _slideSpeed = 4.5f;
+
+            croak.GetComponent<FrogSon>().Input = Input;
         }
 
         private void Update()
