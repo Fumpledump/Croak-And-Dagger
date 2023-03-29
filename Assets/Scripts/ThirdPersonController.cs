@@ -246,6 +246,8 @@ namespace StarterAssets
 
                 hitPointNormal = Vector3.zero;
             }
+
+            _animator.SetBool("InDialog",inDialog);
         }
 
         private void LateUpdate()
@@ -468,7 +470,7 @@ namespace StarterAssets
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
                 }
                 // move the player for the first 20% of the animations run time
-                else if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.2f)
+                else if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.2f && !inDialog)
                 {
                     _controller.Move(targetDirection.normalized * (MoveSpeed * 1.5f * Time.deltaTime) +
                         new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
