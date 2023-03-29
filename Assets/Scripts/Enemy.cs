@@ -200,6 +200,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             isDead = true;
             enemyManager.EnemyGroupDefeated(group); // Check Enemy Trigger in Manager
             deathTime = Time.time;
+            StopEnemy();
             //this.gameObject.SetActive(false);
         }
 
