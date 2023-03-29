@@ -383,6 +383,7 @@ namespace StarterAssets
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
             // FOR COMBAT: only create regular rotation and movement when not attacking
+
             if (_animator.GetInteger("MaceAttack") == 0)
             {
                 if (_input.move != Vector2.zero)
@@ -411,10 +412,12 @@ namespace StarterAssets
 
 
             /// COMBAT MOVEMENT V3
-
+            //
             // Calculated movement for First Attack of Mace Combo
+
             if (_animator.GetInteger("MaceAttack") > 0)
             {
+                /*
                 // Rotation to always attack forward during unlocked camera
 
                 if (!_input.lockedOn)
@@ -431,15 +434,7 @@ namespace StarterAssets
                 {
                     
                     Vector3 enemyPosition = GetComponent<TargetLock>().target.transform.position;
-                    /*
-                    Quaternion tempRotation = Quaternion.LookRotation(enemyPosition, transform.position);
 
-                    float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, tempRotation.eulerAngles.y, ref _rotationVelocity,
-                            RotationSmoothTime);
-
-                    // rotate to face forward relative to camera position
-                    transform.rotation = Quaternion.Euler(0.0f, tempRotation.eulerAngles.y, 0.0f);
-                    */
 
                     transform.LookAt(enemyPosition);
                     Vector3 eulerAngles = transform.rotation.eulerAngles;
@@ -449,20 +444,12 @@ namespace StarterAssets
                     transform.rotation = Quaternion.Euler(eulerAngles);
                     
                 }
-
-
+                */
 
                 // get movement direction
-                Vector3 targetDirection;
-
-                if (_input.lockedOn)
-                {
-                    targetDirection = transform.forward;
-                }
-                else
-                {
-                    targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-                }
+                transform.rotation = Quaternion.Euler(0.0f, _targetRotation, 0.0f);
+                Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+                
 
                 // jump attack motion if airborn
                 if (!_animator.GetBool("Grounded")) {
@@ -771,6 +758,15 @@ namespace StarterAssets
                 yield return null;
             }
             inSwing = false;
+        }
+        public void ComboDirectionReset()
+        {
+            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            if (_input.move != Vector2.zero)
+            {
+                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
+                                  _mainCamera.transform.eulerAngles.y;
+            }
         }
     }
 }

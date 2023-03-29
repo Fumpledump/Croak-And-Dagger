@@ -297,7 +297,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 gameObject.GetComponent<ThirdPersonController>().AirAttack();
             }
         }
-
+        gameObject.GetComponent<ThirdPersonController>().ComboDirectionReset();
         anim.SetInteger("MaceAttack", curMaceAttack);
         weaponTrail.active = true;
         croakTimer = 4;
