@@ -40,10 +40,10 @@ namespace StarterAssets
 
         [Space(10)]
         [Tooltip("The height the player can jump")]
-        public float JumpHeight = 1.2f;
+        public float JumpHeight = 10f;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-        public float Gravity = -15.0f;
+        public float Gravity = -25.0f;
 
         [Space(10)]
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
@@ -636,7 +636,7 @@ namespace StarterAssets
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     //_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
                     //Debug.Log(Mathf.Sqrt(JumpHeight * -2f * Gravity));
-                    _verticalVelocity = 4.5f;
+                    _verticalVelocity = JumpHeight;
 
                     // update animator if using character
                     if (_hasAnimator)
