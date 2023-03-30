@@ -8,6 +8,7 @@ using UnityEngine.Rendering;
 public class EnemyRanged : Enemy
 {
     private EnemyState enemyState = EnemyState.Idle;
+    private float _rotationVelocity;
     [SerializeField] private float idealRange;
     [SerializeField] private float rangeTolerance;
     [SerializeField] GameObject projectile;
@@ -96,14 +97,22 @@ public class EnemyRanged : Enemy
 
         if (enemyState != EnemyState.Idle && enemyState != EnemyState.Patrol)
         {
+            //Save old Y Rotation position
+            float oldRotY = transform.rotation.eulerAngles.y;
+
+            //Set new Look-At-Rotation
             transform.LookAt(player.transform.position);
 
-            //Clamps vertical rotation
-            Vector3 myRotation = transform.rotation.eulerAngles;
-            if(myRotation.x < 325 && myRotation.x > 270){ myRotation.x = 325;}
+            //Smooths Horizontal Rotation
+            float RotationSmoothTime = 0.25f;
+            float yRot = Mathf.SmoothDampAngle(oldRotY, transform.rotation.eulerAngles.y, ref _rotationVelocity, RotationSmoothTime);
 
-            //Applies rotational changes
-            transform.rotation = Quaternion.Euler(myRotation);
+            /*//Clamps vertical rotation
+            float xRot = transform.rotation.eulerAngles.x;
+            if (xRot < 325 && xRot > 270) { xRot = 325; }*/
+
+            //Applies Changes
+            transform.rotation = Quaternion.Euler(0.0f, yRot, 0.0f);
         }
 
         if (health <= 0 && !isDead)
