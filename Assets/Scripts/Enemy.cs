@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     public GameObject player;
     public float lastGotHit = 0;
     public float getHitCooldown = 0.55f;
-    public Slider healthSlider;
+    public GameObject healthBar;
     public GameObject weaponStart;
     public GameObject weaponEnd;
     public GameObject group;
@@ -158,7 +158,11 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     protected void HUDUpdate()
     {
-        healthSlider.value = maxHealth - health;
+        if(health <= 0)
+        {
+            healthBar.SetActive(false);
+        }
+        healthBar.GetComponent<Slider>().value = maxHealth - health;
     }
 
     public void GetHit()
