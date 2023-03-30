@@ -398,7 +398,6 @@ namespace StarterAssets
                     float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                         RotationSmoothTime);
 
-
                     if (!inDialog)
                     {
                         // rotate to face input direction relative to camera position

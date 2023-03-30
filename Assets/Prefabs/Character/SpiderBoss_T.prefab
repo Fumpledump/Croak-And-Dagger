@@ -17819,7 +17819,7 @@ MonoBehaviour:
   player: {fileID: 0}
   lastGotHit: 0
   getHitCooldown: 0.55
-  healthSlider: {fileID: 2394424095246865098}
+  healthBar: {fileID: 2394424095246865099}
   weaponStart: {fileID: 0}
   weaponEnd: {fileID: 0}
   group: {fileID: 0}
