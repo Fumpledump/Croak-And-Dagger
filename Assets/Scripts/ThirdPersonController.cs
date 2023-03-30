@@ -81,6 +81,9 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        //knockback
+        public Vector3 knockbackDirection;
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -742,13 +745,13 @@ namespace StarterAssets
         }
         public IEnumerator KnockbackCoroutine()
         {
+            _verticalVelocity = JumpHeight / 2;
             //TODO: change this to be determined by the player's WASD/Joystick input instead of Camera.forward
-            Vector3 boostDirection = Camera.main.transform.forward * -1f;
-            float boostSpeed = 10.0f;
+            float boostSpeed = 5.0f;
             float deltaBoost = -1.0f;
             for (float timer = 0; timer < 0.2f; timer += Time.deltaTime)
             {
-                _controller.Move((boostDirection * boostSpeed) * Time.deltaTime);
+                _controller.Move((knockbackDirection * boostSpeed) * Time.deltaTime);
                 boostSpeed += deltaBoost * Time.deltaTime;
                 if (boostSpeed < 0) { boostSpeed = 0; }
                 yield return null;

@@ -579,6 +579,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             currentHealth -= damage;
         }
 
+        gameObject.GetComponent<ThirdPersonController>().knockbackDirection = new Vector3(this.transform.forward.normalized.x, 0, this.transform.forward.normalized.z);
+
         // knockback, will always trigger independent of damage taken
         StartCoroutine(gameObject.GetComponent<ThirdPersonController>().KnockbackCoroutine());
     }
