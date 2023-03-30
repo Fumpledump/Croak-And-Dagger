@@ -223,7 +223,12 @@ namespace StarterAssets
 
             // Checks if the player is dead or swinging
             // if not then the player is able to control Dagger
-            if (!GameManager.instance.myFrog.isDead && !inSwing)
+
+            if (GameManager.instance.myFrog.isDead)
+            {
+
+            }
+            if (!inSwing)
             {
                 JumpAndGravity();
                 GroundedCheck();
@@ -246,7 +251,6 @@ namespace StarterAssets
 
                 hitPointNormal = Vector3.zero;
             }
-
             _animator.SetBool("InDialog",inDialog);
         }
 
@@ -334,7 +338,7 @@ namespace StarterAssets
                 targetSpeed = GameManager.instance.myFrog.Dash() ? DashSpeed : targetSpeed;
 
             // If Player is in Dialog Sequence disable movement controls until finished
-            if (inDialog)
+            if (inDialog || GameManager.instance.myFrog.isDead)
             {
                 targetSpeed = 0;
             }
@@ -386,7 +390,7 @@ namespace StarterAssets
 
             if (_animator.GetInteger("MaceAttack") == 0)
             {
-                if (_input.move != Vector2.zero)
+                if (_input.move != Vector2.zero && !GameManager.instance.myFrog.isDead)
                 {
                     _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                       _mainCamera.transform.eulerAngles.y;
@@ -408,14 +412,7 @@ namespace StarterAssets
                 // move the player
                 _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-            }
-
-
-            /// COMBAT MOVEMENT V3
-            //
-            // Calculated movement for First Attack of Mace Combo
-
-            if (_animator.GetInteger("MaceAttack") > 0)
+            } else if (_animator.GetInteger("MaceAttack") > 0)
             {
                 /*
                 // Rotation to always attack forward during unlocked camera
@@ -608,7 +605,7 @@ namespace StarterAssets
             }
 
             croak.GetComponent<FrogSon>().isJumping = false;
-            if (Grounded && _animator.GetInteger("MaceAttack") == 0)
+            if (Grounded && _animator.GetInteger("MaceAttack") == 0 && !GameManager.instance.myFrog.isDead)
             {
                 // reset hold jump timer
                 holdJumpTimer = 0;

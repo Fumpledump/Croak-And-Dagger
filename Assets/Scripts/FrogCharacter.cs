@@ -211,7 +211,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (inDialog) return;
 
 
-        if (inputs.pAttack)
+        if (inputs.pAttack && !GameManager.instance.myFrog.isDead)
         {
             Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
             // mace combo
