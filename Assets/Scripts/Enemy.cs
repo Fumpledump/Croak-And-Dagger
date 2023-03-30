@@ -58,7 +58,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     // Test
     protected float reviveCooldown = 2f;
-    protected float despawnCooldown = 10f;
+    protected float despawnCooldown = 3f;
     protected bool inAir = false;
     public float deathTime = 0;
     public bool isDead = false;
