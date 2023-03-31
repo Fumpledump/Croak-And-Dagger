@@ -305,6 +305,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     public void EndAttackCombo()
     {
+        Debug.Log("called end");
         curMaceAttack = 0;
         anim.SetInteger("MaceAttack", curMaceAttack);
         isAttacking = false;
@@ -346,7 +347,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     public void CheckHit(GameObject enemy)
     {
-
+        Debug.Log(isAttacking);
         if (!hitEnemies.Contains(enemy) && isAttacking)
         {
             enemy.GetComponent<Enemy>().lastGotHit = Time.time;
@@ -354,7 +355,6 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             {
                 enemy.GetComponent<Animator>().SetBool("Hit", true);
                 enemy.GetComponent<Enemy>().GetHit(attackDamage);
-                Debug.Log(attackDamage);
             }
             else if(enemy.tag == "Boss")
             {
@@ -556,7 +556,11 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void TongueAttack()
     {
+        hitEnemies.Clear();
+        timeSinceLastAttack = 0;
         isAttacking = true;
+        weaponTrail.active = true;
+        croakTimer = 4;
         UnSheathWeapon();
         anim.Play("TongueAttack");
     }
