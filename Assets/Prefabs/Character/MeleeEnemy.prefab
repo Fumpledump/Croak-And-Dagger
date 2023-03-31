@@ -540,6 +540,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4072986918231938289}
   - component: {fileID: 4072986918231938288}
+  - component: {fileID: 9160855615962534973}
   m_Layer: 5
   m_Name: EnemyHealth
   m_TagString: Untagged
@@ -622,6 +623,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &9160855615962534973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4072986918231938303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b58ecbdce4b6f4d87eb4916bf4f0e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7756612510170640173
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +753,7 @@ MonoBehaviour:
   player: {fileID: 0}
   lastGotHit: 0
   getHitCooldown: 0.55
-  healthSlider: {fileID: 4072986918231938288}
+  healthBar: {fileID: 4072986918231938303}
   weaponStart: {fileID: 3844710775297677410}
   weaponEnd: {fileID: 2276349208279046851}
   group: {fileID: 0}

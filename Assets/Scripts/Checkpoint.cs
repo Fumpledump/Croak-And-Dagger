@@ -41,6 +41,7 @@ public class Checkpoint : MonoBehaviour, IDataPersistence
             //Debug.Log("Checkpoint");
             checkpointHit = true;
             other.GetComponent<FrogCharacter>().respawnPoint = transform.position;
+            DataPersistenceManager.instance.SaveGame();
         }
     }
 }

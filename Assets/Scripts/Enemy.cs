@@ -17,7 +17,7 @@ public enum EnemyState
     Idle
 }
 
-public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
+public class Enemy : MonoBehaviour, IDamageable, IGrabbable
 {
     [SerializeField]
     public int health;
@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
     public GameObject player;
     public float lastGotHit = 0;
     public float getHitCooldown = 0.55f;
-    public Slider healthSlider;
+    public GameObject healthBar;
     public GameObject weaponStart;
     public GameObject weaponEnd;
     public GameObject group;
@@ -58,7 +58,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
 
     // Test
     protected float reviveCooldown = 2f;
-    protected float despawnCooldown = 10f;
+    protected float despawnCooldown = 3f;
     protected bool inAir = false;
     public float deathTime = 0;
     public bool isDead = false;
@@ -137,28 +137,13 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
         }
     }
 
-    // Since the enemy manager exists this all needs to be changed
-    public void LoadData(GameData data)
-    {
-        //data.enemies.TryGetValue(id, out isDead);
-        if (isDead)
-        {
-            this.gameObject.SetActive(false);
-        }
-    }
-
-    public void SaveData(ref GameData data)
-    {
-        if (data.enemies.ContainsKey(id))
-        {
-            data.enemies.Remove(id);
-        }
-        data.enemies.Add(id, isDead);
-    }
-
     protected void HUDUpdate()
     {
-        healthSlider.value = maxHealth - health;
+        if(health <= 0)
+        {
+            healthBar.SetActive(false);
+        }
+        healthBar.GetComponent<Slider>().value = maxHealth - health;
     }
 
     public void GetHit()
@@ -200,6 +185,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             isDead = true;
             enemyManager.EnemyGroupDefeated(group); // Check Enemy Trigger in Manager
             deathTime = Time.time;
+            StopEnemy();
             //this.gameObject.SetActive(false);
         }
 
@@ -517,11 +503,12 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             //pullTime = (t_player.position - transform.position).sqrMagnitude / pullSpeed;
 
             transform.position = Vector3.Lerp(origin, destination, timer / pullTime);
-            Debug.Log(pullTime);
+            //Debug.Log(pullTime);
             timer += Time.deltaTime;
             yield return null;
         }
         rigidbody.isKinematic = true;
+
     }
 
     public bool GetSwingable() { return false; }
