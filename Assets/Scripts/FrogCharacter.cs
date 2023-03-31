@@ -218,7 +218,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (inDialog) return;
 
 
-        if (inputs.pAttack)
+        if (inputs.pAttack && !GameManager.instance.myFrog.isDead)
         {
             Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
             // mace combo
@@ -312,7 +312,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 gameObject.GetComponent<ThirdPersonController>().AirAttack();
             }
         }
-
+        gameObject.GetComponent<ThirdPersonController>().ComboDirectionReset();
         anim.SetInteger("MaceAttack", curMaceAttack);
         weaponTrail.active = true;
         croakTimer = 4;
@@ -320,6 +320,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     public void EndAttackCombo()
     {
+        Debug.Log("called end");
         curMaceAttack = 0;
         anim.SetInteger("MaceAttack", curMaceAttack);
         isAttacking = false;
@@ -361,6 +362,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     public void CheckHit(GameObject enemy)
     {
+        Debug.Log(isAttacking);
         if (!hitEnemies.Contains(enemy) && isAttacking)
         {
             enemy.GetComponent<Enemy>().lastGotHit = Time.time;
@@ -528,19 +530,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         DataPersistenceManager.instance.LoadGame();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Checkpoint")
-        {
-            DataPersistenceManager.instance.SaveGame();
-        }
-        else if(other.tag == "Collectible")
-        {
-            //AddFirefly(other.gameObject);
-        }
-    }
-
     void TongueGrab(){
+
         // a little yucky but it works
         // adding Vector3.up adjusts for the player object's anchor being on the floor, and adding the forward vector of the camera ensures we don't accidentally detect the shield or weapon objects
             // camera forward offset could be replaced by a layermask later for a more robust implementation
@@ -576,6 +567,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
                         grapplePoint = raycast.collider.gameObject.transform.position;
 
+                        TongueAttack();
                     }
 
                 }
@@ -590,6 +582,15 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (!tonguePressed) return;
         tongueLine.SetPosition(0, tongueTip.position);
         tongueLine.SetPosition(1, grapplePoint);
+    private void TongueAttack()
+    {
+        hitEnemies.Clear();
+        timeSinceLastAttack = 0;
+        isAttacking = true;
+        weaponTrail.active = true;
+        croakTimer = 4;
+        UnSheathWeapon();
+        anim.Play("TongueAttack");
     }
 
     public void AddFirefly(GameObject firefly)
@@ -608,6 +609,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             invulnTimer = invulnDuration;
             currentHealth -= damage;
         }
+
+        gameObject.GetComponent<ThirdPersonController>().knockbackDirection = new Vector3(this.transform.forward.normalized.x, 0, this.transform.forward.normalized.z);
 
         // knockback, will always trigger independent of damage taken
         StartCoroutine(gameObject.GetComponent<ThirdPersonController>().KnockbackCoroutine());

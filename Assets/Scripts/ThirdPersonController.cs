@@ -40,10 +40,10 @@ namespace StarterAssets
 
         [Space(10)]
         [Tooltip("The height the player can jump")]
-        public float JumpHeight = 1.2f;
+        public float JumpHeight = 10f;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-        public float Gravity = -15.0f;
+        public float Gravity = -25.0f;
 
         [Space(10)]
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
@@ -80,6 +80,9 @@ namespace StarterAssets
 
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
+
+        //knockback
+        public Vector3 knockbackDirection;
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -213,6 +216,8 @@ namespace StarterAssets
 
             // Set slide speed
             _slideSpeed = 4.5f;
+
+            croak.GetComponent<FrogSon>().Input = Input;
         }
 
         private void Update()
@@ -221,7 +226,12 @@ namespace StarterAssets
 
             // Checks if the player is dead or swinging
             // if not then the player is able to control Dagger
-            if (!GameManager.instance.myFrog.isDead && !inSwing)
+
+            if (GameManager.instance.myFrog.isDead)
+            {
+
+            }
+            if (!inSwing)
             {
                 JumpAndGravity();
                 GroundedCheck();
@@ -244,6 +254,7 @@ namespace StarterAssets
 
                 hitPointNormal = Vector3.zero;
             }
+            _animator.SetBool("InDialog",inDialog);
         }
 
         private void LateUpdate()
@@ -330,7 +341,7 @@ namespace StarterAssets
                 targetSpeed = GameManager.instance.myFrog.Dash() ? DashSpeed : targetSpeed;
 
             // If Player is in Dialog Sequence disable movement controls until finished
-            if (inDialog)
+            if (inDialog || GameManager.instance.myFrog.isDead)
             {
                 targetSpeed = 0;
             }
@@ -379,16 +390,16 @@ namespace StarterAssets
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
             // FOR COMBAT: only create regular rotation and movement when not attacking
+
             if (_animator.GetInteger("MaceAttack") == 0)
             {
-                if (_input.move != Vector2.zero)
+                if (_input.move != Vector2.zero && !GameManager.instance.myFrog.isDead)
                 {
                     _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                       _mainCamera.transform.eulerAngles.y;
 
                     float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                         RotationSmoothTime);
-
 
                     if (!inDialog)
                     {
@@ -403,14 +414,9 @@ namespace StarterAssets
                 // move the player
                 _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-            }
-
-
-            /// COMBAT MOVEMENT V3
-
-            // Calculated movement for First Attack of Mace Combo
-            if (_animator.GetInteger("MaceAttack") > 0)
+            } else if (_animator.GetInteger("MaceAttack") > 0)
             {
+                /*
                 // Rotation to always attack forward during unlocked camera
 
                 if (!_input.lockedOn)
@@ -427,15 +433,7 @@ namespace StarterAssets
                 {
                     
                     Vector3 enemyPosition = GetComponent<TargetLock>().target.transform.position;
-                    /*
-                    Quaternion tempRotation = Quaternion.LookRotation(enemyPosition, transform.position);
 
-                    float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, tempRotation.eulerAngles.y, ref _rotationVelocity,
-                            RotationSmoothTime);
-
-                    // rotate to face forward relative to camera position
-                    transform.rotation = Quaternion.Euler(0.0f, tempRotation.eulerAngles.y, 0.0f);
-                    */
 
                     transform.LookAt(enemyPosition);
                     Vector3 eulerAngles = transform.rotation.eulerAngles;
@@ -445,20 +443,12 @@ namespace StarterAssets
                     transform.rotation = Quaternion.Euler(eulerAngles);
                     
                 }
-
-
+                */
 
                 // get movement direction
-                Vector3 targetDirection;
-
-                if (_input.lockedOn)
-                {
-                    targetDirection = transform.forward;
-                }
-                else
-                {
-                    targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-                }
+                transform.rotation = Quaternion.Euler(0.0f, _targetRotation, 0.0f);
+                Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+                
 
                 // jump attack motion if airborn
                 if (!_animator.GetBool("Grounded")) {
@@ -466,7 +456,7 @@ namespace StarterAssets
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
                 }
                 // move the player for the first 20% of the animations run time
-                else if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.2f)
+                else if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.2f && !inDialog)
                 {
                     _controller.Move(targetDirection.normalized * (MoveSpeed * 1.5f * Time.deltaTime) +
                         new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
@@ -617,7 +607,7 @@ namespace StarterAssets
             }
 
             croak.GetComponent<FrogSon>().isJumping = false;
-            if (Grounded && _animator.GetInteger("MaceAttack") == 0)
+            if (Grounded && _animator.GetInteger("MaceAttack") == 0 && !GameManager.instance.myFrog.isDead)
             {
                 // reset hold jump timer
                 holdJumpTimer = 0;
@@ -645,7 +635,7 @@ namespace StarterAssets
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     //_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
                     //Debug.Log(Mathf.Sqrt(JumpHeight * -2f * Gravity));
-                    _verticalVelocity = 4.5f;
+                    _verticalVelocity = JumpHeight;
 
                     // update animator if using character
                     if (_hasAnimator)
@@ -755,18 +745,27 @@ namespace StarterAssets
         }
         public IEnumerator KnockbackCoroutine()
         {
+            _verticalVelocity = JumpHeight / 2;
             //TODO: change this to be determined by the player's WASD/Joystick input instead of Camera.forward
-            Vector3 boostDirection = Camera.main.transform.forward * -1f;
-            float boostSpeed = 10.0f;
+            float boostSpeed = 5.0f;
             float deltaBoost = -1.0f;
             for (float timer = 0; timer < 0.2f; timer += Time.deltaTime)
             {
-                _controller.Move((boostDirection * boostSpeed) * Time.deltaTime);
+                _controller.Move((knockbackDirection * boostSpeed) * Time.deltaTime);
                 boostSpeed += deltaBoost * Time.deltaTime;
                 if (boostSpeed < 0) { boostSpeed = 0; }
                 yield return null;
             }
             inSwing = false;
+        }
+        public void ComboDirectionReset()
+        {
+            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            if (_input.move != Vector2.zero)
+            {
+                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
+                                  _mainCamera.transform.eulerAngles.y;
+            }
         }
     }
 }

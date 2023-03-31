@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Boss : Enemy
 {
@@ -20,8 +21,8 @@ public class Boss : Enemy
         health = 500;
         maxHealth = health;
         damage = 1;
-        healthSlider.maxValue = 500;
-        healthSlider.value = 0;
+        healthBar.GetComponent<Slider>().maxValue = 500;
+        healthBar.GetComponent<Slider>().value = 0;
         anim = GetComponent<Animator>();
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }

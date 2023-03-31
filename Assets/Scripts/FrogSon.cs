@@ -42,6 +42,18 @@ public class FrogSon : MonoBehaviour
     [Range(1f, 20f)]
     public float croakRadius;
 
+    public StarterAssetsInputs Input
+    {
+        get
+        {
+            return _input;
+        }
+        set
+        {
+            _input = value;
+        }
+    }
+
     private void Awake()
     {
         // get a reference to our main camera
@@ -55,15 +67,15 @@ public class FrogSon : MonoBehaviour
     void Start()
     {
         player = GameManager.instance.myFrog.gameObject;
-        //agent = GetComponent<NavMeshAgent>();
         target = player.transform;
         controller = GetComponent<CharacterController>();
-        _input = player.GetComponent<ThirdPersonController>().Input;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //_input = player.GetComponent<ThirdPersonController>().Input;
+
         float distance = Vector3.Distance(target.position, transform.position);
 
         // Checks if Croak is too far or too close

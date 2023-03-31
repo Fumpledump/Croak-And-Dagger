@@ -7,12 +7,12 @@ Dagger: It's an egg....
 -> Cradle
     <<ChangeCamera 1>>
     <<AddRelationshipValue 1>>
-    Dagger: Don't worry buddy I got you.
+    Dagger: Don't worry buddy, I got you.
 <<ChangeCamera 1>>
 Dagger: Today must have been rough for the both of us...
 <<SetEnemyGroup 1 true>>
 <<ChangeCamera 6>>
-Dagger: Uh oh looks like we got company...
+Dagger: Uh oh. Looks like we got company...
 <<ChangeCamera 0>>
 <<SetEnemyGroup 2 false>>
 Dagger: I'm not gonna let anybody hurt you!
