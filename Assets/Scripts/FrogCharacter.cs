@@ -346,6 +346,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     public void CheckHit(GameObject enemy)
     {
+
         if (!hitEnemies.Contains(enemy) && isAttacking)
         {
             enemy.GetComponent<Enemy>().lastGotHit = Time.time;
@@ -353,6 +354,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             {
                 enemy.GetComponent<Animator>().SetBool("Hit", true);
                 enemy.GetComponent<Enemy>().GetHit(attackDamage);
+                Debug.Log(attackDamage);
             }
             else if(enemy.tag == "Boss")
             {
@@ -544,11 +546,19 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                         Vector3 playerToEnemy = transform.position - raycast.collider.gameObject.transform.position;
                         Debug.DrawLine(transform.position, raycast.collider.gameObject.transform.position, Color.green, 1.0f);
                         StartCoroutine(g.Grab(transform, pullSpeed));
+                        TongueAttack();
                     }
                 }
             }
             tongueDirection.y += 0.05f;
         }
+    }
+
+    private void TongueAttack()
+    {
+        isAttacking = true;
+        UnSheathWeapon();
+        anim.Play("TongueAttack");
     }
 
     public void AddFirefly(GameObject firefly)

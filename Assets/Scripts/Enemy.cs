@@ -503,11 +503,12 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
             //pullTime = (t_player.position - transform.position).sqrMagnitude / pullSpeed;
 
             transform.position = Vector3.Lerp(origin, destination, timer / pullTime);
-            Debug.Log(pullTime);
+            //Debug.Log(pullTime);
             timer += Time.deltaTime;
             yield return null;
         }
         rigidbody.isKinematic = true;
+
     }
 
     public bool GetSwingable() { return false; }
