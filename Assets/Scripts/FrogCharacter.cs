@@ -513,19 +513,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         DataPersistenceManager.instance.LoadGame();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Checkpoint")
-        {
-            DataPersistenceManager.instance.SaveGame();
-        }
-        else if(other.tag == "Collectible")
-        {
-            //AddFirefly(other.gameObject);
-        }
-    }
-
     void TongueGrab(){
+
         // a little yucky but it works
         // adding Vector3.up adjusts for the player object's anchor being on the floor, and adding the forward vector of the camera ensures we don't accidentally detect the shield or weapon objects
             // camera forward offset could be replaced by a layermask later for a more robust implementation
