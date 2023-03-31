@@ -17,7 +17,7 @@ public enum EnemyState
     Idle
 }
 
-public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
+public class Enemy : MonoBehaviour, IDamageable, IGrabbable
 {
     [SerializeField]
     public int health;
@@ -135,25 +135,6 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IDataPersistence
             inAir = true;
             GetComponent<Rigidbody>().AddForce(Vector3.up * 500);
         }
-    }
-
-    // Since the enemy manager exists this all needs to be changed
-    public void LoadData(GameData data)
-    {
-        //data.enemies.TryGetValue(id, out isDead);
-        if (isDead)
-        {
-            this.gameObject.SetActive(false);
-        }
-    }
-
-    public void SaveData(ref GameData data)
-    {
-        if (data.enemies.ContainsKey(id))
-        {
-            data.enemies.Remove(id);
-        }
-        data.enemies.Add(id, isDead);
     }
 
     protected void HUDUpdate()
