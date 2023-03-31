@@ -10,4 +10,10 @@ public class EnemyAnimationEvents : MonoBehaviour
     {
         attackEffect.Play();
     }
+
+    public void StopVisualEffect()
+    {
+        attackEffect.Stop();
+        Debug.Log("stop visual effect");
+    }
 }
