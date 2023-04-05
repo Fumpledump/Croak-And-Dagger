@@ -19,6 +19,8 @@ public class FrogSon : MonoBehaviour
     // Player tracking
     public GameObject player;
     protected Transform target;
+    private ThirdPersonController playerThirdPersonControllerScript;
+    private FrogCharacter playerFrogCharacterScript;
     //protected UnityEngine.AI.NavMeshAgent agent;
 
     // Jump stuff
@@ -69,6 +71,8 @@ public class FrogSon : MonoBehaviour
         player = GameManager.instance.myFrog.gameObject;
         target = player.transform;
         controller = GetComponent<CharacterController>();
+        playerThirdPersonControllerScript = player.GetComponent<ThirdPersonController>();
+        playerFrogCharacterScript = player.GetComponent<FrogCharacter>();
     }
 
     // Update is called once per frame
@@ -86,7 +90,7 @@ public class FrogSon : MonoBehaviour
         // Checks specifically if Croak is too far
         else if(distance > croakRadius)
         {
-            player.GetComponent<FrogCharacter>().UnSheathWeapon();
+            playerFrogCharacterScript.UnSheathWeapon();
         }
         
         JumpAndGravity();
@@ -116,7 +120,7 @@ public class FrogSon : MonoBehaviour
         // Actual movement
 
         Vector3 direction = target.position - transform.position;
-        Vector3 movement = direction.normalized * player.GetComponent<ThirdPersonController>().Speed * Time.deltaTime;
+        Vector3 movement = direction.normalized * playerThirdPersonControllerScript.Speed * Time.deltaTime;
 
         controller.Move(movement);
     }
@@ -129,7 +133,7 @@ public class FrogSon : MonoBehaviour
             
             //Jump
             //if (isJumping)
-            if(_input.jump)
+            if(_input.jump && player && !playerThirdPersonControllerScript.inDialog)
             {
                 verticalVelocity = 10f;
                 controller.Move(new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
