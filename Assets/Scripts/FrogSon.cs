@@ -133,7 +133,7 @@ public class FrogSon : MonoBehaviour
             
             //Jump
             //if (isJumping)
-            if(_input.jump && player && !playerThirdPersonControllerScript.inDialog)
+            if(_input.jump && player)
             {
                 verticalVelocity = 10f;
                 controller.Move(new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
