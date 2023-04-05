@@ -20,6 +20,7 @@ namespace StarterAssets
 		public bool interact;
 		public bool reportTongueChange;
 		public bool cheat;
+		public bool holdingTongue;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -72,9 +73,15 @@ namespace StarterAssets
 		}
 		public void OnTongue(InputValue value)
 		{
-            //this gets set back to false in FrogCharacter.cs once it's been handled (hence "report" rather than just storing the actual bool value)
-            //it's kind of cursed and I am truly sorry but this is the only way I could figure out how to detect a button being held/released???
-            reportTongueChange = true;
+			holdingTongue = true;
+			if (value.Get<int>() > 0)
+			{
+				holdingTongue = true;
+			}
+			else
+			{
+				holdingTongue = false;
+			}
 		}
 
 

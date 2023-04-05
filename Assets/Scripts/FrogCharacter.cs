@@ -230,16 +230,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             inputs.hAttack = false;
         }
 
-        if (inputs.reportTongueChange && !tonguePressed)
+        if (inputs.holdingTongue)
         {
-            tonguePressed = true;
-            inputs.reportTongueChange = false;
             TongueGrab();
         } 
-        else if(inputs.reportTongueChange && tonguePressed)
+        else if(!inputs.holdingTongue)
         {
-            tonguePressed = false;
-            inputs.reportTongueChange = false;
             //handle ending tongue swing
             GetComponent<ThirdPersonController>().CancelSwing();
         }

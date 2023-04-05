@@ -483,8 +483,11 @@ namespace StarterAssets
         //called from FrogCharacter.cs
         public void Swing(Vector3 anchor)
         {
-            inSwing = true;
-            _swingCoroutine = StartCoroutine(SwingCoroutine(anchor));
+            if (!_swinging)
+            {
+                inSwing = true;
+                _swingCoroutine = StartCoroutine(SwingCoroutine(anchor));
+            }
         }
 
         //called from FrogCharacter.cs
