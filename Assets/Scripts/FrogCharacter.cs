@@ -237,14 +237,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             inputs.hAttack = false;
         }
 
-        if (inputs.reportTongueChange && !tonguePressed)
+        if (inputs.holdingTongue)
         {
-            tonguePressed = true;
-            inputs.reportTongueChange = false;
             TongueGrab();
             tongueLine.positionCount = 2;
         } 
-        else if(inputs.reportTongueChange && tonguePressed)
+        else if(!inputs.holdingTongue)
         {
 
             tongueLine.positionCount = 0;

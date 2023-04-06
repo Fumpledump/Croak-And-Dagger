@@ -88,12 +88,12 @@
                 },
                 {
                     "name": "Tongue",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "e086fe4b-10f4-48a0-a65a-f25e1aa35aeb",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Cheat",

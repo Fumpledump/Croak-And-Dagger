@@ -483,8 +483,11 @@ namespace StarterAssets
         //called from FrogCharacter.cs
         public void Swing(Vector3 anchor)
         {
-            inSwing = true;
-            _swingCoroutine = StartCoroutine(SwingCoroutine(anchor));
+            if (!_swinging)
+            {
+                inSwing = true;
+                _swingCoroutine = StartCoroutine(SwingCoroutine(anchor));
+            }
         }
 
         //called from FrogCharacter.cs
@@ -627,6 +630,12 @@ namespace StarterAssets
                 if (_verticalVelocity < 0.0f)
                 {
                     _verticalVelocity = -2f;
+                }
+
+                //Stop Input From being Buffered during Dialog
+                if(_input.jump && inDialog)
+                {
+                    _input.jump = false;
                 }
 
                 // Jump
