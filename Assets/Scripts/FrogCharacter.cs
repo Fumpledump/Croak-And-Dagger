@@ -179,6 +179,10 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (timeSinceLastAttack > comboTimeBuffer)
         {
             EndAttackCombo();
+
+            if(!tongueAttack)
+            anim.SetBool("TongueAttack", false);
+
             if(croakTimer > 0)
             {
                 croakTimer -= Time.deltaTime;
@@ -242,6 +246,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             // Tongue attack
             if (tongueAttack)
             {
+                anim.SetBool("TongueAttack", tongueAttack);
                 TongueAttack();
             }
         }
@@ -558,13 +563,15 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void TongueAttack()
     {
+        Debug.Log("t attack");
         hitEnemies.Clear();
         timeSinceLastAttack = 0;
         isAttacking = true;
         weaponTrail.active = true;
         croakTimer = 4;
         UnSheathWeapon();
-        anim.Play("TongueAttack");
+        //anim.Play("TongueAttack");
+        //tongueAttack = false;
         tongueAttack = false;
     }
 
