@@ -385,7 +385,6 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     public void CheckHit(GameObject enemy)
     {
-        Debug.Log(isAttacking);
         if (!hitEnemies.Contains(enemy) && isAttacking)
         {
             enemy.GetComponent<Enemy>().lastGotHit = Time.time;
@@ -648,13 +647,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     }
     private void TongueAttack()
     {
-        Debug.Log("t attack");
         hitEnemies.Clear();
         timeSinceLastAttack = 0;
         isAttacking = true;
         weaponTrail.active = true;
         croakTimer = 4;
-        UnSheathWeapon();
+        //UnSheathWeapon();
         //anim.Play("TongueAttack");
         //tongueAttack = false;
         tongueAttack = false;
