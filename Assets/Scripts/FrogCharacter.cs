@@ -127,7 +127,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
         // Start with weapon sheathed
         weapon[0].SetActive(false); // weapon
-        weapon[2].SetActive(true); // croak
+        weapon[2].SetActive(GameManager.instance.croakEnabled); // croak
       
         //weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z);
         timeSinceLastAttack = attackTimeBuffer;
@@ -207,7 +207,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             {
                 croakTimer -= Time.deltaTime;
             }
-            else
+            else if(GameManager.instance.croakEnabled)
             {
                 SheathWeapon();
             }
@@ -240,7 +240,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         {
             Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
             // mace combo
-            if(timeSinceLastAttack > attackTimeBuffer && anim.GetInteger("MaceAttack") < 3) MaceAttack();
+            if(timeSinceLastAttack > attackTimeBuffer && GameManager.instance.croakEnabled && anim.GetInteger("MaceAttack") < 3) MaceAttack();
             // final hit takes double recovery before starting chain again
             else if (timeSinceLastAttack > attackTimeBuffer * 2 && anim.GetInteger("MaceAttack") == 3) MaceAttack();
 
@@ -652,9 +652,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         isAttacking = true;
         weaponTrail.active = true;
         croakTimer = 4;
-        //UnSheathWeapon();
-        //anim.Play("TongueAttack");
-        //tongueAttack = false;
+        if (GameManager.instance.croakEnabled)
+        {
+            UnSheathWeapon();
+            anim.Play("TongueAttack");
+            tongueAttack = false;
+        }
         tongueAttack = false;
     }
 

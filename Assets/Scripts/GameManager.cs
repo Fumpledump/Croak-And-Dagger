@@ -6,6 +6,8 @@ using UnityEngine.Rendering;
 using TMPro;
 public class GameManager : MonoBehaviour
 {
+    public bool croakEnabled;
+
     public static GameManager instance;
     public TextMeshProUGUI alert;
     public Slider healthSlider;
