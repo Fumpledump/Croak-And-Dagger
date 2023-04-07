@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using StarterAssets;
 using System.Linq;
 using System;
-using UnityEditorInternal.Profiling;
+
 
 public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 {
