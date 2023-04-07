@@ -589,7 +589,15 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                         StartCoroutine(g.Grab(transform, pullSpeed));
 
                         //grapplePoint = raycast.collider.gameObject.transform.position;
-                        grapplePoint = raycast.collider.gameObject.transform.GetComponent<Enemy>().grabPoint.position;
+                        Enemy tongueAttackEnemy = raycast.collider.gameObject.transform.GetComponent<Enemy>();
+                        if (tongueAttackEnemy != null)
+                        {
+                            grapplePoint = raycast.collider.gameObject.transform.GetComponent<Enemy>().grabPoint.position;
+                        }
+                        else 
+                        {
+                            grapplePoint = raycast.collider.transform.position;
+                        }
                         tongueAttack = true;
                     }
 
