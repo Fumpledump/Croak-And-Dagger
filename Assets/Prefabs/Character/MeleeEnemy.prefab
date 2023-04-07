@@ -141,6 +141,37 @@ Transform:
   m_Father: {fileID: 3789447838703812670}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -16.997, y: 1.101, z: -2.341}
+--- !u!1 &2490667728364588254
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 112412568333816853}
+  m_Layer: 3
+  m_Name: GrabPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &112412568333816853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2490667728364588254}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.166, z: 0.461}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8203164439510636692}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2810067351340853133
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,6 +706,7 @@ Transform:
   - {fileID: 4072986918204717771}
   - {fileID: 8751098528486648164}
   - {fileID: 8222398975197313640}
+  - {fileID: 112412568333816853}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -759,6 +791,7 @@ MonoBehaviour:
   weaponEnd: {fileID: 2276349208279046851}
   group: {fileID: 0}
   forceChaseMode: 0
+  grabPoint: {fileID: 0}
   lookRadius: 10
   whatIsGround:
     serializedVersion: 2

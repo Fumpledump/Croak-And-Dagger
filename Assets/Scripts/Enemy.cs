@@ -35,6 +35,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
     public GameObject group;
     public bool forceChaseMode = false;
 
+    public Transform grabPoint;
+
     // Player Tracking
     public float lookRadius = 10f;
     protected Transform target;
@@ -93,6 +95,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
     {
         enemyManager = EnemyManager.instance;
         group = transform.parent.gameObject;
+        grabPoint = transform.Find("GrabPoint").transform;
     }
 
     // Start is called before the first frame update

@@ -74,7 +74,7 @@ namespace StarterAssets
 		public void OnTongue(InputValue value)
 		{
 			holdingTongue = true;
-			if (value.Get<int>() > 0)
+			if (value.Get<float>() > 0)
 			{
 				holdingTongue = true;
 			}

@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using StarterAssets;
 using System.Linq;
 using System;
+using UnityEditorInternal.Profiling;
 
 public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 {
@@ -69,16 +70,6 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     public FrogSon Son;
     private float croakTimer = 4;
 
-    // Tongue
-    [SerializeField] float tongueLength = 1.0f; //how far away from the player can the tongue reach to grab things
-    [SerializeField] float pullSpeed = 50.0f; //how quickly a grabbed object will be pulled to the player
-    private bool tonguePressed = false;
-    private float maxSwingingDistance = 20f;
-    private bool canSwing = true;
-    private LineRenderer tongueLine;
-    private Vector3 grapplePoint;
-    public Transform tongueTip;
-
     // Narrative
     public bool inDialog;
 
@@ -94,6 +85,26 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     public float deathTime = 0;
     protected float reviveCooldown = 5f;
     public Vector3 respawnPoint;
+
+    // Tongue
+    [Header("Tongue Settings")]
+    [SerializeField] float tongueLength = 1.0f; //how far away from the player can the tongue reach to grab things
+    [SerializeField] float pullSpeed = 50.0f; //how quickly a grabbed object will be pulled to the player
+    private bool tonguePressed = false;
+    private float maxSwingingDistance = 20f;
+    private bool canSwing = true;
+    private LineRenderer tongueLine;
+    private Vector3 grapplePoint;
+    public Transform tongueTip;
+    private Spring spring;
+    [SerializeField] int quality;
+    [SerializeField] float damper;
+    [SerializeField] float strength;
+    [SerializeField] float velocity;
+    [SerializeField] float waveCount;
+    [SerializeField] float waveHeight;
+    [SerializeField] AnimationCurve affectCurve;
+
 
 
     // Start is called before the first frame update
@@ -141,6 +152,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
         // Get Line render for tongue
         tongueLine = GetComponent<LineRenderer>();
+        spring = new Spring();
+        spring.SetTarget(0);
     }
 
     public void LoadData(GameData data)
@@ -240,14 +253,15 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (inputs.holdingTongue)
         {
             TongueGrab();
-            tongueLine.positionCount = 2;
+            //tongueLine.positionCount = 2;
         } 
         else if(!inputs.holdingTongue)
         {
 
-            tongueLine.positionCount = 0;
-            tonguePressed = false;
-            inputs.reportTongueChange = false;
+            //tongueLine.positionCount = 0;
+            //tonguePressed = false;
+            //inputs.reportTongueChange = false;
+
             //handle ending tongue swing
             GetComponent<ThirdPersonController>().CancelSwing();
         }
@@ -549,7 +563,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 IGrabbable g = raycast.collider.gameObject.GetComponent<IGrabbable>();
                 if (g != null)
                 {
-                    tongueLine.positionCount = 2;
+                    //tongueLine.positionCount = 2;
                     tongueHasHit = true;
                     if (g.GetSwingable() && canSwing)
                     {
@@ -558,28 +572,69 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
                         grapplePoint = raycast.collider.transform.position;
                     }
-                    else {
+                    else
+                    {
                         Vector3 playerToEnemy = transform.position - raycast.collider.gameObject.transform.position;
                         Debug.DrawLine(transform.position, raycast.collider.gameObject.transform.position, Color.green, 1.0f);
                         StartCoroutine(g.Grab(transform, pullSpeed));
 
-                        grapplePoint = raycast.collider.gameObject.transform.position;
-
+                        //grapplePoint = raycast.collider.gameObject.transform.position;
+                        grapplePoint = raycast.collider.gameObject.transform.GetComponent<Enemy>().grabPoint.position;
                         TongueAttack();
                     }
 
                 }
+            }
+            else
+            {
+                //Debug.Log("Tongue direction" + tongueDirection);
+                //tongueDirection.y = 0;
+                grapplePoint = tongueTip.transform.position + tongueDirection* tongueLength;
             }
             tongueDirection.y += 0.05f;
 
         }
     }
 
+    private Vector3 currentGrapplePos;
     public void DrawTongue()
     {
-        if (!tonguePressed) return;
-        tongueLine.SetPosition(0, tongueTip.position);
-        tongueLine.SetPosition(1, grapplePoint);
+        //if (!inputs.holdingTongue) return;
+        ////currentGrapplePos = Vector3.Lerp(currentGrapplePos, grapplePoint, Time.deltaTime * 8f);
+        //tongueLine.SetPosition(0, tongueTip.position);
+        ////tongueLine.SetPosition(1, currentGrapplePos);
+        //tongueLine.SetPosition(1, grapplePoint);
+
+        if (!inputs.holdingTongue) {
+            currentGrapplePos=tongueTip.position;
+            spring.Reset();
+            if (tongueLine.positionCount > 0)
+            {
+                tongueLine.positionCount = 0;
+            }
+            return;
+        }
+
+        if (tongueLine.positionCount == 0)
+        {
+            spring.SetVelocity(velocity);
+            tongueLine.positionCount = quality + 1;
+        }
+
+        spring.SetDamper(damper);
+        spring.SetStrength(strength);
+        spring.Update(Time.deltaTime);
+
+        Vector3 up = Quaternion.LookRotation((grapplePoint - tongueTip.position).normalized) * Vector3.up;
+        currentGrapplePos = Vector3.Lerp(currentGrapplePos, grapplePoint, Time.deltaTime * 12f);
+
+        for (int i = 0; i < quality + 1; i++)
+        {
+            float delta = (float)i /(float)quality;
+            Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
+            tongueLine.SetPosition(i, Vector3.Lerp(tongueTip.position, currentGrapplePos, delta) + offset);
+        }
+    }
     private void TongueAttack()
     {
         hitEnemies.Clear();
