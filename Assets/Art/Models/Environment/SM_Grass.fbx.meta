@@ -3,7 +3,19 @@ guid: 1c4f4b0185706af46a5dfa7d919814da
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glassYellowGreen_Bush
+    second: {fileID: -2767743703232099514, guid: a3fbd67386c19fd4abeb2b3081bf7fd0,
+      type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glassYellowGreen_Bush.001
+    second: {fileID: -2767743703232099514, guid: 1544cfab248475647a36ed8da11e0baf,
+      type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

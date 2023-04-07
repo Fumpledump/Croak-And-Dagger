@@ -3,7 +3,12 @@ guid: c05a612b05542794abf9e321c603b818
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cattail_Flower
+    second: {fileID: 2100000, guid: e155ddcb9daaca346940a562027d9515, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
