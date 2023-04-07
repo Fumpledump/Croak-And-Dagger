@@ -75,6 +75,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     private bool tonguePressed = false;
     private float maxSwingingDistance = 20f;
     private bool canSwing = true;
+    private bool tongueAttack = false;
 
     // Narrative
     public bool inDialog;
@@ -238,6 +239,11 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         {
             //handle ending tongue swing
             GetComponent<ThirdPersonController>().CancelSwing();
+            // Tongue attack
+            if (tongueAttack)
+            {
+                TongueAttack();
+            }
         }
 
         // grounded check for swining
@@ -542,7 +548,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                         Vector3 playerToEnemy = transform.position - raycast.collider.gameObject.transform.position;
                         Debug.DrawLine(transform.position, raycast.collider.gameObject.transform.position, Color.green, 1.0f);
                         StartCoroutine(g.Grab(transform, pullSpeed));
-                        TongueAttack();
+                        tongueAttack = true;
                     }
                 }
             }
@@ -559,6 +565,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         croakTimer = 4;
         UnSheathWeapon();
         anim.Play("TongueAttack");
+        tongueAttack = false;
     }
 
     public void AddFirefly(GameObject firefly)

@@ -407,9 +407,9 @@
                     "name": "",
                     "id": "112b0d04-f560-4749-8af3-2aa68710fee5",
                     "path": "<Mouse>/rightButton",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KeyboardMouse",
                     "action": "Tongue",
                     "isComposite": false,
                     "isPartOfComposite": false
