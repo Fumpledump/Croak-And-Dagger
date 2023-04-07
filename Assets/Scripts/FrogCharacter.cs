@@ -97,6 +97,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     private Vector3 grapplePoint;
     public Transform tongueTip;
     private Spring spring;
+    private bool tongueAttack = false;
     [SerializeField] int quality;
     [SerializeField] float damper;
     [SerializeField] float strength;
@@ -198,6 +199,10 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (timeSinceLastAttack > comboTimeBuffer)
         {
             EndAttackCombo();
+
+            if(!tongueAttack)
+            anim.SetBool("TongueAttack", false);
+
             if(croakTimer > 0)
             {
                 croakTimer -= Time.deltaTime;
@@ -264,6 +269,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
             //handle ending tongue swing
             GetComponent<ThirdPersonController>().CancelSwing();
+            // Tongue attack
+            if (tongueAttack)
+            {
+                anim.SetBool("TongueAttack", tongueAttack);
+                TongueAttack();
+            }
         }
 
         // grounded check for swining
@@ -580,7 +591,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
                         //grapplePoint = raycast.collider.gameObject.transform.position;
                         grapplePoint = raycast.collider.gameObject.transform.GetComponent<Enemy>().grabPoint.position;
-                        TongueAttack();
+                        tongueAttack = true;
                     }
 
                 }
@@ -637,13 +648,16 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     }
     private void TongueAttack()
     {
+        Debug.Log("t attack");
         hitEnemies.Clear();
         timeSinceLastAttack = 0;
         isAttacking = true;
         weaponTrail.active = true;
         croakTimer = 4;
         UnSheathWeapon();
-        anim.Play("TongueAttack");
+        //anim.Play("TongueAttack");
+        //tongueAttack = false;
+        tongueAttack = false;
     }
 
     public void AddFirefly(GameObject firefly)
