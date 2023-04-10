@@ -1,10 +1,10 @@
 ﻿title: CombatComplete
 tags:
 ---
+<<SetEnemyGroup 3 false>>
 <<ChangeCamera 1>>
-Dagger: Now with them out of the way I can finally make it home.
+Dagger: Hopefully I won't see anymore of those pests.
 <<ChangeCamera 5>>
-Dagger: I should be able to cross this river by swinging on this branch with my tongue. 
-Activated by Holding the T key.
+Dagger: Now with them out of the way I can finally make it home.
 <<ChangeCamera 0>>
 ===

@@ -6,6 +6,8 @@ using Yarn.Unity;
 using StarterAssets;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Globalization;
+
 
 // Script that handels Narrative Sequences & Triggers for the Player and Holds Narrative Data.
 public class NarrativeHandler : MonoBehaviour, IDataPersistence
@@ -103,7 +105,6 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         {
             yield return new WaitForSeconds(delay * 4);
         }
-
         
         dialogSystem.StartDialogue(storedTrigger);
         StopCoroutine(dialogeRoutine);
@@ -195,7 +196,9 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
             Time.timeScale = 1;
             NameWarning.SetActive(false);
 
-            this.croakName = inputField.text;
+            string newName = inputField.text.ToLower();
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            this.croakName = textInfo.ToTitleCase(newName);
             NameInput.SetActive(false);
             textBox.SetActive(true);
         }

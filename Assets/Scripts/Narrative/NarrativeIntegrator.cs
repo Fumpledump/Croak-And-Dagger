@@ -7,7 +7,9 @@ using Yarn.Unity;
 public class NarrativeIntegrator
 {
     private static NarrativeHandler narrativeHandler = NarrativeHandler.Instance; // Get Ref to Narrative Handler
-    private static EnemyManager enemyManager = EnemyManager.instance; // Get Ref to Narrative Handler
+    private static EnemyManager enemyManager = EnemyManager.instance; // Get Ref to Enemy Manager
+    private static GameManager gameManager = GameManager.instance; // Get Ref to Game Manager
+    private static ButtonPrompts buttonPrompts = ButtonPrompts.instance; // Get Ref to Button Prompt Script
 
     // Sets the Camera for Dialogue Sequences in the game.
     // Can be used to showcase different npcs and or set pieces to go along with the narrative.
@@ -43,6 +45,30 @@ public class NarrativeIntegrator
     private static void SetEnemyGroup(int groupIndex, bool setting)
     {
         enemyManager.enemyGroups[groupIndex].SetActive(setting);
+    }
+
+    [YarnCommand("ActivateCroak")]
+    private static void ActivateCroak(bool setting)
+    {
+        Debug.Log("Croak set to " + setting);
+        gameManager.croakEnabled = setting;
+    }
+
+    [YarnCommand("InvokeCombatPrompts")]
+    private static void InvokeCombatPrompts()
+    {
+        Debug.Log("Invoke Combat Prompts ran");
+        buttonPrompts.hasUsedTongue = false;
+        buttonPrompts.hasTargeted = false;
+        buttonPrompts.InvokeCombatPrompts();
+    }
+
+    [YarnCommand("InvokeCroakPrompt")]
+    private static void InvokeCroakPrompt()
+    {
+        Debug.Log("Invoke Croak Prompt ran");
+        buttonPrompts.hasUsedCroak = false;
+        buttonPrompts.InvokeCroakPrompt();
     }
 
     // Sets the Relationship Value to the given value
@@ -91,8 +117,18 @@ public class NarrativeIntegrator
         }
         if (enemyManager == null)
         {
-            Debug.Log("Enemy Manager is Null. Grabbing Enemey");
+            Debug.Log("Enemy Manager is Null. Grabbing Enemy Manager");
             enemyManager = EnemyManager.instance;
+        }
+        if (gameManager == null)
+        {
+            Debug.Log("Game Manager is Null. Grabbing Game Manager");
+            gameManager = GameManager.instance;
+        }
+        if (buttonPrompts == null)
+        {
+            Debug.Log("Button Prompt Script is Null. Grabbing Button Prompt Script");
+            buttonPrompts = ButtonPrompts.instance;
         }
     }
 }

@@ -16,5 +16,7 @@ Dagger: Uh oh. Looks like we got company...
 <<ChangeCamera 0>>
 <<SetEnemyGroup 2 false>>
 Dagger: I'm not gonna let anybody hurt you!
+<<ActivateCroak true>>
 Dagger: ...Wait did the egg just turn into a weapon?!
+<<InvokeCroakPrompt>>
 ===
