@@ -383,6 +383,17 @@
                 },
                 {
                     "name": "",
+                    "id": "6cf8f003-9f07-4fae-9670-aa1ba801f935",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "LockOnEnemy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "a42f0385-2148-4214-ab4c-cdb2b5330e91",
                     "path": "<Keyboard>/enter",
                     "interactions": "",
