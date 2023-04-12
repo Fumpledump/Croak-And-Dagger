@@ -35,6 +35,9 @@ public class NarrativeTrigger : MonoBehaviour, IDataPersistence
     // Checks if the Player is inside the Narrative Trigger
     private void OnTriggerEnter(Collider col)
     {
+        if(!narrativeHandler)
+            narrativeHandler = NarrativeHandler.Instance; // Grab NarrativeHandler Singleton
+
         if (col.tag == "Player" && !triggerComplete)
         {
             narrativeHandler.inTrigger = true;
