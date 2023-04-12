@@ -31,7 +31,7 @@ public class TargetLock : MonoBehaviour
     {
         switcher = targetSwitcher.GetComponent<TargetSwitch>();
     }
-    void Update()
+    void FixedUpdate()
     {
         CheckCameraSwitch();
         

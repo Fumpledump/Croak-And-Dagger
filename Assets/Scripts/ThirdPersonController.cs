@@ -220,7 +220,7 @@ namespace StarterAssets
             croak.GetComponent<FrogSon>().Input = Input;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             _hasAnimator = TryGetComponent(out _animator);
 
