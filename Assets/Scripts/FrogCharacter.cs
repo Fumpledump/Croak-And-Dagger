@@ -90,6 +90,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     [Header("Tongue Settings")]
     [SerializeField] float tongueLength = 1.0f; //how far away from the player can the tongue reach to grab things
     [SerializeField] float pullSpeed = 50.0f; //how quickly a grabbed object will be pulled to the player
+    private float tongueAttackCheckRadius = 1f;
     private bool tonguePressed = false;
     private float maxSwingingDistance = 20f;
     private bool canSwing = true;
@@ -272,8 +273,21 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             // Tongue attack
             if (tongueAttack)
             {
-                anim.SetBool("TongueAttack", tongueAttack);
-                TongueAttack();
+                bool enemyNear = false;
+                // check for an enemy within the radius before setting off attack
+                Collider[] collisions = Physics.OverlapSphere(this.transform.position, tongueAttackCheckRadius);
+                foreach (Collider c in collisions)
+                {
+                    if (c.gameObject.GetComponent<Enemy>() != null)
+                    {
+                        enemyNear = true;
+                    }
+                }
+                if (enemyNear)
+                {
+                    anim.SetBool("TongueAttack", tongueAttack);
+                    TongueAttack();
+                }
             }
         }
 
@@ -557,7 +571,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         // a little yucky but it works
         // adding Vector3.up adjusts for the player object's anchor being on the floor, and adding the forward vector of the camera ensures we don't accidentally detect the shield or weapon objects
             // camera forward offset could be replaced by a layermask later for a more robust implementation
-        Vector3 tonguePosStart = transform.position + Vector3.up + camera.transform.forward; 
+        Vector3 tonguePosStart = transform.position + Vector3.up; 
         Vector3 tongueDirection = camera.transform.forward;
         tongueDirection.y = 0;
         RaycastHit raycast = new RaycastHit();
@@ -565,9 +579,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         bool tongueHasHit = false;
         while (!tongueHasHit && tongueDirection.y < 1)
         {
-            Debug.DrawLine(tonguePosStart, tonguePosStart + tongueDirection * tongueLength, Color.red, 1.0f);
+
+            Debug.DrawLine(tonguePosStart, tonguePosStart + tongueDirection * tongueLength, Color.red, 3.0f);
 
             Physics.Raycast(tonguePosStart, tongueDirection, out raycast);
+
+            grapplePoint = raycast.collider.transform.position;
             if (raycast.collider && raycast.collider.gameObject.GetComponent<IGrabbable>() != null && raycast.distance <= maxSwingingDistance)
             {
                 IGrabbable g = raycast.collider.gameObject.GetComponent<IGrabbable>();
@@ -607,11 +624,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             {
                 //Debug.Log("Tongue direction" + tongueDirection);
                 //tongueDirection.y = 0;
-                grapplePoint = tongueTip.transform.position + tongueDirection* tongueLength;
+                grapplePoint = tongueTip.transform.position + transform.rotation.eulerAngles.normalized * tongueLength;
             }
             tongueDirection.y += 0.05f;
 
         }
+        
     }
 
     private Vector3 currentGrapplePos;
