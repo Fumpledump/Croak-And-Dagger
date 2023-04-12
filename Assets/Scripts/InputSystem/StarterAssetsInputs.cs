@@ -73,8 +73,7 @@ namespace StarterAssets
 		}
 		public void OnTongue(InputValue value)
 		{
-			holdingTongue = true;
-			if (value.Get<float>() > 0)
+			if (value.Get<float>() > 0 && !GetComponent<FrogCharacter>().inDialog)
 			{
 				holdingTongue = true;
 			}
@@ -114,7 +113,9 @@ namespace StarterAssets
 
 		public void SprintInput(bool newSprintState)
 		{
+			/*
 			sprint = newSprintState;
+			*/ // need to discuss if the player should be able to sprint
 		}
 
 		public void DashInput(bool newDashState)

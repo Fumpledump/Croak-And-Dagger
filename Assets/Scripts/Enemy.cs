@@ -7,6 +7,7 @@ using System.Linq;
 using System.IO;
 using System.Drawing;
 using UnityEngine.VFX;
+using StarterAssets;
 
 public enum EnemyState
 {
@@ -499,7 +500,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         Vector3 destination;
         float pullTime = (t_player.position - transform.position).sqrMagnitude / pullSpeed;
         float timer = 0;
-        while (timer < pullTime)
+        while (timer < pullTime && player.GetComponent<StarterAssetsInputs>().holdingTongue)
         {
             //destination and pullTime need to be updated each frame to account for player movement during the pull
             destination = t_player.position + ((transform.position - t_player.position).normalized);

@@ -96,6 +96,7 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
 
     IEnumerator DialogueStart(float delay = 0.25f)
     {
+        player.GetComponent<StarterAssetsInputs>().holdingTongue = false;
         string storedTrigger = currentTrigger.node;
         if (player.GetComponent<ThirdPersonController>().Grounded)
         {
