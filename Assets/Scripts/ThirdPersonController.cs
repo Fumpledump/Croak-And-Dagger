@@ -181,7 +181,7 @@ namespace StarterAssets
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if(hit.gameObject.layer != LayerMask.NameToLayer("IgnoreSlide"))
+            if(hit.gameObject.layer != LayerMask.NameToLayer("IgnoreSlide") && hit.gameObject.layer != LayerMask.NameToLayer("Enemy"))
                 hitPointNormal = hit.normal;
         }
 

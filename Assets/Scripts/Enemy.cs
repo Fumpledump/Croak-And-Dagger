@@ -120,7 +120,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (player.GetComponent<NarrativeHandler>().inDialog)
         {
