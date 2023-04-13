@@ -580,11 +580,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         while (!tongueHasHit && tongueDirection.y < 1)
         {
 
-            Debug.DrawLine(tonguePosStart, tonguePosStart + tongueDirection * tongueLength, Color.red, 3.0f);
+           // Debug.DrawLine(tonguePosStart, tonguePosStart + tongueDirection * tongueLength, Color.red, 3.0f);
 
             Physics.Raycast(tonguePosStart, tongueDirection, out raycast);
 
             grapplePoint = raycast.collider.transform.position;
+            Debug.Log("grapplepoint" + grapplePoint);
             if (raycast.collider && raycast.collider.gameObject.GetComponent<IGrabbable>() != null && raycast.distance <= maxSwingingDistance)
             {
                 IGrabbable g = raycast.collider.gameObject.GetComponent<IGrabbable>();
@@ -596,13 +597,12 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                     {
                         canSwing = false;
                         GetComponent<ThirdPersonController>().Swing(raycast.point);
-
                         grapplePoint = raycast.collider.transform.position;
                     }
                     else
                     {
                         Vector3 playerToEnemy = transform.position - raycast.collider.gameObject.transform.position;
-                        Debug.DrawLine(transform.position, raycast.collider.gameObject.transform.position, Color.green, 1.0f);
+                       // Debug.DrawLine(transform.position, raycast.collider.gameObject.transform.position, Color.green, 1.0f);
                         StartCoroutine(g.Grab(transform, pullSpeed));
 
                         //grapplePoint = raycast.collider.gameObject.transform.position;
@@ -622,9 +622,10 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             }
             else
             {
-                //Debug.Log("Tongue direction" + tongueDirection);
                 //tongueDirection.y = 0;
-                grapplePoint = tongueTip.transform.position + transform.rotation.eulerAngles.normalized * tongueLength;
+                //grapplePoint = tongueTip.transform.position + transform.rotation.eulerAngles.normalized * tongueLength;
+                grapplePoint = tongueTip.transform.position + transform.forward * tongueLength;
+                Debug.Log("Tongue direction" + grapplePoint);
             }
             tongueDirection.y += 0.05f;
 
