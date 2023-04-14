@@ -606,7 +606,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                     //StartCoroutine(g.Grab(transform, pullSpeed));
                     GetComponent<ThirdPersonController>().Freeze = true;
                     toungeEnemy = raycast.collider.gameObject;
-                    Invoke(nameof(TongueGrapple), 0.25f);
+                    Invoke(nameof(TongueGrapple), 0.15f);
                     raycast.collider.gameObject.transform.GetComponent<Enemy>().TongueAttack();
                     //grapplePoint = raycast.collider.gameObject.transform.position;
                     /*
