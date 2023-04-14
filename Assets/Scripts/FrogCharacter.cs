@@ -260,10 +260,13 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (inputs.holdingTongue)
         {
             TongueGrab();
+
+            anim.SetBool("TongueOpen", true);
             //tongueLine.positionCount = 2;
-        } 
-        else if(!inputs.holdingTongue)
+        }
+        else if (!inputs.holdingTongue)
         {
+
             if (tongueAttack)
             {
                 toungeEnemy.GetComponent<Enemy>().TongueStop();
@@ -291,9 +294,11 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 if (enemyNear)
                 {
                     anim.SetBool("TongueAttack", tongueAttack);
+                    anim.SetBool("TongueAttack", tongueAttack);
                     TongueAttack();
                 }
             }
+            anim.SetBool("TongueOpen", false);
         }
 
         // grounded check for swining
@@ -634,6 +639,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
         }
         
+        
+
     }
 
     private void TongueGrapple()
