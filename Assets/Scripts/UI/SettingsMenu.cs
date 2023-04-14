@@ -16,11 +16,12 @@ public class SettingsMenu : MonoBehaviour
     private InputAction escape;
 
     [SerializeField] private Slider musicSlider = null;
-
+    [SerializeField] private GameObject settings;
     void Awake()
     {
         menuMap = new MenuMap();
         Cursor.visible = true;
+        settings.SetActive(false);
     }
 
     void Start()
@@ -46,15 +47,30 @@ public class SettingsMenu : MonoBehaviour
         escape.Disable();
     }
 
-    public void LoadScene(string sceneName)
+    public void ActivateMenu()
     {
-        SceneManager.LoadScene(sceneName);
+        settings.SetActive(true);
     }
 
-    public void NewGame(string sceneName)
+    public void DeactivateMenu()
     {
-        DataPersistenceManager.instance.NewGame();
-        DataPersistenceManager.instance.SaveGame();
+        settings.SetActive(false);
+    }
+
+    public void SettingToggle()
+    {
+        if (!settings.activeInHierarchy)
+        {
+            settings.SetActive(true);
+        }
+        else
+        {
+            settings.SetActive(false);
+        }
+    }
+
+    public void LoadScene(string sceneName)
+    {
         SceneManager.LoadScene(sceneName);
     }
 
