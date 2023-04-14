@@ -107,6 +107,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     [SerializeField] float waveHeight;
     [SerializeField] AnimationCurve affectCurve;
 
+    public GameObject toungeEnemy;
 
 
     // Start is called before the first frame update
@@ -263,7 +264,11 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         } 
         else if(!inputs.holdingTongue)
         {
-
+            if (tongueAttack)
+            {
+                toungeEnemy.GetComponent<Enemy>().TongueStop();
+            }
+            GetComponent<ThirdPersonController>().Freeze = false;
             //tongueLine.positionCount = 0;
             //tonguePressed = false;
             //inputs.reportTongueChange = false;
@@ -585,7 +590,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             Physics.Raycast(tonguePosStart, tongueDirection, out raycast);
 
             grapplePoint = raycast.collider.transform.position;
-            Debug.Log("grapplepoint" + grapplePoint);
+            //Debug.Log("grapplepoint" + grapplePoint);
             if (raycast.collider && raycast.collider.gameObject.GetComponent<IGrabbable>() != null && raycast.distance <= maxSwingingDistance)
             {
                 IGrabbable g = raycast.collider.gameObject.GetComponent<IGrabbable>();
@@ -593,31 +598,29 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 {
                     //tongueLine.positionCount = 2;
                     tongueHasHit = true;
-                    if (g.GetSwingable() && canSwing)
+
+                    //Vector3 playerToEnemy = transform.position - raycast.collider.gameObject.transform.position;
+                    // Debug.DrawLine(transform.position, raycast.collider.gameObject.transform.position, Color.green, 1.0f);
+
+                    // What grabs the enemy
+                    //StartCoroutine(g.Grab(transform, pullSpeed));
+                    GetComponent<ThirdPersonController>().Freeze = true;
+                    toungeEnemy = raycast.collider.gameObject;
+                    Invoke(nameof(TongueGrapple), 0.25f);
+                    raycast.collider.gameObject.transform.GetComponent<Enemy>().TongueAttack();
+                    //grapplePoint = raycast.collider.gameObject.transform.position;
+                    /*
+                    Enemy tongueAttackEnemy = raycast.collider.gameObject.transform.GetComponent<Enemy>();
+                    if (tongueAttackEnemy != null)
                     {
-                        canSwing = false;
-                        GetComponent<ThirdPersonController>().Swing(raycast.point);
-                        grapplePoint = raycast.collider.transform.position;
+                        grapplePoint = raycast.collider.gameObject.transform.GetComponent<Enemy>().grabPoint.position;
                     }
                     else
                     {
-                        Vector3 playerToEnemy = transform.position - raycast.collider.gameObject.transform.position;
-                       // Debug.DrawLine(transform.position, raycast.collider.gameObject.transform.position, Color.green, 1.0f);
-                        StartCoroutine(g.Grab(transform, pullSpeed));
-
-                        //grapplePoint = raycast.collider.gameObject.transform.position;
-                        Enemy tongueAttackEnemy = raycast.collider.gameObject.transform.GetComponent<Enemy>();
-                        if (tongueAttackEnemy != null)
-                        {
-                            grapplePoint = raycast.collider.gameObject.transform.GetComponent<Enemy>().grabPoint.position;
-                        }
-                        else 
-                        {
-                            grapplePoint = raycast.collider.transform.position;
-                        }
-                        tongueAttack = true;
+                        grapplePoint = raycast.collider.transform.position;
                     }
-
+                    */
+                    tongueAttack = true;
                 }
             }
             else
@@ -625,12 +628,25 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 //tongueDirection.y = 0;
                 //grapplePoint = tongueTip.transform.position + transform.rotation.eulerAngles.normalized * tongueLength;
                 grapplePoint = tongueTip.transform.position + transform.forward * tongueLength;
-                Debug.Log("Tongue direction" + grapplePoint);
+                //Debug.Log("Tongue direction" + grapplePoint);
             }
             tongueDirection.y += 0.05f;
 
         }
         
+    }
+
+    private void TongueGrapple()
+    {
+        GetComponent<ThirdPersonController>().Freeze = false;
+
+        Vector3 offset = toungeEnemy.transform.position - transform.position;
+        if(offset.magnitude > 2f)
+        {
+            offset = offset.normalized * 14f;
+
+            GetComponent<CharacterController>().Move(offset * Time.deltaTime);
+        }
     }
 
     private Vector3 currentGrapplePos;

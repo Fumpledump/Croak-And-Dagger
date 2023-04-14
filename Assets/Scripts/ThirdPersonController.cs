@@ -138,6 +138,7 @@ namespace StarterAssets
         // Swing
         public bool inSwing;
         Coroutine _swingCoroutine;
+        private bool freeze;
 
         public StarterAssetsInputs Input
         {
@@ -152,6 +153,18 @@ namespace StarterAssets
             get
             {
                 return _speed;
+            }
+        }
+
+        public bool Freeze
+        {
+            get
+            {
+                return freeze;
+            }
+            set
+            {
+                freeze = value;
             }
         }
 
@@ -231,13 +244,12 @@ namespace StarterAssets
             {
 
             }
-            if (!inSwing)
-            {
                 JumpAndGravity();
                 GroundedCheck();
 
                 // cannot move if attacking
-                Move();
+                if(!freeze)
+                   Move();
                 
 
                 //Check for character sliding, update movement if so
@@ -253,7 +265,6 @@ namespace StarterAssets
                 }
 
                 hitPointNormal = Vector3.zero;
-            }
             _animator.SetBool("InDialog",inDialog);
         }
 
@@ -776,5 +787,6 @@ namespace StarterAssets
                                   _mainCamera.transform.eulerAngles.y;
             }
         }
+
     }
 }

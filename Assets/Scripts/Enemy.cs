@@ -81,6 +81,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
 
     public EnemyManager enemyManager;
 
+    public bool freeze = false;
+
     // Save System
 
     [SerializeField] private string id;
@@ -128,6 +130,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         }
 
         HUDUpdate();
+        if(!freeze)
         EnemyAI();
         if (anim.GetBool("Hit"))
             ResetHit();
@@ -320,11 +323,13 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
 
     // Stops the Enemy completely 
     // and sets up the idle animation
-    private void StopEnemy()
+    public void StopEnemy()
     {
         agent.isStopped = true;
         agent.speed = 0;
         anim.SetFloat("Speed", 0);
+        Debug.Log("called enemy stop");
+
     }
 
     // Starts the Enemy back up with a given speed
@@ -334,6 +339,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         agent.isStopped = false;
         agent.speed = speed;
         anim.SetFloat("Speed", speed);
+        Debug.Log("called enemy start");
     }
 
     protected void SearchWalkPoint(float multiplier)
@@ -512,6 +518,19 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         }
         rigidbody.isKinematic = true;
 
+    }
+
+    public void TongueAttack()
+    {
+        StopEnemy();
+        transform.LookAt(player.transform);
+        freeze = true;
+    }
+
+    public void TongueStop()
+    {
+        StartEnemy(2);
+        freeze = false;
     }
 
     public bool GetSwingable() { return false; }
