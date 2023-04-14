@@ -14,14 +14,11 @@ public class MainMenu : MonoBehaviour
     private MenuMap menuMap;
     private InputAction escape;
 
-    [SerializeField] private GameObject settings;
-
     void Awake()
     {
         PlayerPrefs.SetFloat("Music", AudioListener.volume);
         menuMap = new MenuMap();
         Cursor.visible = true;
-        settings.SetActive(false);
     }
 
     private void OnEnable()
@@ -34,28 +31,6 @@ public class MainMenu : MonoBehaviour
     private void OnDisable()
     {
         escape.Disable();
-    }
-
-    public void ActivateMenu()
-    {
-        settings.SetActive(true);
-    }
-
-    public void DeactivateMenu()
-    {
-        settings.SetActive(false);
-    }
-
-    public void SettingToggle()
-    {
-        if (!settings.activeInHierarchy)
-        {
-            settings.SetActive(true);
-        }
-        else
-        {
-            settings.SetActive(false);
-        }
     }
 
     public void LoadScene(string sceneName)
