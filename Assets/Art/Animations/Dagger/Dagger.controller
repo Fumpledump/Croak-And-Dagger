@@ -217,7 +217,7 @@ AnimatorStateMachine:
     m_Position: {x: 200, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3738716188970738631}
-    m_Position: {x: 470, y: 360, z: 0}
+    m_Position: {x: 460, y: 280, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7711433435825446580}
     m_Position: {x: 720, y: 490, z: 0}
@@ -936,6 +936,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: TongueAttack
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: InDialog
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3482978605125555426}
