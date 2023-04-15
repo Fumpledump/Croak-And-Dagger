@@ -16,6 +16,7 @@ public class SettingsMenu : MonoBehaviour
     private InputAction escape;
 
     [SerializeField] private Slider musicSlider = null;
+    [SerializeField] private GameObject settingsUI;
 
     void Awake()
     {
@@ -38,7 +39,6 @@ public class SettingsMenu : MonoBehaviour
     {
         escape = menuMap.Menu.Escape;
         escape.Enable();
-        Cursor.visible = true;
     }
 
     private void OnDisable()
@@ -46,15 +46,10 @@ public class SettingsMenu : MonoBehaviour
         escape.Disable();
     }
 
+
+
     public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
-    }
-
-    public void NewGame(string sceneName)
-    {
-        DataPersistenceManager.instance.NewGame();
-        DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadScene(sceneName);
     }
 
@@ -70,6 +65,18 @@ public class SettingsMenu : MonoBehaviour
         float musicValue = PlayerPrefs.GetFloat("Music");
         musicSlider.value = musicValue;
         AudioListener.volume = musicValue;
+    }
+
+    public void ToggleActive()
+    {
+        if (!settingsUI.activeInHierarchy)
+        {
+            settingsUI.SetActive(true);
+        } 
+        else
+        {
+            settingsUI.SetActive(false);
+        }
     }
 
 
