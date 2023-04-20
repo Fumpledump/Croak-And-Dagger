@@ -16,11 +16,9 @@ public class MainMenu : MonoBehaviour
 
     void Awake()
     {
-        AudioManager.instance.StopSounds();
         PlayerPrefs.SetFloat("Music", AudioListener.volume);
         menuMap = new MenuMap();
         Cursor.visible = true;
-        AudioManager.instance.Play("Menu");
     }
 
     private void OnEnable()
@@ -33,6 +31,12 @@ public class MainMenu : MonoBehaviour
     private void OnDisable()
     {
         escape.Disable();
+    }
+
+    private void Start()
+    {
+        AudioManager.instance.StopSounds();
+        AudioManager.instance.Play("Menu");
     }
 
     public void LoadScene(string sceneName)
