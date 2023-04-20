@@ -10,7 +10,15 @@ public class AudioManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        if (instance != null)
+        {
+            Debug.Log("Found more than one Data Persistence Manager in the scene. Destroying newest one.");
+            Destroy(this.gameObject);
+            return;
+        }
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
+
         foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -25,7 +33,7 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        Play("LevelOneSong");
+        //Play("LevelOneSong");
     }
 
     public void Play(string name)
@@ -48,5 +56,13 @@ public class AudioManager : MonoBehaviour
             return;
         }
         s.source.Stop();
+    }
+
+    public void StopSounds()
+    {
+        for(int i = 0; i < sounds.Length; i++)
+        {
+            sounds[i].source.Stop();
+        }
     }
 }

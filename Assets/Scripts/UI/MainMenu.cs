@@ -19,6 +19,7 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetFloat("Music", AudioListener.volume);
         menuMap = new MenuMap();
         Cursor.visible = true;
+        AudioManager.instance.Play("Menu");
     }
 
     private void OnEnable()
@@ -35,11 +36,13 @@ public class MainMenu : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
+        AudioManager.instance.StopSounds();
         if (sceneName == "Exit") {
             UnityEngine.Application.Quit();
             UnityEngine.Debug.Log(sceneName);
             return;
         }
+        AudioManager.instance.Play(sceneName);
         SceneManager.LoadScene(sceneName);
     }
 
