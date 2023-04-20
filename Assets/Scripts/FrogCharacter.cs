@@ -574,6 +574,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         isDead = false;
         anim.SetBool("isDead", isDead);
         DataPersistenceManager.instance.LoadGame();
+        currentHealth = maxhealth;
     }
 
     void TongueGrab(){
