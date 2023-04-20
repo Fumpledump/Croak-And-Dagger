@@ -573,7 +573,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
     {
         isDead = false;
         anim.SetBool("isDead", isDead);
-        DataPersistenceManager.instance.LoadGame();
+        this.GetComponent<CharacterController>().enabled = false;
+        this.transform.position = respawnPoint;
+        this.GetComponent<CharacterController>().enabled = true;
         currentHealth = maxhealth;
     }
 
