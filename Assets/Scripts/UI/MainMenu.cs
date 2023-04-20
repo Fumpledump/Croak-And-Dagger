@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
 
     void Awake()
     {
+        AudioManager.instance.StopSounds();
         PlayerPrefs.SetFloat("Music", AudioListener.volume);
         menuMap = new MenuMap();
         Cursor.visible = true;
