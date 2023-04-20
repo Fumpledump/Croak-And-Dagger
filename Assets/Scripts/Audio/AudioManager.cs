@@ -2,7 +2,7 @@ using UnityEngine.Audio;
 using System;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : MonoBehaviour, IDataPersistence
 {
     public Sound[] sounds;
 
@@ -87,5 +87,30 @@ public class AudioManager : MonoBehaviour
             return;
         }
         s.currentActive = active;
+    }
+
+    public void LoadData(GameData data)
+    {
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            if (data.songStates.ContainsKey(sounds[i].name))
+            {
+                sounds[i].currentActive = data.songStates[sounds[i].name];
+            }
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        Debug.Log("Song saving");
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            if (data.songStates.ContainsKey(sounds[i].name))
+            {
+                data.songStates.Remove(sounds[i].name);
+            }
+            data.songStates.Add(sounds[i].name, sounds[i].currentActive);
+        }
+
     }
 }

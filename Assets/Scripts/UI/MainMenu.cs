@@ -44,13 +44,13 @@ public class MainMenu : MonoBehaviour
             return;
         }
         AudioManager.instance.Play(AudioManager.instance.ActiveSong());
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(sceneName); 
     }
 
     public void NewGame(string sceneName)
     {
         AudioManager.instance.StopSounds();
-        AudioManager.instance.Play(AudioManager.instance.ActiveSong());
+        AudioManager.instance.Play(sceneName);
         DataPersistenceManager.instance.NewGame();
         DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadScene(sceneName);

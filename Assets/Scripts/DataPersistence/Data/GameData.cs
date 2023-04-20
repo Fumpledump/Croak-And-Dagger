@@ -14,6 +14,7 @@ public class GameData
     public SerializableDictionary<string, bool> checkpointsHit;
     public SerializableDictionary<string, bool> fireflysHit;
     public SerializableDictionary<string, bool> narrativeTriggersHit;
+    public SerializableDictionary<string, bool> songStates;
     public GameData()
     {
         this.croakName = "Croak";
@@ -24,5 +25,6 @@ public class GameData
         checkpointsHit = new SerializableDictionary<string, bool>();
         fireflysHit = new SerializableDictionary<string, bool>();
         narrativeTriggersHit = new SerializableDictionary<string, bool>();
+        songStates = new SerializableDictionary<string, bool>();
     }
 }

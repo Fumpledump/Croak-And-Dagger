@@ -12,9 +12,9 @@ public class SoundTrigger : MonoBehaviour
         if(other.tag == "Player")
         {
             AudioManager.instance.Stop(stopSong);
-            //AudioManager.instance.SetActiveSong(stopSong, false);
+            AudioManager.instance.SetActiveSong(stopSong, false);
             AudioManager.instance.Play(startSong);
-            //AudioManager.instance.SetActiveSong(startSong, true);
+            AudioManager.instance.SetActiveSong(startSong, true);
         }
     }
 
