@@ -99,23 +99,9 @@ public class FrogSon : MonoBehaviour
 
     private void Move()
     {
-        // Taken from Dagger's script
         // Rotates Croak to face the same way as Dagger
 
-        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-        if (_input.move != Vector2.zero)
-        {
-
-            targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                  mainCamera.transform.eulerAngles.y;
-            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity,
-        RotationSmoothTime);
-
-            // rotate to face forward relative to camera position
-            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-
-        }
+        transform.LookAt(target.position);
 
         // Actual movement
 
