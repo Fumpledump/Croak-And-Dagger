@@ -102,7 +102,6 @@ public class AudioManager : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        Debug.Log("Song saving");
         for (int i = 0; i < sounds.Length; i++)
         {
             if (data.songStates.ContainsKey(sounds[i].name))
