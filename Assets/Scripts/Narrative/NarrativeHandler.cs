@@ -7,6 +7,7 @@ using StarterAssets;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Globalization;
+using System.Transactions;
 
 
 // Script that handels Narrative Sequences & Triggers for the Player and Holds Narrative Data.
@@ -33,7 +34,6 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
     //TODO: Probably should move narrative input handeling to another script as I don't see this being used for much
     [Header("Narrative Input")]
     public GameObject NameInput; // Inputted Name by the Player
-    public GameObject NameWarning; // Warning for Invalid Name
     public GameObject textBox;
 
     private GameObject player; // Player GameObject
@@ -91,6 +91,14 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
         else
         {
             dialogPrompt.gameObject.SetActive(false); // If the player can start a dialog sequence and is not already in one show the prompt
+        }
+
+        if(inDialog)
+        {
+            if (!Cursor.visible)
+            {
+                Cursor.visible = true;
+            }
         }
     }
 
@@ -150,6 +158,14 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
             // check for level load
             if (currentTrigger.loadLevel != string.Empty)
             {
+                if (Cursor.lockState == CursorLockMode.Locked)
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                }
+                if (!Cursor.visible)
+                {
+                    Cursor.visible = true;
+                }
                 SceneManager.LoadScene(currentTrigger.loadLevel);
             }
 
@@ -183,25 +199,17 @@ public class NarrativeHandler : MonoBehaviour, IDataPersistence
     {
         TMP_InputField inputField = NameInput.GetComponent<TMP_InputField>();
 
-        if (inputField.text.Length > 9)
+        if (inputField.text.Length <= 0)
         {
-            NameWarning.SetActive(true);
+            inputField.text = "Croak";
         }
-        else
-        {
-            if (inputField.text.Length <= 0)
-            {
-                inputField.text = "Croak";
-            }
 
-            Time.timeScale = 1;
-            NameWarning.SetActive(false);
+        Time.timeScale = 1;
 
-            string newName = inputField.text.ToLower();
-            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
-            this.croakName = textInfo.ToTitleCase(newName);
-            NameInput.SetActive(false);
-            textBox.SetActive(true);
-        }
+        string newName = inputField.text.ToLower();
+        TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+        this.croakName = textInfo.ToTitleCase(newName);
+        NameInput.SetActive(false);
+        textBox.SetActive(true);
     }
 }
