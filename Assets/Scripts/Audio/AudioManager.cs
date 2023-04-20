@@ -65,4 +65,27 @@ public class AudioManager : MonoBehaviour
             sounds[i].source.Stop();
         }
     }
+
+    public string ActiveSong()
+    {
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            if (sounds[i].currentActive)
+            {
+                return sounds[i].name;
+            }
+        }
+        return sounds[0].name;
+    }
+
+    public void SetActiveSong(string name, bool active)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Sound " + name + " not found!");
+            return;
+        }
+        s.currentActive = active;
+    }
 }

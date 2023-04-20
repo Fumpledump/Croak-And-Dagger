@@ -50,16 +50,19 @@ MonoBehaviour:
     volume: 0.1
     pitch: 1
     loop: 1
+    currentActive: 1
     source: {fileID: 0}
   - name: FireCutscene
     clip: {fileID: 8300000, guid: 10c53c991b6eea041bfdc8d042bee1c2, type: 3}
     volume: 0.1
     pitch: 1
     loop: 1
+    currentActive: 0
     source: {fileID: 0}
   - name: Menu
     clip: {fileID: 8300000, guid: 956c5a89603574c4faa47ad137473775, type: 3}
     volume: 0.1
     pitch: 1
     loop: 1
+    currentActive: 0
     source: {fileID: 0}

@@ -43,12 +43,14 @@ public class MainMenu : MonoBehaviour
             UnityEngine.Debug.Log(sceneName);
             return;
         }
-        AudioManager.instance.Play(sceneName);
+        AudioManager.instance.Play(AudioManager.instance.ActiveSong());
         SceneManager.LoadScene(sceneName);
     }
 
     public void NewGame(string sceneName)
     {
+        AudioManager.instance.StopSounds();
+        AudioManager.instance.Play(AudioManager.instance.ActiveSong());
         DataPersistenceManager.instance.NewGame();
         DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadScene(sceneName);
