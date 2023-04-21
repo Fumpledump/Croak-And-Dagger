@@ -72,6 +72,10 @@ public class SettingsMenu : MonoBehaviour
         if (!settingsUI.activeInHierarchy)
         {
             settingsUI.SetActive(true);
+            Time.timeScale = 0;
+            //AudioListener.pause = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         } 
         else
         {
