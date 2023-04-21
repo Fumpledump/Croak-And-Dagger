@@ -139,6 +139,7 @@ namespace StarterAssets
         public bool inSwing;
         Coroutine _swingCoroutine;
         private bool freeze;
+        private bool tongue;
 
         public StarterAssetsInputs Input
         {
@@ -165,6 +166,18 @@ namespace StarterAssets
             set
             {
                 freeze = value;
+            }
+        }
+
+        public bool Tongue
+        {
+            get
+            {
+                return tongue;
+            }
+            set
+            {
+                tongue = value;
             }
         }
 
@@ -244,11 +257,14 @@ namespace StarterAssets
             {
 
             }
+            if (!tongue)
+            {
                 JumpAndGravity();
+            }
                 GroundedCheck();
 
                 // cannot move if attacking
-                if(!freeze)
+
                    Move();
                 
 
@@ -404,7 +420,7 @@ namespace StarterAssets
 
             if (_animator.GetInteger("MaceAttack") == 0)
             {
-                if (_input.move != Vector2.zero && !GameManager.instance.myFrog.isDead)
+                if (_input.move != Vector2.zero && !GameManager.instance.myFrog.isDead && !freeze)
                 {
                     _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                       _mainCamera.transform.eulerAngles.y;
@@ -612,6 +628,7 @@ namespace StarterAssets
 
         private void JumpAndGravity()
         {
+            //Debug.Log("gravity gravity");
             // check if player is holding down jump key
             jumpHeld = (_playerInput.currentActionMap.actions[2].ReadValue<float>() > 0.1f) ? true : false;
 

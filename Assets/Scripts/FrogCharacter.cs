@@ -266,7 +266,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         }
         else if (!inputs.holdingTongue)
         {
-
+            GetComponent<ThirdPersonController>().Tongue = false;
             if (tongueAttack)
             {
                 toungeEnemy.GetComponent<Enemy>().TongueStop();
@@ -613,6 +613,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                     // What grabs the enemy
                     //StartCoroutine(g.Grab(transform, pullSpeed));
                     GetComponent<ThirdPersonController>().Freeze = true;
+                    GetComponent<ThirdPersonController>().Tongue = true;
                     toungeEnemy = raycast.collider.gameObject;
                     Invoke(nameof(TongueGrapple), 0.15f);
                     raycast.collider.gameObject.transform.GetComponent<Enemy>().TongueAttack();
@@ -628,7 +629,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                         grapplePoint = raycast.collider.transform.position;
                     }
                     */
-                    tongueAttack = true;
+                    //tongueAttack = true;
                 }
             }
             else
@@ -648,14 +649,22 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void TongueGrapple()
     {
-        GetComponent<ThirdPersonController>().Freeze = false;
+        //GetComponent<ThirdPersonController>().Freeze = false;
 
         Vector3 offset = toungeEnemy.transform.position - transform.position;
         if(offset.magnitude > 2f)
         {
+            tongueAttack = true;
             offset = offset.normalized * 14f;
 
-            GetComponent<CharacterController>().Move(offset * Time.deltaTime);
+            // Give a little more air to the launch
+            //offset.y += 10;
+
+            GetComponent<CharacterController>().Move(new Vector3(offset.x, offset.y + 2, offset.z) * Time.deltaTime);
+        }
+        else
+        {
+            GetComponent<ThirdPersonController>().Tongue = false;
         }
     }
 
