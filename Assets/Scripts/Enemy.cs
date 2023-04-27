@@ -62,6 +62,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
     // Test
     protected float reviveCooldown = 2f;
     protected float despawnCooldown = 3f;
+    protected float freezeCooldown = 1f;
+    protected float timeFrozen = 0;
     protected bool inAir = false;
     public float deathTime = 0;
     public bool isDead = false;
@@ -129,8 +131,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
             return;
         }
 
+
         HUDUpdate();
-        if(!freeze)
         EnemyAI();
         if (anim.GetBool("Hit"))
             ResetHit();
@@ -198,7 +200,6 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         if (Time.time - deathTime > despawnCooldown && isDead)
         {
             this.gameObject.SetActive(false);
-
         }
 
         // Revives the enemy
@@ -212,10 +213,15 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         }
         **/
 
+        if (Time.time - timeFrozen > freezeCooldown && timeFrozen != 0)
+        {
+            TongueStop();
+        }
+
         // Depending on the distance of the player and the enemy view distance
         // The enemy will enter a different state
         float distance = Vector3.Distance(target.position, transform.position);
-        if (!canSeePlayer && !isDead)
+        if (!canSeePlayer && !isDead && !freeze)
         {
             // Checks if the player was lost while chasing them
             if (!lostPlayer)
@@ -252,7 +258,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         {
             case false:
                 if (canSeePlayer && !isDead && !player.GetComponent<FrogCharacter>().isDead //Attempts to Chase Player
-                && agent.pathStatus == NavMeshPathStatus.PathComplete && chasingTimeOut <= 0) //Stops Chase if Player cannot be reached
+                && agent.pathStatus == NavMeshPathStatus.PathComplete && chasingTimeOut <= 0 && !freeze) //Stops Chase if Player cannot be reached
                 {
                     ChasePlayer();
                 }
@@ -268,7 +274,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
             case true:
                 NavMeshPath path = new NavMeshPath();
                 NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
-                if (agent.pathStatus != NavMeshPathStatus.PathComplete && !isDead)
+                if (agent.pathStatus != NavMeshPathStatus.PathComplete && !isDead && !freeze)
                 {
                     agent.ResetPath();
                     StopEnemy();
@@ -525,12 +531,15 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         StopEnemy();
         transform.LookAt(player.transform);
         freeze = true;
+        timeFrozen = Time.time;
     }
 
     public void TongueStop()
     {
         StartEnemy(2);
+        ChasePlayer();
         freeze = false;
+        timeFrozen = 0;
     }
 
     public bool GetSwingable() { return false; }
