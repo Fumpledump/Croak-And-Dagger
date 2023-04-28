@@ -78,6 +78,10 @@ public class FrogSon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Rotates Croak to face the same way as Dagger
+
+        transform.LookAt(target.position);
+
         //_input = player.GetComponent<ThirdPersonController>().Input;
 
         float distance = Vector3.Distance(target.position, transform.position);
@@ -99,10 +103,6 @@ public class FrogSon : MonoBehaviour
 
     private void Move()
     {
-        // Rotates Croak to face the same way as Dagger
-
-        transform.LookAt(target.position);
-
         // Actual movement
 
         Vector3 direction = target.position - transform.position;
@@ -135,11 +135,6 @@ public class FrogSon : MonoBehaviour
             }
             controller.Move(new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
         }
-
-    }
-
-    void SwitchWeapons()
-    {
 
     }
 

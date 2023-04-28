@@ -189,7 +189,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void Update()
     {
-        Debug.Log("tongue attack is" + anim.GetBool("TongueAttack"));
+        //Debug.Log("tongue attack is" + anim.GetBool("TongueAttack"));
         //Debug.Log(currentHealth);
         timeSinceLastAttack += Time.deltaTime;
         if (invulnTimer > 0)
@@ -238,7 +238,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
         if (inputs.pAttack && !GameManager.instance.myFrog.isDead)
         {
-            Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
+            //Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
             // mace combo
             if(timeSinceLastAttack > attackTimeBuffer && GameManager.instance.croakEnabled && anim.GetInteger("MaceAttack") < 3) MaceAttack();
             // final hit takes double recovery before starting chain again
@@ -254,7 +254,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
             inputs.hAttack = false;
         }
-
+        Debug.Log(inputs);
         if (inputs.holdingTongue)
         {
             TongueGrab();
@@ -264,7 +264,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         }
         else if (!inputs.holdingTongue)
         {
-            Debug.Log("no more holding tongue");
+            //Debug.Log("no more holding tongue");
             GetComponent<ThirdPersonController>().Tongue = false;
             GetComponent<ThirdPersonController>().Freeze = false;
             //tongueLine.positionCount = 0;
@@ -381,7 +381,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
         // Set Croak's Position
         //weapon[2].GetComponent<NavMeshAgent>().enabled = false;
-        weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
+        weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y + 0.2f, transform.position.z);
+        weapon[2].GetComponent<FrogSon>().grounded = false;
         //weapon[2].GetComponent<NavMeshAgent>().enabled = true;
 
         weaponPop.transform.position = weapon[0].transform.position;
