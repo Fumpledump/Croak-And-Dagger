@@ -203,9 +203,6 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         {
             EndAttackCombo();
 
-            if(!tongueAttack)
-            anim.SetBool("TongueAttack", false);
-
             if(croakTimer > 0)
             {
                 croakTimer -= Time.deltaTime;
@@ -292,7 +289,6 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 }
                 if (enemyNear)
                 {
-                    //anim.SetBool("TongueAttack", tongueAttack);
                     TongueAttack();
                     anim.Play("TongueAttack");
                 }
@@ -716,9 +712,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (GameManager.instance.croakEnabled)
         {
             UnSheathWeapon();
-            //anim.Play("TongueAttack");
         }
-        //anim.Play("TongueAttack");
         tongueAttack = false;
     }
 
