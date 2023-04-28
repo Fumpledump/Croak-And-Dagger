@@ -189,6 +189,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void Update()
     {
+        Debug.Log("tongue attack is" + anim.GetBool("TongueAttack"));
         //Debug.Log(currentHealth);
         timeSinceLastAttack += Time.deltaTime;
         if (invulnTimer > 0)
@@ -266,21 +267,19 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         }
         else if (!inputs.holdingTongue)
         {
+            Debug.Log("no more holding tongue");
             GetComponent<ThirdPersonController>().Tongue = false;
-            if (tongueAttack)
-            {
-                toungeEnemy.GetComponent<Enemy>().TongueStop();
-            }
             GetComponent<ThirdPersonController>().Freeze = false;
             //tongueLine.positionCount = 0;
             //tonguePressed = false;
             //inputs.reportTongueChange = false;
 
             //handle ending tongue swing
-            GetComponent<ThirdPersonController>().CancelSwing();
+            //GetComponent<ThirdPersonController>().CancelSwing();
             // Tongue attack
             if (tongueAttack)
             {
+                toungeEnemy.GetComponent<Enemy>().TongueStop();
                 bool enemyNear = false;
                 // check for an enemy within the radius before setting off attack
                 Collider[] collisions = Physics.OverlapSphere(this.transform.position, tongueAttackCheckRadius);
@@ -293,9 +292,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                 }
                 if (enemyNear)
                 {
-                    anim.SetBool("TongueAttack", tongueAttack);
-                    anim.SetBool("TongueAttack", tongueAttack);
+                    //anim.SetBool("TongueAttack", tongueAttack);
                     TongueAttack();
+                    anim.Play("TongueAttack");
                 }
             }
             anim.SetBool("TongueOpen", false);
@@ -367,7 +366,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     public void EndAttackCombo()
     {
-        Debug.Log("called end");
+        //Debug.Log("called end");
         curMaceAttack = 0;
         anim.SetInteger("MaceAttack", curMaceAttack);
         isAttacking = false;
@@ -717,9 +716,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (GameManager.instance.croakEnabled)
         {
             UnSheathWeapon();
-            anim.Play("TongueAttack");
-            tongueAttack = false;
+            //anim.Play("TongueAttack");
         }
+        //anim.Play("TongueAttack");
         tongueAttack = false;
     }
 
