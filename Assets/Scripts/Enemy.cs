@@ -139,7 +139,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
 
         if (player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AttackJump") && !inAir)
         {
-            Debug.Log("here");
+            //Debug.Log("here");
             inAir = true;
             GetComponent<Rigidbody>().AddForce(Vector3.up * 500);
         }
@@ -334,7 +334,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         agent.isStopped = true;
         agent.speed = 0;
         anim.SetFloat("Speed", 0);
-        Debug.Log("called enemy stop");
+        //Debug.Log("called enemy stop");
 
     }
 
@@ -345,7 +345,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable
         agent.isStopped = false;
         agent.speed = speed;
         anim.SetFloat("Speed", speed);
-        Debug.Log("called enemy start");
+        //Debug.Log("called enemy start");
     }
 
     protected void SearchWalkPoint(float multiplier)
