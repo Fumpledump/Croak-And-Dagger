@@ -27,6 +27,7 @@ public class SettingsMenu : MonoBehaviour
     void Start()
     {
         LoadVolume();
+        settingsUI.SetActive(false);
     }
 
     void Update()
@@ -69,6 +70,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void ToggleActive()
     {
+        UnityEngine.Debug.Log("Is this working?");
         if (!settingsUI.activeInHierarchy)
         {
             settingsUI.SetActive(true);
