@@ -189,7 +189,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
     private void Update()
     {
-        Debug.Log("tongue attack is" + anim.GetBool("TongueAttack"));
+        //Debug.Log("tongue attack is" + anim.GetBool("TongueAttack"));
         //Debug.Log(currentHealth);
         timeSinceLastAttack += Time.deltaTime;
         if (invulnTimer > 0)
@@ -236,9 +236,9 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (inDialog) return;
 
 
-        if (inputs.pAttack && !GameManager.instance.myFrog.isDead)
+        if (inputs.pAttack && !GameManager.instance.myFrog.isDead && !inputs.holdingTongue)
         {
-            Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
+            //Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
             // mace combo
             if(timeSinceLastAttack > attackTimeBuffer && GameManager.instance.croakEnabled && anim.GetInteger("MaceAttack") < 3) MaceAttack();
             // final hit takes double recovery before starting chain again
@@ -254,8 +254,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
             inputs.hAttack = false;
         }
-
-        if (inputs.holdingTongue)
+        Debug.Log(inputs);
+        if (inputs.holdingTongue && timeSinceLastAttack > 1f)
         {
             TongueGrab();
 
@@ -264,7 +264,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         }
         else if (!inputs.holdingTongue)
         {
-            Debug.Log("no more holding tongue");
+            //Debug.Log("no more holding tongue");
             GetComponent<ThirdPersonController>().Tongue = false;
             GetComponent<ThirdPersonController>().Freeze = false;
             //tongueLine.positionCount = 0;
@@ -381,7 +381,8 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
 
         // Set Croak's Position
         //weapon[2].GetComponent<NavMeshAgent>().enabled = false;
-        weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y, transform.position.z); ;
+        weapon[2].transform.position = new Vector3(transform.position.x - transform.forward.x, transform.position.y + 0.2f, transform.position.z);
+        weapon[2].GetComponent<FrogSon>().grounded = false;
         //weapon[2].GetComponent<NavMeshAgent>().enabled = true;
 
         weaponPop.transform.position = weapon[0].transform.position;
@@ -609,6 +610,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
                     //StartCoroutine(g.Grab(transform, pullSpeed));
                     GetComponent<ThirdPersonController>().Freeze = true;
                     GetComponent<ThirdPersonController>().Tongue = true;
+                    transform.LookAt(raycast.collider.gameObject.transform);
                     toungeEnemy = raycast.collider.gameObject;
                     Invoke(nameof(TongueGrapple), 0.15f);
                     raycast.collider.gameObject.transform.GetComponent<Enemy>().TongueAttack();
@@ -682,24 +684,27 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             return;
         }
 
-        if (tongueLine.positionCount == 0)
+        if (timeSinceLastAttack > 1f)
         {
-            spring.SetVelocity(velocity);
-            tongueLine.positionCount = quality + 1;
-        }
+            if (tongueLine.positionCount == 0)
+            {
+                spring.SetVelocity(velocity);
+                tongueLine.positionCount = quality + 1;
+            }
 
-        spring.SetDamper(damper);
-        spring.SetStrength(strength);
-        spring.Update(Time.deltaTime);
+            spring.SetDamper(damper);
+            spring.SetStrength(strength);
+            spring.Update(Time.deltaTime);
 
-        Vector3 up = Quaternion.LookRotation((grapplePoint - tongueTip.position).normalized) * Vector3.up;
-        currentGrapplePos = Vector3.Lerp(currentGrapplePos, grapplePoint, Time.deltaTime * 12f);
+            Vector3 up = Quaternion.LookRotation((grapplePoint - tongueTip.position).normalized) * Vector3.up;
+            currentGrapplePos = Vector3.Lerp(currentGrapplePos, grapplePoint, Time.deltaTime * 12f);
 
-        for (int i = 0; i < quality + 1; i++)
-        {
-            float delta = (float)i /(float)quality;
-            Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
-            tongueLine.SetPosition(i, Vector3.Lerp(tongueTip.position, currentGrapplePos, delta) + offset);
+            for (int i = 0; i < quality + 1; i++)
+            {
+                float delta = (float)i / (float)quality;
+                Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
+                tongueLine.SetPosition(i, Vector3.Lerp(tongueTip.position, currentGrapplePos, delta) + offset);
+            }
         }
     }
     private void TongueAttack()
