@@ -20,11 +20,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject exit;
 
     [SerializeField] private GameObject pauseUI;
-    [SerializeField] private GameObject settingsUI;
-
-    [SerializeField] private GameObject healthStatic;
-    [SerializeField] private GameObject health;
-
     [SerializeField] private bool isPaused;
 
 
@@ -64,16 +59,11 @@ public class PauseMenu : MonoBehaviour
 
     public void ActivateMenu()
     {
-        if (!settingsUI.activeInHierarchy)
-        {
-            Time.timeScale = 0;
-            //AudioListener.pause = true;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            pauseUI.SetActive(true);
-            healthStatic.SetActive(false);
-            health.SetActive(false);
-        } 
+        Time.timeScale = 0;
+        //AudioListener.pause = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        pauseUI.SetActive(true);
     }
 
     public void DeactivateMenu()
@@ -83,8 +73,6 @@ public class PauseMenu : MonoBehaviour
         pauseUI.SetActive(false);
         Cursor.visible = false;
         isPaused = false;
-        healthStatic.SetActive(true);
-        health.SetActive(true);
     }
 
     public void GoToTitle()

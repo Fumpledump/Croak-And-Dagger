@@ -18,10 +18,6 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private Slider musicSlider = null;
     [SerializeField] private GameObject settingsUI;
 
-    [SerializeField] private GameObject healthStatic;
-    [SerializeField] private GameObject health;
-    //[SerializeField] private GameObject pauseUI;
-
     void Awake()
     {
         menuMap = new MenuMap();
@@ -80,14 +76,10 @@ public class SettingsMenu : MonoBehaviour
             //AudioListener.pause = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            healthStatic.SetActive(false);
-            health.SetActive(false);
         } 
         else
         {
             settingsUI.SetActive(false);
-            healthStatic.SetActive(true);
-            health.SetActive(true);
         }
     }
 
