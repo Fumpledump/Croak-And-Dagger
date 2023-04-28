@@ -63,9 +63,115 @@ ModelImporter:
     removeConstantScaleCurves: 1
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: 
+    rigImportWarnings: "Avatar Rig Configuration mis-match. Inbetween bone rotation
+      in configuration does not match rotation in animation file:\n\t'Leg.L.003'
+      : rotation error = 11.107485 deg\n"
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'Idle' has import animation warnings that might
+      lower retargeting quality:\nNote: Activate translation DOF on avatar to improve
+      retargeting quality.\n\t'TorsoControl' has translation animation that will
+      be discarded.\n\t'Spine.001' is inbetween humanoid transforms and has rotation
+      animation that will be discarded.\n\t'Leg.R.003' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Spine.005' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'UpperArm.R'
+      has translation animation that will be discarded.\n\t'UpperArm.L' has translation
+      animation that will be discarded.\n\t'Leg.L.003' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\nClip 'Jump' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'TorsoControl' has translation
+      animation that will be discarded.\n\t'Leg.R.003' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'UpperArm.R' has translation
+      animation that will be discarded.\n\t'UpperArm.L' has translation animation
+      that will be discarded.\n\t'Leg.L.003' is inbetween humanoid transforms and
+      has rotation animation that will be discarded.\n\nClip 'Fall' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'TorsoControl' has translation
+      animation that will be discarded.\n\t'TorsoControl' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Leg.R.003' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'UpperArm.R'
+      has translation animation that will be discarded.\n\t'UpperArm.L' has translation
+      animation that will be discarded.\n\t'Leg.L.003' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\nClip 'Land' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'TorsoControl' has translation
+      animation that will be discarded.\n\t'TorsoControl' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Leg.R.003' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'UpperArm.R'
+      has translation animation that will be discarded.\n\t'UpperArm.L' has translation
+      animation that will be discarded.\n\t'Leg.L.003' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\nClip 'Run' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'TorsoControl' has translation
+      animation that will be discarded.\n\t'TorsoControl' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Spine.001' has translation
+      animation that will be discarded.\n\t'Spine.001' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Leg.R.003' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.005'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'UpperArm.R'
+      has translation animation that will be discarded.\n\t'UpperArm.L' has translation
+      animation that will be discarded.\n\t'Leg.L.003' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\nClip 'Death' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'TorsoControl' has translation
+      animation that will be discarded.\n\t'TorsoControl' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Spine.001' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.R.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.005'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.L.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Recoil' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine.001'
+      has translation animation that will be discarded.\n\t'Spine.001' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.R.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.005'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'UpperArm.R'
+      has translation animation that will be discarded.\n\t'UpperArm.L' has translation
+      animation that will be discarded.\n\t'Leg.L.003' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\nClip 'MaceAttack_1' has
+      import animation warnings that might lower retargeting quality:\nNote: Activate
+      translation DOF on avatar to improve retargeting quality.\n\t'TorsoControl'
+      has translation animation that will be discarded.\n\t'Spine.001' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.R.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.005'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.L.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'MaceAttack_2' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'TorsoControl'
+      has translation animation that will be discarded.\n\t'TorsoControl' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.001'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.R.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.005'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'UpperArm.R'
+      has translation animation that will be discarded.\n\t'Leg.L.003' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'MaceAttack_3' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'TorsoControl'
+      has translation animation that will be discarded.\n\t'TorsoControl' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.001'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.R.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.005'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Jaw'
+      has translation animation that will be discarded.\n\t'UpperArm.R' has translation
+      animation that will be discarded.\n\t'Leg.L.003' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\nClip 'MaceDashAttack'
+      has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'TorsoControl'
+      has translation animation that will be discarded.\n\t'TorsoControl' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.001'
+      has translation animation that will be discarded.\n\t'Spine.001' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.R.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.005'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'UpperArm.R'
+      has translation animation that will be discarded.\n\t'Leg.L.003' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Dodge' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'TorsoControl'
+      has translation animation that will be discarded.\n\t'TorsoControl' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.001'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.R.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Spine.005'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Leg.L.003'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -1069,7 +1175,7 @@ ModelImporter:
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 3
+  animationType: 2
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
