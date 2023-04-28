@@ -236,7 +236,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
         if (inDialog) return;
 
 
-        if (inputs.pAttack && !GameManager.instance.myFrog.isDead)
+        if (inputs.pAttack && !GameManager.instance.myFrog.isDead && !inputs.holdingTongue)
         {
             //Debug.Log("time: "+timeSinceLastAttack+", buffer: "+attackTimeBuffer);
             // mace combo
@@ -255,7 +255,7 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             inputs.hAttack = false;
         }
         Debug.Log(inputs);
-        if (inputs.holdingTongue)
+        if (inputs.holdingTongue && timeSinceLastAttack > 1f)
         {
             TongueGrab();
 
@@ -684,24 +684,27 @@ public class FrogCharacter : MonoBehaviour, IDamageable, IDataPersistence
             return;
         }
 
-        if (tongueLine.positionCount == 0)
+        if (timeSinceLastAttack > 1f)
         {
-            spring.SetVelocity(velocity);
-            tongueLine.positionCount = quality + 1;
-        }
+            if (tongueLine.positionCount == 0)
+            {
+                spring.SetVelocity(velocity);
+                tongueLine.positionCount = quality + 1;
+            }
 
-        spring.SetDamper(damper);
-        spring.SetStrength(strength);
-        spring.Update(Time.deltaTime);
+            spring.SetDamper(damper);
+            spring.SetStrength(strength);
+            spring.Update(Time.deltaTime);
 
-        Vector3 up = Quaternion.LookRotation((grapplePoint - tongueTip.position).normalized) * Vector3.up;
-        currentGrapplePos = Vector3.Lerp(currentGrapplePos, grapplePoint, Time.deltaTime * 12f);
+            Vector3 up = Quaternion.LookRotation((grapplePoint - tongueTip.position).normalized) * Vector3.up;
+            currentGrapplePos = Vector3.Lerp(currentGrapplePos, grapplePoint, Time.deltaTime * 12f);
 
-        for (int i = 0; i < quality + 1; i++)
-        {
-            float delta = (float)i /(float)quality;
-            Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
-            tongueLine.SetPosition(i, Vector3.Lerp(tongueTip.position, currentGrapplePos, delta) + offset);
+            for (int i = 0; i < quality + 1; i++)
+            {
+                float delta = (float)i / (float)quality;
+                Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
+                tongueLine.SetPosition(i, Vector3.Lerp(tongueTip.position, currentGrapplePos, delta) + offset);
+            }
         }
     }
     private void TongueAttack()
