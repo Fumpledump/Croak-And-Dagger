@@ -70,7 +70,6 @@ public class SettingsMenu : MonoBehaviour
 
     public void ToggleActive()
     {
-        UnityEngine.Debug.Log("Is this working?");
         if (!settingsUI.activeInHierarchy)
         {
             settingsUI.SetActive(true);
